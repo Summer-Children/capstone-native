@@ -45,17 +45,23 @@
       <string>twitter</string>
       <string>tiktoksharesdk</string>
     </array>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSAllowsArbitraryLoads</key>
-      <false/>
+      <true/>
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>This app requires access to the documents folder to open files.</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
+    <key>UIFileSharingEnabled</key>
+    <true/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
