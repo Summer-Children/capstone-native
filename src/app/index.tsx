@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text} from 'react-native';
-import FileViewer from '../features/view-file/ui/FileViewer';
+import FileViewer from '../features/view-file/ui/file-viewer';
 
 export default function App() {
   return (
