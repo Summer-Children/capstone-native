@@ -71,7 +71,8 @@
       },
       "eas": {
         "projectId": "41a63707-eda1-4124-8cde-1adaf4db9715"
-      }
+      },
+      "API_URL": "http://localhost:8080/graphql"
     },
     "owner": "natsuko_summer_children"
   }
