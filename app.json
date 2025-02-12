@@ -20,6 +20,7 @@
         ],
         "ITSAppUsesNonExemptEncryption": false
       }
+      "bundleIdentifier": "com.anonymous.capstone"
     },
     "android": {
       "adaptiveIcon": {

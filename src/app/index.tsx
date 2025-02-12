@@ -12,10 +12,10 @@ const AppContent = () => {
   );
 };
 
-export default function App () {
-  return (
-    <ApolloProvider client={apolloClient}>
-      <AppContent />
-    </ApolloProvider>
-  );
-};
+export default function App(): ReactNode {
+    return (
+        <ApolloProvider client={apolloClient}>
+            <AppContent />
+        </ApolloProvider>
+    )
+}
