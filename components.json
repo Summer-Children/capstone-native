@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "components": "reusables/components",
+    "lib": "reusables/lib"
+  }
+}

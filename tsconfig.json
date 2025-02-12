@@ -3,9 +3,13 @@
   "compilerOptions": {
     "strict": true,
     "module": "esnext",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "tailwind.config": [
+        "./tailwind.config.ts"
       ]
     }
   },
@@ -13,6 +17,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "tailwind.config.ts",
+    "nativewind-env.d.ts"
   ]
 }
