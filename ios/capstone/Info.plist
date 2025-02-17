@@ -88,5 +88,9 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSCameraUsageDescription</key>
+    <string>To capture a photo, please allow access to your camera.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>To select a photo, please allow access to your photos</string>
   </dict>
 </plist>
