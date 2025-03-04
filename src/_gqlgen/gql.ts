@@ -14,14 +14,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Buildings {\n    res: buildings {\n      id\n      organizationId\n      year\n      address\n    }\n  }\n": typeof types.BuildingsDocument,
-    "\n  mutation CreateOrganization($input: CreateOrganization!) {\n    res: createOrganization(input: $input) {\n      id\n      name\n      buildings {\n        id\n        organizationId\n        address\n        year\n      }\n    }\n  }\n": typeof types.CreateOrganizationDocument,
-    "\n  mutation CreateBuilding($input: CreateBuilding!) {\n    res: createBuilding(input: $input) {\n      id\n      organizationId\n      address\n      year\n    }\n  }\n": typeof types.CreateBuildingDocument,
+    "\n    mutation SignIn($input: SignIn!) {\n        signIn(input: $input)\n    }\n": typeof types.SignInDocument,
+    "\n    mutation SignUp($input: SignUp!) {\n        signUp(input: $input)\n    }\n": typeof types.SignUpDocument,
 };
 const documents: Documents = {
-    "\n  query Buildings {\n    res: buildings {\n      id\n      organizationId\n      year\n      address\n    }\n  }\n": types.BuildingsDocument,
-    "\n  mutation CreateOrganization($input: CreateOrganization!) {\n    res: createOrganization(input: $input) {\n      id\n      name\n      buildings {\n        id\n        organizationId\n        address\n        year\n      }\n    }\n  }\n": types.CreateOrganizationDocument,
-    "\n  mutation CreateBuilding($input: CreateBuilding!) {\n    res: createBuilding(input: $input) {\n      id\n      organizationId\n      address\n      year\n    }\n  }\n": types.CreateBuildingDocument,
+    "\n    mutation SignIn($input: SignIn!) {\n        signIn(input: $input)\n    }\n": types.SignInDocument,
+    "\n    mutation SignUp($input: SignUp!) {\n        signUp(input: $input)\n    }\n": types.SignUpDocument,
 };
 
 /**
@@ -41,15 +39,11 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Buildings {\n    res: buildings {\n      id\n      organizationId\n      year\n      address\n    }\n  }\n"): (typeof documents)["\n  query Buildings {\n    res: buildings {\n      id\n      organizationId\n      year\n      address\n    }\n  }\n"];
+export function graphql(source: "\n    mutation SignIn($input: SignIn!) {\n        signIn(input: $input)\n    }\n"): (typeof documents)["\n    mutation SignIn($input: SignIn!) {\n        signIn(input: $input)\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateOrganization($input: CreateOrganization!) {\n    res: createOrganization(input: $input) {\n      id\n      name\n      buildings {\n        id\n        organizationId\n        address\n        year\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateOrganization($input: CreateOrganization!) {\n    res: createOrganization(input: $input) {\n      id\n      name\n      buildings {\n        id\n        organizationId\n        address\n        year\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation CreateBuilding($input: CreateBuilding!) {\n    res: createBuilding(input: $input) {\n      id\n      organizationId\n      address\n      year\n    }\n  }\n"): (typeof documents)["\n  mutation CreateBuilding($input: CreateBuilding!) {\n    res: createBuilding(input: $input) {\n      id\n      organizationId\n      address\n      year\n    }\n  }\n"];
+export function graphql(source: "\n    mutation SignUp($input: SignUp!) {\n        signUp(input: $input)\n    }\n"): (typeof documents)["\n    mutation SignUp($input: SignUp!) {\n        signUp(input: $input)\n    }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
