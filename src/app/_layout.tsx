@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import { Slot, Stack } from 'expo-router'
+import { Slot } from 'expo-router'
 import React, { ReactNode } from 'react'
 import 'react-native-reanimated'
 import { apolloClient } from '../shared/api/clients'

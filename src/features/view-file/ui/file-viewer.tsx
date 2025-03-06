@@ -1,64 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { Button, View, Alert } from "react-native";
-import RNFS from "react-native-fs";
-import { viewDocument } from "@react-native-documents/viewer";
+import React, { useState, useEffect, ReactNode } from 'react'
+import { Button, View, Alert } from 'react-native'
+import RNFS from 'react-native-fs'
+import { viewDocument } from '@react-native-documents/viewer'
 
 interface FileViewerProps {
-    fetchedFileUrl: string;
-    fileType:"pdf" | "excel";
-    buttonText?: string;
+    fetchedFileUrl: string
+    fileType: 'pdf' | 'excel'
+    buttonText?: string
 }
 
-export default function FileViewer({ fetchedFileUrl, fileType, buttonText }: FileViewerProps) {
-    const [filePath, setFilePath] = useState<string | null>(null);
+export default function FileViewer({ fetchedFileUrl, fileType, buttonText }: FileViewerProps): ReactNode {
+    const [filePath, setFilePath] = useState<string | null>(null)
 
-    const downloadFile = async () => {
-        const localFilePath = `${RNFS.DocumentDirectoryPath}/dummy.${fileType === "pdf" ? "pdf" : "xlsx"}`;
+    const downloadFile = async (): Promise<void> => {
+        const localFilePath = `${RNFS.DocumentDirectoryPath}/dummy.${fileType === 'pdf' ? 'pdf' : 'xlsx'}`
 
         try {
-            const fileExists = await RNFS.exists(localFilePath);
+            const fileExists = await RNFS.exists(localFilePath)
             if (!fileExists) {
                 const options = {
                     fromUrl: fetchedFileUrl,
-                    toFile: localFilePath,
-                };
-                await RNFS.downloadFile(options).promise;
+                    toFile: localFilePath
+                }
+                await RNFS.downloadFile(options).promise
             }
-            setFilePath(localFilePath);
-        } catch (err) {
-            Alert.alert("Download Failed", "Could not download the Excel file.");
+            setFilePath(localFilePath)
+        } catch {
+            Alert.alert('Download Failed', 'Could not download the Excel file.')
         }
-    };
+    }
 
     useEffect(() => {
-        (async () => {
-            await downloadFile();
-        })();
-    }, []);
+        // todo: add proper cleanup on unmount
+        void downloadFile()
+    }, [])
 
-    const handleOpenFile = async () => {
+    const handleOpenFile = async (): Promise<void> => {
         if (!filePath) {
-            Alert.alert(
-                "No File Found",
-                "The file is not available. Please try again.",
-            );
-            return;
+            Alert.alert('No File Found', 'The file is not available. Please try again.')
+            return
         }
 
         try {
             await viewDocument({
                 uri: `file://${filePath}`,
-                mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                presentationStyle: "fullScreen",
-            });
-        } catch (err) {
-            Alert.alert("Error", "Failed to open the file.");
+                mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                presentationStyle: 'fullScreen'
+            })
+        } catch {
+            Alert.alert('Error', 'Failed to open the file.')
         }
-    };
+    }
 
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Button title={buttonText || "Open File"} onPress={handleOpenFile} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Button title={buttonText || 'Open File'} onPress={handleOpenFile} />
         </View>
-    );
+    )
 }

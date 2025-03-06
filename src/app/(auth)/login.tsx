@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { tokenVar } from '@shared/lib/auth/provider'
 import { Link, router } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { View } from 'react-native'
 import { graphql } from '../../_gqlgen'
 import Footer from '../../shared/ui/footer'
@@ -17,7 +17,7 @@ const USER_LOGIN = graphql(`
     }
 `)
 
-export default function LoginPage() {
+export default function LoginPage(): ReactNode {
     const [values, setValues] = useState({
         email: '',
         password: ''
@@ -31,11 +31,11 @@ export default function LoginPage() {
         }
     })
 
-    const handleChange = (key: string, value: string) => {
+    const handleChange = (key: string, value: string): void => {
         setValues({ ...values, [key]: value })
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (): Promise<void> => {
         const data = await singIn({ variables: { input: values } })
 
         if (!data.data?.signIn) {

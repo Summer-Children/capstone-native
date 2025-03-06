@@ -21,13 +21,12 @@ const authLink = setContext(async (_, { headers }) => {
     }
 })
 
-const errorLink = onError( ({ graphQLErrors, networkError }) => {
-
+const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
         for (const { extensions } of graphQLErrors) {
             if (extensions?.code === 'UNAUTHENTICATED') {
                 tokenVar(null)
-                SecureStore.deleteItemAsync('authToken').then(() => { window.location.reload()})
+                void SecureStore.deleteItemAsync('authToken').then(() => window.location.reload())
             }
         }
     }

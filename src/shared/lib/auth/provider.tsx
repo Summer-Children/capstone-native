@@ -1,10 +1,6 @@
-import { createContext, useContext, useEffect, useCallback, useState, type PropsWithChildren } from 'react'
-import { makeVar, useReactiveVar } from '@apollo/client'
+import { createContext, ReactNode, useEffect, useState, type PropsWithChildren } from 'react'
+import { makeVar } from '@apollo/client'
 import * as SecureStore from 'expo-secure-store'
-import { User } from '@/src/_gqlgen/graphql'
-import { graphql } from '@gqlgen'
-import { useQuery } from '@apollo/client'
-import { Redirect, router } from 'expo-router'
 // TODO: Replace the commented out user related code when the user query is implemented
 
 // Use Apollo reactive variable to make the authToken globally available in the app
@@ -27,7 +23,7 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 //   }
 // `)
 
-export function AuthProvider({ children }: PropsWithChildren) {
+export function AuthProvider({ children }: PropsWithChildren): ReactNode {
     const [isTokenLoading, setIsTokenLoading] = useState(true)
 
     // const { data } = useQuery(FETCH_USER, {
@@ -42,16 +38,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
     // })
 
     useEffect(() => {
-        SecureStore.getItemAsync('authToken').then(value => {
-            tokenVar(value)
-        })
+        void SecureStore.getItemAsync('authToken').then(value => tokenVar(value))
         setIsTokenLoading(false)
     }, [])
 
     return (
         <AuthContext.Provider
             value={{
-                isTokenLoading,
+                isTokenLoading
                 // user: data?.user || null,
             }}
         >

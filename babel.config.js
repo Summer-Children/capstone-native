@@ -1,33 +1,22 @@
-module.exports = (api) => {
-  api.cache(true);
-  return {
-    presets: [["babel-preset-expo", { jsxImportSource: "nativewind" }]],
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default api => {
+    api.cache(true)
 
-    plugins: [
-      [
-        "module-resolver",
-        {
-          root: ["./"],
+    return {
+        presets: [['babel-preset-expo', { jsxImportSource: 'nativewind' }]],
 
-          alias: {
-            "@": "./",
-            "tailwind.config": "./tailwind.config.ts",
-          },
-        },
-      ],
-    ],
-    plugins: [
-      [
-        "module-resolver",
-        {
-          root: ["./"],
+        plugins: [
+            [
+                'module-resolver',
+                {
+                    root: ['./'],
 
-          alias: {
-            "@": "./",
-            "tailwind.config": "./tailwind.config.ts",
-          },
-        },
-      ],
-    ],
-  };
-};
+                    alias: {
+                        '@': './',
+                        'tailwind.config': './tailwind.config.ts'
+                    }
+                }
+            ]
+        ]
+    }
+}

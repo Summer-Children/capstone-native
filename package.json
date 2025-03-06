@@ -10,6 +10,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
+    "lintcheck": "eslint .",
+    "typecheck": "tsc --build --noEmit",
     "graphql:gen": "graphql-codegen",
     "graphql:watch": "graphql-codegen --watch"
   },

@@ -3,7 +3,7 @@ import { Input } from '@/reusables/components/ui/input'
 import { Text } from '@/reusables/components/ui/text'
 import { useMutation } from '@apollo/client'
 import { Link, router } from 'expo-router'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { View } from 'react-native'
 import { graphql } from '../../_gqlgen'
 import Footer from '../../shared/ui/footer'
@@ -15,7 +15,7 @@ const USER_SIGNUP = graphql(`
     }
 `)
 
-export default function SignUpPage() {
+export default function SignUpPage(): ReactNode {
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -30,11 +30,11 @@ export default function SignUpPage() {
         }
     })
 
-    const handleChange = (key: string, value: string) => {
+    const handleChange = (key: string, value: string): void => {
         setValues({ ...values, [key]: value })
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (): Promise<void> => {
         const { data } = await signUp({ variables: { input: values } })
         if (data) router.replace('./login')
     }

@@ -3,16 +3,17 @@ import { Text } from '@/reusables/components/ui/text'
 import { Redirect, router, Stack } from 'expo-router'
 import { useReactiveVar } from '@apollo/client'
 import { tokenVar } from '@shared/lib/auth/provider'
+import { ReactNode } from 'react'
 
-export default function App() {
+export default function App(): ReactNode {
     const token = useReactiveVar(tokenVar)
-     if (token) {
-            return <Redirect href="/(app)" />
-        }
+    if (token) {
+        return <Redirect href="/(app)" />
+    }
 
     return (
         <>
-            <Stack.Screen  />
+            <Stack.Screen />
             <Button onPress={() => router.replace('./(auth)/signup')}>
                 <Text>Sign Up</Text>
             </Button>

@@ -1,11 +1,11 @@
 import { Redirect, Stack } from 'expo-router'
 import { Text } from '@/reusables/components/ui/text'
-import { useContext } from 'react'
+import { ReactNode, useContext } from 'react'
 import { useReactiveVar } from '@apollo/client'
 import { tokenVar } from '@shared/lib/auth/provider'
 import { AuthContext } from '@shared/lib/auth/provider'
 
-export default function AppLayout() {
+export default function AppLayout(): ReactNode {
     const { isTokenLoading } = useContext(AuthContext)
     const token = useReactiveVar(tokenVar)
 

@@ -1,5 +1,5 @@
 import { Text } from '@/reusables/components/ui/text'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { View } from 'react-native'
 
 interface HeaderProps {
@@ -7,7 +7,7 @@ interface HeaderProps {
     headerDescription?: string
 }
 
-export default function Header({ headerText, headerDescription }: HeaderProps) {
+export default function Header({ headerText, headerDescription }: HeaderProps): ReactNode {
     return (
         <View className="py-4">
             <Text className="text-3xl font-bold ">{headerText}</Text>
@@ -15,5 +15,3 @@ export default function Header({ headerText, headerDescription }: HeaderProps) {
         </View>
     )
 }
-
-

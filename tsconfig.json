@@ -5,13 +5,27 @@
         "module": "esnext",
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./*"],
-            "tailwind.config": ["./tailwind.config.ts"],
-            "@gqlgen": ["./src/_gqlgen"],
-            "@gqlgen/*": ["./src/_gqlgen/*"],
-            "@app/*": ["./src/app/*"],
-            "@shared/*": ["./src/shared/*"],
-            "@widgets/*": ["./src/widgets/*"]
+            "@/*": [
+                "./*"
+            ],
+            "tailwind.config": [
+                "./tailwind.config.ts"
+            ],
+            "@gqlgen": [
+                "./src/_gqlgen"
+            ],
+            "@gqlgen/*": [
+                "./src/_gqlgen/*"
+            ],
+            "@app/*": [
+                "./src/app/*"
+            ],
+            "@shared/*": [
+                "./src/shared/*"
+            ],
+            "@widgets/*": [
+                "./src/widgets/*"
+            ]
         }
     },
     "include": [
@@ -21,5 +35,8 @@
         "expo-env.d.ts",
         "tailwind.config.ts",
         "nativewind-env.d.ts"
+    ],
+    "exclude": [
+        "metro.config.js"
     ]
 }

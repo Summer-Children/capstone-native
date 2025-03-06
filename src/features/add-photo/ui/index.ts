@@ -1,1 +1,1 @@
-export { AddPhoto } from "./add-photo";
+export { AddPhoto } from './add-photo'

@@ -7,10 +7,6 @@ interface FooterProps {
     className?: string
 }
 
-export default function Footer({ children, className }: FooterProps) {
-    return (
-        <View className={clsx("absolute bottom-0 right-0 left-0 ", className)}>
-            {children}
-        </View>
-    )
+export default function Footer({ children, className }: FooterProps): ReactNode {
+    return <View className={clsx('absolute bottom-0 right-0 left-0 ', className)}>{children}</View>
 }

@@ -30,7 +30,8 @@ export default [
         languageOptions: {
             globals: globals.browser,
             parserOptions: {
-                project: './tsconfig.json'
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname
             }
         }
     },
