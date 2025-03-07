@@ -1,9 +1,11 @@
 import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
-import { Redirect, router, Stack } from 'expo-router'
 import { useReactiveVar } from '@apollo/client'
 import { tokenVar } from '@shared/lib/auth/provider'
-import { ReactNode } from 'react'
+import { Redirect, router } from 'expo-router'
+import React, { ReactNode } from 'react'
+import { View } from 'react-native'
+import Footer from '../shared/ui/footer'
 
 export default function App(): ReactNode {
     const token = useReactiveVar(tokenVar)
@@ -12,18 +14,19 @@ export default function App(): ReactNode {
     }
 
     return (
-        <>
-            <Stack.Screen />
-            <Button onPress={() => router.replace('./(auth)/signup')}>
-                <Text>Sign Up</Text>
-            </Button>
-            <Button
-                onPress={() => {
-                    router.replace('./(auth)/login')
-                }}
-            >
-                <Text>Log In</Text>
-            </Button>
-        </>
+        <View className="flex-1">
+            <Footer className="flex flex-col gap-4">
+                <Button onPress={() => router.replace('./(auth)/signup')}>
+                    <Text>Sign Up</Text>
+                </Button>
+                <Button
+                    onPress={() => {
+                        router.replace('./(auth)/login')
+                    }}
+                >
+                    <Text>Log</Text>
+                </Button>
+            </Footer>
+        </View>
     )
 }

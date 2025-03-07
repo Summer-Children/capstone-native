@@ -1,100 +1,82 @@
-import { ReactNode, useState } from 'react'
-import { View, Text, Button } from 'react-native'
+import { Waveform, type IWaveformRef } from '@simform_solutions/react-native-audio-waveform'
+import { Circle, CirclePause, CircleStop, RotateCcw, Undo2 } from 'lucide-react-native'
+import { ReactNode, useRef, useState } from 'react'
+import { Text, TouchableOpacity, View } from 'react-native'
 import AudioRecorderPlayer from 'react-native-audio-recorder-player'
 
 export function RecordAudio(): ReactNode {
-    const [recorderPlayer] = useState(() => new AudioRecorderPlayer())
-
     const [isRecording, setIsRecording] = useState(false)
-    const [isPlaying, setIsPlaying] = useState(false)
+    const [recorderPlayer] = useState(() => new AudioRecorderPlayer())
     const [recordingUri, setRecordingUri] = useState<string | null>(null)
+    const [isRecorderMode, setIsRecorderMode] = useState(true)
+    const waveformRef = useRef<IWaveformRef>(null)
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Recorder:</Text>
+        <>
+            <View className="justify-center items-center">
+                <Waveform mode="live" ref={waveformRef} candleSpace={2} candleWidth={4} />
+                <Text className="text-lg font-bold mb-5">{isRecorderMode ? 'Recorder' : 'Player'}</Text>
 
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <Button
-                    title="Record"
-                    onPress={async () => {
-                        const result = await recorderPlayer.startRecorder()
-                        recorderPlayer.addRecordBackListener(console.log)
-                        setRecordingUri(result)
-                        setIsRecording(true)
-                    }}
-                    disabled={isRecording}
-                />
+                <View className="flex-row items-center">
+                    {/* Left-side button (Clear or Go Back to Record Mode) */}
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (isRecorderMode) {
+                                setRecordingUri(null)
+                                return
+                            }
+                            setIsRecorderMode(true)
+                        }}
+                        disabled={isRecorderMode && !recordingUri}
+                        className="items-center flex-1"
+                    >
+                        {isRecorderMode ? <RotateCcw size={32} /> : <Undo2 size={32} />}
+                        <Text className="text-center break-words">{isRecorderMode ? 'Clear' : 'Record'}</Text>
+                    </TouchableOpacity>
 
-                <Button
-                    title="Pause"
-                    onPress={async () => {
-                        await recorderPlayer.pauseRecorder()
-                        setIsRecording(false)
-                    }}
-                    disabled={!isRecording}
-                />
+                    {/* Center button (Record / Pause / Resume / Play) */}
+                    <TouchableOpacity
+                        onPress={async () => {
+                            if (!isRecording) {
+                                await recorderPlayer.startRecorder()
+                                await waveformRef.current?.startRecord({
+                                    encoder: 1,
+                                    sampleRate: 44100,
+                                    bitRate: 128000,
+                                    fileNameFormat: 'recording.wav',
+                                    useLegacy: false
+                                })
+                                setIsRecording(true)
+                                return
+                            }
+                            await recorderPlayer.stopRecorder()
+                            await waveformRef.current?.stopRecord()
+                            setIsRecording(false)
+                        }}
+                        className="items-center flex-1"
+                    >
+                        {isRecording ? <CirclePause size={64} color="red" /> : <Circle size={64} color="red" />}
+                        <Text>{isRecording ? 'Stop' : 'Record'}</Text>
+                    </TouchableOpacity>
 
-                <Button
-                    title="Resume"
-                    onPress={async () => {
-                        await recorderPlayer.resumeRecorder()
-                        setIsRecording(true)
-                    }}
-                    disabled={!recordingUri || isRecording}
-                />
-
-                <Button
-                    title="Stop"
-                    onPress={async () => {
-                        await recorderPlayer.stopRecorder()
-                        setIsRecording(false)
-                    }}
-                    disabled={!isRecording}
-                />
-
-                <Button title="Clear" onPress={() => setRecordingUri(null)} disabled={!recordingUri} />
+                    {/* Right-side button (Stop) */}
+                    <TouchableOpacity
+                        onPress={async () => {
+                            if (isRecorderMode) {
+                                await recorderPlayer.stopRecorder()
+                                setIsRecording(false)
+                                setIsRecorderMode(false)
+                                return
+                            }
+                            await recorderPlayer.stopPlayer()
+                        }}
+                        className="items-center flex-1"
+                    >
+                        <CircleStop size={32} />
+                        <Text>Stop</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-
-            <Text>Player:</Text>
-
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <Button
-                    title="Play"
-                    onPress={async () => {
-                        const result = await recorderPlayer.startPlayer(recordingUri!)
-                        setRecordingUri(result)
-                        setIsPlaying(true)
-                    }}
-                    disabled={isPlaying}
-                />
-
-                <Button
-                    title="Pause"
-                    onPress={async () => {
-                        await recorderPlayer.pausePlayer()
-                        setIsPlaying(false)
-                    }}
-                    disabled={!isPlaying}
-                />
-
-                <Button
-                    title="Resume"
-                    onPress={async () => {
-                        await recorderPlayer.resumePlayer()
-                        setIsPlaying(true)
-                    }}
-                    disabled={isPlaying}
-                />
-
-                <Button
-                    title="Stop"
-                    onPress={async () => {
-                        await recorderPlayer.stopPlayer()
-                        setIsPlaying(false)
-                    }}
-                    disabled={!isPlaying}
-                />
-            </View>
-        </View>
+        </>
     )
 }

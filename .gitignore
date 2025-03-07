@@ -37,3 +37,17 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# Expo
+.expo
+dist/
+web-build/
+
+# native code
+android/
+ios/*
+!ios/capstone
+ios/capstone/*
+!ios/capstone/Info.plist
+!ios/Podfile
+

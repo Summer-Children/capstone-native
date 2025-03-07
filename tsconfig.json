@@ -26,7 +26,7 @@
             "@widgets/*": [
                 "./src/widgets/*"
             ]
-        }
+        },
     },
     "include": [
         "**/*.ts",

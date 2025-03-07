@@ -10,7 +10,6 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "seal.ios",
       "infoPlist": {
         "LSApplicationQueriesSchemes": [
           "fb",
@@ -19,7 +18,8 @@
           "tiktoksharesdk"
         ],
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "bundleIdentifier": "com.anonymous.capstone"
     },
     "android": {
       "adaptiveIcon": {

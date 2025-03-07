@@ -15,6 +15,7 @@ prepare_react_native_project!
 
 target 'capstone' do
   use_expo_modules!
+  pod 'ExpoModulesCore', path: '../node_modules/expo-modules-core'
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
@@ -45,12 +46,21 @@ target 'capstone' do
   )
 
   post_install do |installer|
+    ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
       :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
     )
+
+    # NOTE: Natsuko has added the following code to fix the build error
+    # related to the react-native-vector-icons library.
+    system("sed -i '' 's/NativeVectorIconsSpec/NativeRNVectorIconsSpec/g' node_modules/@react-native-vector-icons/common/ios/VectorIcons.h")
+
+    system("sed -i '' 's/NativeVectorIconsSpecJSI/NativeRNVectorIconsSpecJSI/g' node_modules/@react-native-vector-icons/common/ios/VectorIcons.mm")
+
 
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.

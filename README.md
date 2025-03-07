@@ -25,6 +25,17 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+
+## Procedures to use the app on your physical phone when you have to access local backend server (when the deployed backend server is ready, you do not need to do this.)
+1. Replace your .env
+replace the EXPO_PUBLIC_API_URL of .env with the url I share
+
+2. Build (If this is your first time to use the physical phone)
+```bash
+pnpm exec expo run:ios
+```
+3. Scan the QR code with your physical iphone
+
 ## Get a fresh project
 
 When you're ready, run:
