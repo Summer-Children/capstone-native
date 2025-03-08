@@ -35,18 +35,6 @@ importers:
       '@react-native-documents/viewer':
         specifier: ^1.0.0
         version: 1.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      '@react-native-vector-icons/common':
-        specifier: ^11.0.0
-        version: 11.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      '@react-native-vector-icons/evil-icons':
-        specifier: ^1.10.1
-        version: 1.10.1(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      '@react-native-vector-icons/fontawesome6':
-        specifier: ^6.7.1
-        version: 6.7.1(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      '@react-native-vector-icons/ionicons':
-        specifier: ^7.4.0
-        version: 7.4.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       '@react-navigation/bottom-tabs':
         specifier: ^7.2.1
         version: 7.2.1(@react-navigation/native@7.0.15(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native-safe-area-context@5.2.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native-screens@4.4.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
@@ -2418,9 +2406,6 @@ packages:
   '@react-native-community/cli-tools@11.4.1':
     resolution: {integrity: sha512-GuQIuY/kCPfLeXB1aiPZ5HvF+e/wdO42AYuNEmT7FpH/0nAhdTxA9qjL8m3vatDD2/YK7WNOSVNsl2UBZuOISg==}
 
-  '@react-native-community/cli-tools@15.1.3':
-    resolution: {integrity: sha512-2RzoUKR+Y03ijBeeSoCSQihyN6dxy3fbHjraO4MheZZUzt/Yd1VMEDd0R5aa6rtiRDoknbHt45RL2GMa8MSaEA==}
-
   '@react-native-community/cli-types@11.4.1':
     resolution: {integrity: sha512-B3q9A5BCneLDSoK/iSJ06MNyBn1qTxjdJeOgeS3MiCxgJpPcxyn/Yrc6+h0Cu9T9sgWj/dmectQPYWxtZeo5VA==}
 
@@ -2443,34 +2428,6 @@ packages:
 
   '@react-native-documents/viewer@1.0.0':
     resolution: {integrity: sha512-ZUD80wagFJSlzJS7iyE30+mNnpy1HgMmiuBgL/YCs5grxCCUZhEQCjCktmhN8MRPH/KUerXRdzEejrgimefV+w==}
-    peerDependencies:
-      react: '*'
-      react-native: '*'
-
-  '@react-native-vector-icons/common@11.0.0':
-    resolution: {integrity: sha512-Ee0UAOsJRAUKb/yzs6qRSuxxLX7LbyQP/jikik9HZwfSCO81MkHwklXbYg6/+NAaYPyLCa3VsATorWY3f5M3lQ==}
-    hasBin: true
-    peerDependencies:
-      react: '*'
-      react-native: '*'
-
-  '@react-native-vector-icons/evil-icons@1.10.1':
-    resolution: {integrity: sha512-bH46bNhDYXui22TeKL4KTrzqvPbO0ZA3ppJR88ZnfRt9GWwEQTqV2CImEHrsPqyPnrk3crWgP3KXP9C227Gm5w==}
-    engines: {node: '>= 18.0.0'}
-    peerDependencies:
-      react: '*'
-      react-native: '*'
-
-  '@react-native-vector-icons/fontawesome6@6.7.1':
-    resolution: {integrity: sha512-4B23wt80oX7hUgca11X8E8DLvf9rKAwxwZQkhc+6FdSq2lWXMg6Sr2a5v99hUQnefyJk4emry30jQapjjyhGtA==}
-    engines: {node: '>= 18.0.0'}
-    peerDependencies:
-      react: '*'
-      react-native: '*'
-
-  '@react-native-vector-icons/ionicons@7.4.0':
-    resolution: {integrity: sha512-Jzqd5HITWNBNJMzg/88PVdz7mZVYSx0eRovI+ziN3r97bLZDzoDgHPI6YWVTT5bk4lPxm0ojP1//+5e5ztVAag==}
-    engines: {node: '>= 18.0.0'}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -12845,20 +12802,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@react-native-community/cli-tools@15.1.3':
-    dependencies:
-      appdirsjs: 1.2.7
-      chalk: 4.1.2
-      execa: 5.1.1
-      find-up: 5.0.0
-      mime: 2.6.0
-      open: 6.4.0
-      ora: 5.4.1
-      prompts: 2.4.2
-      semver: 7.7.1
-      shell-quote: 1.8.2
-      sudo-prompt: 9.2.1
-
   '@react-native-community/cli-types@11.4.1':
     dependencies:
       joi: 17.13.3
@@ -12901,32 +12844,6 @@ snapshots:
 
   '@react-native-documents/viewer@1.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
     dependencies:
-      react: 18.3.1
-      react-native: 0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1)
-
-  '@react-native-vector-icons/common@11.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@react-native-community/cli-tools': 15.1.3
-      picocolors: 1.1.1
-      plist: 3.1.0
-      react: 18.3.1
-      react-native: 0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1)
-
-  '@react-native-vector-icons/evil-icons@1.10.1(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@react-native-vector-icons/common': 11.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      react: 18.3.1
-      react-native: 0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1)
-
-  '@react-native-vector-icons/fontawesome6@6.7.1(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@react-native-vector-icons/common': 11.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      react: 18.3.1
-      react-native: 0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1)
-
-  '@react-native-vector-icons/ionicons@7.4.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@react-native-vector-icons/common': 11.0.0(react-native@0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-native: 0.76.6(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@11.4.1)(@types/react@18.3.18)(react@18.3.1)
 

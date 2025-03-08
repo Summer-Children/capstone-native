@@ -2,16 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-  <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>This app requires access to the microphone for audio visualization.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>This app requires access to the camera.</string>
-    <key>AVAudioSessionCategory</key>
     <string>PlayAndRecord</string>
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
+    <key>AVAudioSessionCategory</key>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
@@ -50,10 +44,6 @@
     <string>1</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
-    <key>LSMinimumSystemVersion</key>
-    <string>12.0</string>
-    <key>LSRequiresIPhoneOS</key>
-    <true/>
     <key>LSApplicationQueriesSchemes</key>
     <array>
       <string>fb</string>
@@ -69,19 +59,15 @@
     <string>12.0</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
-    <key>LSSupportsOpeningDocumentsInPlace</key>
-    <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSAllowsArbitraryLoads</key>
-      <true/>
+      <false/>
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
     <key>NSCameraUsageDescription</key>
     <string>Allow this app to access your camera</string>
-    <key>NSDocumentsFolderUsageDescription</key>
-    <string>This app requires access to the documents folder to open files.</string>
     <key>NSFaceIDUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your Face ID biometric data.</string>
     <key>NSMicrophoneUsageDescription</key>
@@ -94,8 +80,6 @@
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
-    <key>UIFileSharingEnabled</key>
-    <true/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
@@ -122,11 +106,5 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>To select a photo, please allow access to your photos.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>To capture a photo, please allow access to your camera.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>To select a photo, please allow access to your photos</string>
   </dict>
 </plist>
