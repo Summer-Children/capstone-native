@@ -94,7 +94,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                 <>
                     <View className="h-72 justify-center items-center">
                         {selectedPhotos.length === 0 ? (
-                            <Text className="text-center text-2xl text-base-600 font-bold">
+                            <Text className="text-center text-2xl text-eva-black-600 font-bold">
                                 No photos yet.{'\n'}Select or take one!
                             </Text>
                         ) : (
@@ -125,10 +125,10 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                             item === 'camera' ? (
                                 <TouchableOpacity
                                     onPress={() => setIsCameraActive(true)}
-                                    className="w-1/4 aspect-square justify-center items-center bg-base-200 border border-white"
+                                    className="w-1/4 aspect-square justify-center items-center bg-eva-white-200 border border-white"
                                 >
                                     <Camera color="#2D3648" size={24} />
-                                    <Text className="text-base-800 font-bold text-base">Camera</Text>
+                                    <Text className="text-eva-black-800 font-bold text-base">Camera</Text>
                                 </TouchableOpacity>
                             ) : (
                                 <TouchableOpacity
