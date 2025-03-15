@@ -5,14 +5,14 @@ import { Textarea } from '@/reusables/components/ui/textarea'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
 import { Link } from 'expo-router'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { View } from 'react-native'
 import { Text } from 'reusables/components/ui/text'
 
 export default function ReviewComponentPage(): ReactNode {
     return (
         <View className="flex-1">
-            <Header headerText={'Component review'}></Header>
+            <Header headerText={'Component review'} />
 
             <Label nativeID="name">Name</Label>
             <Input
@@ -51,19 +51,19 @@ export default function ReviewComponentPage(): ReactNode {
             </View>
             <View className="flex flex-row justify-stretch items-center">
                 <Label>Action</Label>
-                <Input className="w-full"></Input>
+                <Input className="w-full" />
             </View>
             <View className="flex flex-row justify-stretch items-center">
                 <Label>Frequency</Label>
-                <Input className="w-full"></Input>
+                <Input className="w-full" />
             </View>
             <View className="flex flex-row justify-stretch ites-center">
                 <Label>Next renovation</Label>
-                <Input className="w-full"></Input>
+                <Input className="w-full" />
             </View>
             <View className="flex flex-row justify-stretch items-center ">
                 <Label>Component condition</Label>
-                <Input className="w-full"></Input>
+                <Input className="w-full" />
             </View>
 
             <Footer>

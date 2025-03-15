@@ -11,7 +11,7 @@ export default function AddPhotosPage(): ReactNode {
 
     const handleContinue = (): void => {
         try {
-            router.push(`./add-action`)
+            router.push(`./update-action`)
         } catch (error) {
             console.error('Error saving photos:', error)
         }

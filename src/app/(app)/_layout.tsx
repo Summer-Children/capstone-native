@@ -2,7 +2,8 @@ import { Text } from '@/reusables/components/ui/text'
 import { useReactiveVar } from '@apollo/client'
 import { AuthContext, tokenVar } from '@shared/lib/auth/provider'
 import { Redirect, Stack } from 'expo-router'
-import { ReactNode, useContext } from 'react'
+import React from 'react'
+import { type ReactNode, useContext } from 'react'
 
 export default function AppLayout(): ReactNode {
     const { isTokenLoading } = useContext(AuthContext)
@@ -20,7 +21,7 @@ export default function AppLayout(): ReactNode {
         <>
             <Stack
                 screenOptions={{ headerTitle: '', contentStyle: { paddingHorizontal: 16, backgroundColor: 'white' } }}
-            ></Stack>
+            />
         </>
     )
 }

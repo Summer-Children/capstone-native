@@ -3,24 +3,29 @@ import { Text } from '@/reusables/components/ui/text'
 import { Textarea } from '@/reusables/components/ui/textarea'
 import { RecordAudio } from '@/src/features/record-audio/record-audio'
 import Footer from '@/src/shared/ui/footer'
-import { useRouter } from 'expo-router'
-import { ReactNode, useState } from 'react'
+import { Href, useRouter } from 'expo-router'
+import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { View } from 'react-native'
 
-export function AddDescription(): ReactNode {
+type Props = {
+    onGoNext: (note: string) => Promise<Href>
+}
+
+export function AddDescription({ onGoNext }: Props): ReactNode {
     const [value, setValue] = useState<string>('')
 
     const [isAudioDescription, setIsAudioDescription] = useState<boolean>(true)
     const router = useRouter()
-
-    const handleDone = (): void => {
+    const handleDone = async (): Promise<void> => {
         if (isAudioDescription) {
-            // TODO: Save the recorded audio and transcribe it
+            // TODO: Save the audio description
         } else {
             // TODO: Save the text description
         }
+        const targetPath = await onGoNext(value)
 
-        router.push('./add-photos')
+        router.push(targetPath)
     }
 
     console.log('isAudioDescription:', isAudioDescription)

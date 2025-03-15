@@ -3,7 +3,8 @@ import { Text } from '@/reusables/components/ui/text'
 import { tokenVar } from '@shared/lib/auth/provider'
 import { Link } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 
 export default function Homepage(): ReactNode {
@@ -18,7 +19,7 @@ export default function Homepage(): ReactNode {
                 <Text>This is a home page</Text>
             </View>
 
-            <Link href="../(app)/assessment" asChild>
+            <Link href="./buildings" asChild>
                 <Button
                     variant="default"
                     className="border border-gray-300 p-3 rounded-md bg-white mt-4 flex-row items-center justify-center"

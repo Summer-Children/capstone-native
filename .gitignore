@@ -51,3 +51,6 @@ ios/capstone/*
 !ios/capstone/Info.plist
 !ios/Podfile
 
+
+# private settings
+.vscode/settings.json

@@ -15,8 +15,6 @@ export default function XButton(): ReactNode {
         }
     }
 
-    console.log('segments', segments)
-
     return (
         <Pressable onPress={handleClose}>
             <Text>

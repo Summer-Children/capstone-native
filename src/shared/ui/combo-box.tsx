@@ -1,13 +1,12 @@
-import React from 'react'
 import { View, Text, TextInput, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 interface ComboBoxProps {
     label?: string
     placeholder: string
-    options: string[]
+    options: { id: string; name: string }[]
     value?: string
     onChangeText?: (text: string) => void
-    onSelect: (item: string) => void
+    onSelect: (item: { id: string; name: string }) => void
     isDropdownVisible?: boolean
     setDropdownVisible?: (visible: boolean) => void
 }
@@ -23,7 +22,7 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
     setDropdownVisible
 }) => {
     const filteredOptions = value
-        ? options.filter(option => option.toLowerCase().includes(value.toLowerCase()))
+        ? options.filter(option => option.name.toLowerCase().includes(value.toLowerCase()))
         : options
 
     return (
@@ -51,18 +50,18 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
                     <View className="border border-gray-300 rounded-md bg-white mt-2 max-h-40 overflow-hidden">
                         <FlatList
                             data={filteredOptions}
-                            keyExtractor={(item, index) => `${item}-${index}`}
+                            keyExtractor={(item, index) => `${item.id}-${index}`}
                             style={{ maxHeight: 160 }}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     className="p-3 border-b border-gray-200"
                                     onPress={() => {
                                         onSelect(item)
-                                        onChangeText?.(item)
+                                        onChangeText?.(item.name)
                                         setDropdownVisible?.(false)
                                     }}
                                 >
-                                    <Text>{item}</Text>
+                                    <Text>{item.name}</Text>
                                 </TouchableOpacity>
                             )}
                         />

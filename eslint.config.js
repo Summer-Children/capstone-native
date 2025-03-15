@@ -23,7 +23,18 @@ export default [
             '@typescript-eslint/explicit-member-accessibility': 'error',
             '@typescript-eslint/no-misused-promises': 'off',
             'no-async-promise-executor': 'off',
-            '@typescript-eslint/no-unused-expressions': 'off'
+            '@typescript-eslint/no-unused-expressions': 'off',
+            '@typescript-eslint/restrict-template-expressions': [
+                'error',
+                {
+                    allowNumber: true,
+                    allowBoolean: true,
+                    allowAny: false,
+                    allowNullish: true,
+                    allowRegExp: false,
+                    allowArray: true
+                }
+            ]
         }
     },
     {
