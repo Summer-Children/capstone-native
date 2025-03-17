@@ -162,6 +162,7 @@ export type Mutation = {
   deleteComponentReport: Scalars['ID']['output'];
   signIn: Scalars['String']['output'];
   signUp: Scalars['Boolean']['output'];
+  transcribeAudio: ComponentReport;
   updateAssessmentReport: AssessmentReport;
   updateBuilding: Building;
   updateComponent: Component;
@@ -221,6 +222,11 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   input: SignUp;
+};
+
+
+export type MutationTranscribeAudioArgs = {
+  input: TranscribeAudio;
 };
 
 
@@ -300,6 +306,11 @@ export type SignUp = {
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type TranscribeAudio = {
+  audio?: InputMaybe<Scalars['Upload']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 export type UpdateAssessmentReport = {

@@ -25,7 +25,7 @@ export default function LoginPage(): ReactNode {
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-    const [singIn] = useMutation(USER_LOGIN, {
+    const [signIn] = useMutation(USER_LOGIN, {
         onError: err => {
             setErrorMessage(err.message)
         }
@@ -36,7 +36,9 @@ export default function LoginPage(): ReactNode {
     }
 
     const handleSubmit = async (): Promise<void> => {
-        const data = await singIn({ variables: { input: values } })
+        const data = await signIn({ variables: { input: values } })
+
+        console.log(data)
 
         if (!data.data?.signIn) {
             setErrorMessage('Failed to get token')

@@ -6,13 +6,13 @@ import { Camera, CircleCheck, CircleX } from 'lucide-react-native'
 
 interface AddPhotoProps {
     maxSelection: number
-    onSelectPhotos: (photos: string[]) => void
+    onSelectPhotos: (photos: MediaLibrary.Asset[]) => void
 }
 
 export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): ReactNode {
     const [isCameraActive, setIsCameraActive] = useState(false)
-    const [photos, setPhotos] = useState<string[]>([])
-    const [selectedPhotos, setSelectedPhotos] = useState<string[]>([])
+    const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([])
+    const [selectedPhotos, setSelectedPhotos] = useState<MediaLibrary.Asset[]>([])
     const cameraRef = useRef<CameraView | null>(null)
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                                 sortBy: [['creationTime', false]],
                                 first: 100
                             })
-                        ).assets.map(asset => asset.uri)
+                        ).assets
                     )
                 }
             } catch (error) {
@@ -51,7 +51,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                         sortBy: [['creationTime', false]],
                         first: 100
                     })
-                ).assets.map(asset => asset.uri)
+                ).assets
             )
         } catch (error) {
             Alert.alert('Error', `Failed to capture photo: ${(error as Error).message}`)
@@ -59,17 +59,17 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
         }
     }
 
-    const handleToggleSelectPhoto = (uri: string): void => {
+    const handleToggleSelectPhoto = (toggledAsset: MediaLibrary.Asset): void => {
         setSelectedPhotos(prevSelectedPhotos => {
             let newSelectedPhotos
-            if (prevSelectedPhotos.includes(uri)) {
-                newSelectedPhotos = prevSelectedPhotos.filter(photo => photo !== uri)
+            if (prevSelectedPhotos.some(asset => asset.uri === toggledAsset.uri)) {
+                newSelectedPhotos = prevSelectedPhotos.filter(asset => asset.uri !== toggledAsset.uri)
             } else {
                 if (prevSelectedPhotos.length >= maxSelection) {
                     Alert.alert(`Maximum ${maxSelection} photos allowed`)
                     return prevSelectedPhotos
                 }
-                newSelectedPhotos = [uri, ...prevSelectedPhotos]
+                newSelectedPhotos = [toggledAsset, ...prevSelectedPhotos]
             }
             onSelectPhotos(newSelectedPhotos)
             return newSelectedPhotos
@@ -99,15 +99,19 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                             </Text>
                         ) : (
                             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="px-4">
-                                {selectedPhotos.map(uri => (
+                                {selectedPhotos.map(asset => (
                                     <View
-                                        key={uri}
+                                        key={asset.uri}
                                         className="relative mr-2 w-[145] h-[220] rounded-xl overflow-hidden"
                                     >
-                                        <Image source={{ uri }} className="w-full h-full" resizeMode="cover" />
+                                        <Image
+                                            source={{ uri: asset.uri }}
+                                            className="w-full h-full"
+                                            resizeMode="cover"
+                                        />
                                         <TouchableOpacity
                                             className="absolute top-2 right-2"
-                                            onPress={() => handleToggleSelectPhoto(uri)}
+                                            onPress={() => handleToggleSelectPhoto(asset)}
                                         >
                                             <CircleX color="#fff" />
                                         </TouchableOpacity>
@@ -118,7 +122,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                     </View>
 
                     <FlatList
-                        data={['camera', ...photos]}
+                        data={['camera', ...photos] as const}
                         keyExtractor={(_item, index) => index.toString()}
                         numColumns={4}
                         renderItem={({ item }) =>
@@ -135,7 +139,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                                     onPress={() => handleToggleSelectPhoto(item)}
                                     className="w-1/4 aspect-square border border-white"
                                 >
-                                    <Image source={{ uri: item }} className="w-full h-full" resizeMode="cover" />
+                                    <Image source={{ uri: item.uri }} className="w-full h-full" resizeMode="cover" />
                                     {selectedPhotos.includes(item) && (
                                         <View className="absolute right-2 top-2">
                                             <CircleCheck color="#fff" />

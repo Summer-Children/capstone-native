@@ -1,15 +1,12 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
+import { ApolloClient, from, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { tokenVar } from '@shared/lib/auth/provider'
 import * as SecureStore from 'expo-secure-store'
+import { createUploadLink } from 'apollo-upload-client'
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? ''
 console.log('API_URL:', API_URL)
-
-const httpLink = createHttpLink({
-    uri: API_URL
-})
 
 const authLink = setContext(async (_, { headers }) => {
     const token = await SecureStore.getItemAsync('authToken')
@@ -33,7 +30,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (networkError) console.error(`[Network error]: ${networkError}`)
 })
 
+const uploadLink = createUploadLink({ uri: API_URL, fetch })
+
 export const apolloClient = new ApolloClient({
-    link: authLink.concat(errorLink).concat(httpLink),
+    link: from([authLink, errorLink, uploadLink]),
     cache: new InMemoryCache()
 })

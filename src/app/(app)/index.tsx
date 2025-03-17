@@ -32,6 +32,33 @@ export default function Homepage(): ReactNode {
         await SecureStore.deleteItemAsync('authToken')
     }
 
+    // const [updateBuilding, { data }] = useMutation(UPDATE_BUILDING)
+
+    // const { data: buildingsResponse } = useQuery(BUILDINGS, {
+    //     onError: console.error
+    // })
+
+    // const [selectedPhotos, setSelectedPhotos] = useState<MediaLibrary.Asset[]>([])
+
+    // const info = await MediaLibrary.getAssetInfoAsync(asset)
+
+    // const file = new ReactNativeFile({
+    //     uri: info.localUri,
+    //     name: 'image.jpg',
+    //     type: 'image/jpeg'
+    // })
+
+    // console.log('file:', file)
+
+    // const res = await updateBuilding({
+    //     variables: {
+    //         input: {
+    //             id: '1',
+    //             image: file
+    //         }
+    //     }
+    // })
+
     return (
         <>
             <Stack.Screen

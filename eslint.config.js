@@ -7,6 +7,9 @@ export default [
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
     {
+        ignores: ['**/_gqlgen/**', './expo-env.d.ts']
+    },
+    {
         rules: {
             '@typescript-eslint/explicit-function-return-type': 'error',
             '@typescript-eslint/consistent-type-definitions': 'off',
