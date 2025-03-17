@@ -76,10 +76,13 @@ export function AddComponent(): ReactNode {
                         <ComboBox
                             label="Component name"
                             placeholder="Enter component name"
-                            options={components.map(comp => ({ id: comp.id, name: comp.name }))}
+                            options={components.map(comp => ({ id: comp.id, val: comp.name }))}
                             value={searchComponent}
                             onChangeText={text => setSearchComponent(text)}
-                            onSelect={item => setComponentInput({ id: item.id, name: item.name })}
+                            onSelect={item => {
+                                setComponentInput({ id: item.id, name: item.val })
+                                setSearchComponent(item.val)
+                            }}
                             isDropdownVisible={componentDropdownVisible}
                             setDropdownVisible={setComponentDropdownVisible}
                         />

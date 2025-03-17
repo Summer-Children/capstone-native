@@ -74,6 +74,10 @@
     <string>Allow this app to save photos.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Allow this app to access your photos.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Allow this app to access your location to provide accurate location-based services.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Allow this app to access your location.</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
@@ -104,5 +108,9 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSCameraUsageDescription</key>
+    <string>To capture a photo, please allow access to your camera.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>To select a photo, please allow access to your photos</string>
   </dict>
 </plist>

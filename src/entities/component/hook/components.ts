@@ -4,6 +4,7 @@ const GET_COMPONENTS = graphql(`
     query Components($buildingId: ID!) {
         res: components(buildingId: $buildingId) {
             id
+            buildingId
             name
             category
             section

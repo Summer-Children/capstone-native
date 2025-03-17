@@ -3,10 +3,10 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, TouchableWithoutFeed
 interface ComboBoxProps {
     label?: string
     placeholder: string
-    options: { id: string; name: string }[]
+    options: { id: string; val: string }[]
     value?: string
-    onChangeText?: (text: string) => void
-    onSelect: (item: { id: string; name: string }) => void
+    onChangeText: (text: string) => void
+    onSelect: (item: { id: string; val: string }) => void
     isDropdownVisible?: boolean
     setDropdownVisible?: (visible: boolean) => void
 }
@@ -22,7 +22,7 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
     setDropdownVisible
 }) => {
     const filteredOptions = value
-        ? options.filter(option => option.name.toLowerCase().includes(value.toLowerCase()))
+        ? options.filter(option => option.val.toLowerCase().includes(value.toLowerCase()))
         : options
 
     return (
@@ -37,9 +37,9 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
                 <View className="border border-gray-300 rounded-md p-3 bg-white">
                     <TextInput
                         placeholder={placeholder}
-                        value={value}
+                        defaultValue={value}
                         onChangeText={text => {
-                            onChangeText?.(text)
+                            onChangeText(text)
                             setDropdownVisible?.(filteredOptions.length > 0)
                         }}
                         onFocus={() => setDropdownVisible?.(true)}
@@ -57,11 +57,10 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
                                     className="p-3 border-b border-gray-200"
                                     onPress={() => {
                                         onSelect(item)
-                                        onChangeText?.(item.name)
                                         setDropdownVisible?.(false)
                                     }}
                                 >
-                                    <Text>{item.name}</Text>
+                                    <Text>{item.val}</Text>
                                 </TouchableOpacity>
                             )}
                         />

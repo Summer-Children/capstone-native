@@ -8,21 +8,37 @@ const GET_BUILDINGS = graphql(`
             name
             address
             year
+            strataId
             crfTotalBalance
             crfMinimumBalance
             crfAnnualContribution
             fiscalYear
+            assessmentReports {
+                id
+                fiscalYear
+                draft
+            }
         }
     }
 `)
 
 const GET_BUILDING = graphql(`
-    query Building($id: ID!) {
+    query GetBuilding($id: ID!) {
         res: building(id: $id) {
             id
             name
-            address
             year
+            address
+            strataId
+            crfTotalBalance
+            crfMinimumBalance
+            crfAnnualContribution
+            fiscalYear
+            assessmentReports {
+                id
+                fiscalYear
+                draft
+            }
         }
     }
 `)

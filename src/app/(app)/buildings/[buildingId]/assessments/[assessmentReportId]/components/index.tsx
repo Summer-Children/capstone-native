@@ -12,10 +12,15 @@ import { useQuery } from '@apollo/client'
 
 export default function BuildingAssessmentPage(): ReactNode {
     const { buildingId, assessmentReportId } = useLocalSearchParams()
+    console.log({ buildingId, assessmentReportId })
 
     const [title] = useState('')
     const { data, loading, error } = useQuery(GET_COMPONENTS, {
-        variables: { buildingId: buildingId as string }
+        variables: { buildingId: buildingId.toString() },
+        fetchPolicy: 'network-only',
+        onCompleted: d => {
+            console.log('completed', d)
+        }
     })
 
     if (loading) {
@@ -74,31 +79,15 @@ export default function BuildingAssessmentPage(): ReactNode {
             </View>
 
             <Footer>
-                {data && data.res.length > 0 ? (
-                    <Link href={'./review/'} asChild>
-                        <Button>
-                            <Text>Confirm components</Text>
-                        </Button>
-                    </Link>
-                ) : (
-                    <Button disabled>
+                <Link
+                    href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/review`}
+                    asChild
+                    disabled={!data || data?.res.length === 0}
+                >
+                    <Button>
                         <Text>Confirm components</Text>
                     </Button>
-                )}
-            </Footer>
-
-            <Footer>
-                {data && data.res.length > 0 ? (
-                    <Link href={'./review/'} asChild>
-                        <Button>
-                            <Text>Confirm components</Text>
-                        </Button>
-                    </Link>
-                ) : (
-                    <Button disabled>
-                        <Text>Confirm components</Text>
-                    </Button>
-                )}
+                </Link>
             </Footer>
         </View>
     )
