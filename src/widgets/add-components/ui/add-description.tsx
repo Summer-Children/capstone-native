@@ -9,11 +9,12 @@ import { useState } from 'react'
 import { View } from 'react-native'
 
 type Props = {
-    onGoNext: (note: string) => Promise<Href>
+    onGoNext: (note: string | null | undefined) => Promise<Href>
+    initialValue?: string | null
 }
 
-export function AddDescription({ onGoNext }: Props): ReactNode {
-    const [value, setValue] = useState<string>('')
+export function AddDescription({ onGoNext, initialValue }: Props): ReactNode {
+    const [value, setValue] = useState<string | null | undefined>(initialValue)
 
     const [isAudioDescription, setIsAudioDescription] = useState<boolean>(true)
     const router = useRouter()
@@ -54,10 +55,10 @@ export function AddDescription({ onGoNext }: Props): ReactNode {
                 <View className="flex flex-col gap-4">
                     <Textarea
                         placeholder="Write a component description"
-                        value={value}
+                        defaultValue={initialValue ?? ''}
                         onChangeText={setValue}
                         aria-labelledby="textareaLabel"
-                        className="min-h-[218px] ma"
+                        className="min-h-[218px] max-h-[218px]"
                     />
                     <Button variant="link" size="sm" onPress={() => setIsAudioDescription(true)}>
                         <Text className="font-bold" style={{ fontSize: 16 }}>

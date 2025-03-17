@@ -3,11 +3,12 @@ import Header from '@/src/shared/ui/header'
 import XButton from '@/src/shared/ui/x-button'
 import { AddDescription } from '@/src/widgets/add-components/ui/add-description'
 import { useMutation, useQuery } from '@apollo/client'
-import { Alert, Text } from 'react-native'
+import { Text } from 'react-native'
 
 import { Href, Stack, useLocalSearchParams } from 'expo-router'
 import type { ReactNode } from 'react'
 import React from 'react'
+import { ComponentReportPriority } from '@/src/_gqlgen/graphql'
 
 export default function AudioDescriptionPage(): ReactNode {
     const { componentReportId } = useLocalSearchParams()
@@ -26,24 +27,20 @@ export default function AudioDescriptionPage(): ReactNode {
         return <Text>could not fetch data</Text>
     }
 
-    const onGoNext = async (note: string): Promise<Href> => {
+    const onGoNext = async (note: string | null | undefined): Promise<Href> => {
         const { componentReport } = data
-        const { id, action, condition, priority, quantityNeeded, yearReviewed } = componentReport
-        if (!id || !action || !condition || !priority || !quantityNeeded || !yearReviewed) {
-            Alert.alert('data is imcomplete')
-            return Promise.reject(new Error('data is imcomplete'))
-        }
+        const { action, condition, priority, quantityNeeded, yearReviewed } = componentReport
 
         await updateComponentReport({
             variables: {
                 input: {
                     id: componentReportId.toString(),
-                    action: action,
-                    condition: condition,
-                    priority: priority,
-                    quantityNeeded: quantityNeeded,
-                    yearReviewed: yearReviewed,
-                    note: note
+                    action: action ?? '',
+                    condition: condition ?? '',
+                    priority: priority ?? ComponentReportPriority.Low,
+                    quantityNeeded: quantityNeeded ?? 0,
+                    yearReviewed: yearReviewed ?? 0,
+                    note: note ?? ''
                 }
             }
         })
@@ -59,7 +56,7 @@ export default function AudioDescriptionPage(): ReactNode {
                 headerDescription="Describe your component status and details. We'll organize it in the report for you."
             />
 
-            <AddDescription onGoNext={onGoNext} />
+            <AddDescription onGoNext={onGoNext} initialValue={data.componentReport.note} />
         </>
     )
 }

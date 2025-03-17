@@ -5,13 +5,14 @@ import { View } from 'react-native'
 interface HeaderProps {
     headerText: string
     headerDescription?: string
+    className?: string
 }
 
-export default function Header({ headerText, headerDescription }: HeaderProps): ReactNode {
+export default function Header({ headerText, headerDescription, className }: HeaderProps): ReactNode {
     return (
-        <View className="py-4">
-            <Text className="text-3xl font-bold ">{headerText}</Text>
-            <Text className="text-lg text-gray-700 pb-6">{headerDescription}</Text>
+        <View className={`flex flex-col gap-3 py-4 h-fit ${className}`}>
+            {headerText && <Text className="text-3xl font-bold ">{headerText}</Text>}
+            {headerDescription && <Text className="text-lg text-gray-700">{headerDescription}</Text>}
         </View>
     )
 }

@@ -11,7 +11,7 @@ import { ComponentReportPriority } from '@/src/_gqlgen/graphql'
 export default function AudioDescriptionPage(): ReactNode {
     const { assessmentReportId, componentId, buildingId } = useLocalSearchParams()
     const [createComponentReport] = useMutation(CREATE_COMPONENT_REPORT)
-    const onGoNext = async (note: string): Promise<Href> => {
+    const onGoNext = async (note: string | null | undefined): Promise<Href> => {
         const result = await createComponentReport({
             variables: {
                 input: {
@@ -19,7 +19,7 @@ export default function AudioDescriptionPage(): ReactNode {
                     componentId: componentId.toString(),
                     action: 'TBD',
                     condition: 'TBD',
-                    note: note,
+                    note: note ?? '',
                     priority: ComponentReportPriority.Low,
                     quantityNeeded: 0,
                     yearReviewed: 0
