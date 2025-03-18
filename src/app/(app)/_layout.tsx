@@ -9,8 +9,7 @@ export default function AppLayout(): ReactNode {
     const { isTokenLoading } = useContext(AuthContext)
     const token = useReactiveVar(tokenVar)
     const pathname = usePathname()
-    const hiddenPaths = ['/buildings', '/building/create', '/building/detail', '/building/edit', '/building/success']
-    const shouldShowBottomNavigation = !hiddenPaths.some(path => pathname.startsWith(path))
+    const shouldShowBottomNavigation = pathname === '/' || pathname === '/buildings/archive-list'
 
     if (isTokenLoading) {
         return <Text>Loading...</Text>
