@@ -17,7 +17,7 @@ const navItems = [
 
 const NavItem = ({ name, href }: (typeof navItems)[number]): ReactNode => {
     const pathname = usePathname()
-    const isActive = pathname.endsWith(href.replace('./', '/')) || pathname.startsWith(href.replace('./', '/') + '/')
+    const isActive = pathname === href.replace('./', '/')
     const NavIcon = iconMap[name]
 
     const handlePress = (): void => {
