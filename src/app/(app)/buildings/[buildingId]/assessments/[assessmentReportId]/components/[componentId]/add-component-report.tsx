@@ -1,6 +1,6 @@
 import { CREATE_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
 import Header from '@/src/shared/ui/header'
-import XButton from '@/src/shared/ui/x-button'
+import CloseButton from '@/src/shared/ui/close-button'
 import { useMutation } from '@apollo/client'
 import { AddDescription } from '@/src/widgets/add-components/ui/add-description'
 import { Href, Stack, useLocalSearchParams } from 'expo-router'
@@ -22,8 +22,14 @@ export default function AudioDescriptionPage(): ReactNode {
                     note: note ?? '',
                     priority: ComponentReportPriority.Low,
                     quantityNeeded: 0,
-                    yearReviewed: 0
+                    yearReviewed: new Date().getFullYear()
                 }
+            },
+            onCompleted: () => {
+                console.error('Component report created')
+            },
+            onError: error => {
+                console.error('Error creating component report', error)
             }
         })
         const componentReportId = result.data?.createComponentReport.id
@@ -35,7 +41,7 @@ export default function AudioDescriptionPage(): ReactNode {
 
     return (
         <>
-            <Stack.Screen options={{ headerRight: () => <XButton /> }} />
+            <Stack.Screen options={{ headerRight: () => <CloseButton /> }} />
             <Header
                 headerText="Component description"
                 headerDescription="Describe your component status and details. We'll organize it in the report for you."

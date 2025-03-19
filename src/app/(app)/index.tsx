@@ -1,21 +1,21 @@
 import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
+import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building'
+import { Building } from '@/src/entities/building/type/building-type'
 import { useCarousel } from '@/src/features/map-view/api/use-carousel'
 import { BuildingCarousel } from '@/src/features/map-view/ui/building-carousel'
 import { MapViewComponent } from '@/src/features/map-view/ui/map'
+import { AddHomeIcon, AssignmentIcon } from '@/src/shared/ui'
+import { ActionButton, BlankState } from '@/src/widgets/home'
+import { useQuery } from '@apollo/client'
 import { tokenVar } from '@shared/lib/auth/provider'
 import { router, Stack } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
-import { AddHomeIcon, AssignmentIcon } from '@/src/shared/ui'
-import { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { useQuery } from '@apollo/client'
-import { GET_BUILDINGS } from '@/src/entities/building'
-import { Building } from '@/src/entities/building/type/building-type'
-import { ActionButton, BlankState } from '@/src/widgets/home'
 
 export default function Homepage(): ReactNode {
-    const { data, loading, error } = useQuery<{ res: Building[] }>(GET_BUILDINGS)
+    const { data, loading, error } = useQuery<{ res: Building[] }>(GET_BUILDINGS_ON_FIRST_LOAD)
     const buildings: Building[] = (data?.res || []).filter((b): b is Building => b !== null)
 
     const { handleSelectBuilding } = useCarousel()

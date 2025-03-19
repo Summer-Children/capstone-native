@@ -8,7 +8,7 @@ interface libraryAddIconProps extends SvgProps {
     variant?: 'solid' | 'outline'
 }
 
-export function libraryAddIcon({
+export function LibraryAddIcon({
     color = '#5D6368',
     size = 24,
     variant = 'outline',

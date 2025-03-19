@@ -6,7 +6,7 @@ import { router } from 'expo-router'
 import { ComboBox } from '@shared/ui/combo-box'
 import Header from '@/src/shared/ui/header'
 import Footer from '@/src/shared/ui/footer'
-import { GET_BUILDINGS } from '@/src/entities/building/hook'
+import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building/hook'
 import { useMutation, useQuery } from '@apollo/client'
 import { CREATE_ASSESSMENT_REPORT } from '@/src/entities/assessment-report/hook/assessment-report'
 
@@ -16,7 +16,7 @@ export default function SelectBuildingPage(): ReactNode {
 
     const [isDropdownVisible, setDropdownVisible] = useState(false)
 
-    const { data, loading, error } = useQuery(GET_BUILDINGS, {
+    const { data, loading, error } = useQuery(GET_BUILDINGS_ON_FIRST_LOAD, {
         fetchPolicy: 'network-only'
     })
     const isNewBldg = useMemo(() => {

@@ -28,7 +28,15 @@ export function GeneralForm(): ReactNode {
             const response = await Location.reverseGeocodeAsync({ latitude, longitude })
 
             if (response.length > 0) {
-                const { name, city, postalCode, region, country } = response[0]
+                // NOTE from Natsuko: I added the type assertion to prevent lint error.
+                // const { name, city, postalCode, region, country } = response[0]
+                const { name, city, postalCode, region, country } = response[0] as {
+                    name: string | null
+                    city: string | null
+                    postalCode: string | null
+                    region: string | null
+                    country: string | null
+                }
                 const formattedAddress = `${name ? name + ', ' : ''}${city ? city + ', ' : ''}${region ? region + ', ' : ''}${country ? country + ', ' : ''}${postalCode || ''}`
                 setValue('address', formattedAddress)
             } else {

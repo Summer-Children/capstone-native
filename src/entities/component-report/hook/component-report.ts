@@ -32,6 +32,22 @@ const GET_COMPONENT_REPORT = graphql(`
     }
 `)
 
+export const GET_COMPONENT_REPORTS_BY_ASSESSMENT_REPORT_ID = graphql(`
+    query GetComponentReports($assessmentReportId: ID!) {
+        componentReports(assessmentReportId: $assessmentReportId) {
+            id
+            componentId
+            action
+            condition
+            priority
+            note
+            quantityNeeded
+            yearReviewed
+            assessmentReportId
+        }
+    }
+`)
+
 const UPDATE_COMPONENT_REPORT = graphql(`
     mutation UpdateComponentReport($input: UpdateComponentReport!) {
         res: updateComponentReport(input: $input) {

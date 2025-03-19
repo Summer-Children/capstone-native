@@ -1,29 +1,41 @@
 import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
-import Header from '@/src/shared/ui/header'
-import { Stack, useLocalSearchParams, Link } from 'expo-router'
-import { type ReactNode, useState } from 'react'
-import { View, FlatList } from 'react-native'
-import { CirclePlus } from 'lucide-react-native'
-import XButton from '@shared/ui/x-button'
-import Footer from '@/src/shared/ui/footer'
+import { GET_BUILDING } from '@/src/entities/building/hook'
 import { GET_COMPONENTS } from '@/src/entities/component/hook'
+import Footer from '@/src/shared/ui/footer'
+import Header from '@/src/shared/ui/header'
 import { useQuery } from '@apollo/client'
+import { ChevronIcon, LibraryAddIcon } from '@shared/ui/icons'
+import CloseButton from '@/src/shared/ui/close-button'
+import { Link, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import { CirclePlus } from 'lucide-react-native'
+import { useCallback, type ReactNode } from 'react'
+import { FlatList, View } from 'react-native'
 
 export default function BuildingAssessmentPage(): ReactNode {
     const { buildingId, assessmentReportId } = useLocalSearchParams()
-    console.log({ buildingId, assessmentReportId })
+    const { data: buildingData, loading: buildingLoading } = useQuery(GET_BUILDING, {
+        variables: { id: buildingId as string },
+        fetchPolicy: 'network-only'
+    })
+    const buildingName = buildingData?.res?.name || ''
 
-    const [title] = useState('')
-    const { data, loading, error } = useQuery(GET_COMPONENTS, {
-        variables: { buildingId: buildingId.toString() },
-        fetchPolicy: 'network-only',
-        onCompleted: d => {
-            console.log('completed', d)
-        }
+    const {
+        refetch: refetchComponents,
+        data: componentData,
+        loading: componentLoading,
+        error
+    } = useQuery(GET_COMPONENTS, {
+        variables: { buildingId: buildingId as string }
     })
 
-    if (loading) {
+    useFocusEffect(
+        useCallback(() => {
+            void refetchComponents()
+        }, [refetchComponents])
+    )
+
+    if (componentLoading || buildingLoading) {
         return <Text>Loading...</Text>
     }
 
@@ -33,28 +45,36 @@ export default function BuildingAssessmentPage(): ReactNode {
 
     return (
         <View className="flex-1">
-            <Stack.Screen options={{ headerTitle: () => <Text>{title}</Text>, headerRight: () => <XButton /> }} />
+            <Stack.Screen
+                options={{ headerTitle: () => <Text>{buildingName}</Text>, headerRight: () => <CloseButton /> }}
+            />
             <Header
                 headerText="Building assessment"
-                headerDescription="Create components, capture its pictures, and describe all of them using your voice."
+                headerDescription="Add components with photos and audio description. We'll categorize them and generate a report for you!"
             />
 
             <View className="flex-row items-center justify-between">
-                <Text>Components</Text>
-                {data && data.res.length > 0 && (
+                <Text className="font-bold text-xl">Components</Text>
+                {componentData && componentData.res.length > 0 && (
                     <Link
                         href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/components/add-component`}
                         asChild
                     >
-                        <Button variant="default">
-                            <Text> Add a component</Text>
+                        <Button
+                            className="rounded-lg flex-row gap-2 items-center justify-center bg-eva-white-100 "
+                            size="sm"
+                        >
+                            <LibraryAddIcon variant="solid" color="#111213" size={20}>
+                                {' '}
+                            </LibraryAddIcon>
+                            <Text className="text-eva-black-900">Add a component</Text>
                         </Button>
                     </Link>
                 )}
             </View>
 
             <View className="h-2/3 py-4">
-                {data && data.res.length === 0 && (
+                {componentData && componentData.res.length === 0 && (
                     <Link
                         href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/components/add-component`}
                         asChild
@@ -67,12 +87,15 @@ export default function BuildingAssessmentPage(): ReactNode {
                 )}
 
                 <FlatList
-                    data={data?.res}
+                    className="flex flex-col"
+                    contentContainerStyle={{ gap: 16 }}
+                    data={componentData?.res}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <View className="flex-row items-center py-2">
+                        <View className="flex flex-row justify-between items-center p-2 rounded-md bg-eva-white-100 h-[5rem] ">
                             {/* <Image source={{ uri: item?.image }} className="w-10 h-10 mr-2" /> */}
-                            <Text>{item?.name}</Text>
+                            <Text className="font-bold">{item?.name}</Text>
+                            <ChevronIcon direction="right"></ChevronIcon>
                         </View>
                     )}
                 />
@@ -82,7 +105,7 @@ export default function BuildingAssessmentPage(): ReactNode {
                 <Link
                     href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/review`}
                     asChild
-                    disabled={!data || data?.res.length === 0}
+                    disabled={!componentData || componentData?.res.length === 0}
                 >
                     <Button>
                         <Text>Confirm components</Text>

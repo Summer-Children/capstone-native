@@ -1,6 +1,6 @@
-import { createContext, ReactNode, useEffect, useState, type PropsWithChildren } from 'react'
 import { makeVar } from '@apollo/client'
 import * as SecureStore from 'expo-secure-store'
+import { createContext, ReactNode, useEffect, useState, type PropsWithChildren } from 'react'
 // TODO: Replace the commented out user related code when the user query is implemented
 
 // Use Apollo reactive variable to make the authToken globally available in the app

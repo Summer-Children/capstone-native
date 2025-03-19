@@ -29,9 +29,7 @@ type Props = {
 
 export default function AddAction({ componentReportId, componentId }: Props): ReactNode {
     const insets = useSafeAreaInsets()
-    const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>()
-    const [componentItems, setComponentItems] = useState<UpdateComponent>()
-    const { loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
+    const { data: componentReportData, loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
         variables: {
             componentReportId: componentReportId.toString()
         },
@@ -45,18 +43,47 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 yearReviewed: d?.componentReport.yearReviewed ?? 0,
                 note: d?.componentReport.note ?? ''
             })
+        },
+        onError: e => {
+            console.error('Error fetching component report', e)
         }
     })
-    const { loading: componentLoading } = useQuery(GET_COMPONENT, {
+    const { data: componentData, loading: componentLoading } = useQuery(GET_COMPONENT, {
         variables: {
             componentId: componentId
         },
         onCompleted: d => {
             setComponentItems(d?.res)
+        },
+        onError: e => {
+            console.error('Error fetching component', e)
         }
     })
     const [updateComponentReport] = useMutation(UPDATE_COMPONENT_REPORT)
     const [updateComponent] = useMutation(UPDATE_COMPONENT)
+
+    if (!componentReportData || !componentData) return <Text>No data found</Text>
+
+    const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>({
+        id: componentReportData?.componentReport.id.toString(),
+        action: componentReportData?.componentReport.action ?? '',
+        condition: componentReportData?.componentReport.condition ?? '',
+        priority: componentReportData?.componentReport.priority ?? ComponentReportPriority.Low,
+        quantityNeeded: componentReportData?.componentReport.quantityNeeded ?? 0,
+        yearReviewed: componentReportData?.componentReport.yearReviewed ?? 0,
+        note: componentReportData?.componentReport.note ?? ''
+    })
+    const [componentItems, setComponentItems] = useState<UpdateComponent>({
+        id: componentData?.res.id.toString(),
+        lastActionYear: componentData?.res.lastActionYear ?? 0,
+        nextActionYear: componentData?.res.nextActionYear ?? 0,
+        name: componentData?.res.name ?? '',
+        category: componentData?.res.category ?? '',
+        section: componentData?.res.section ?? '',
+        yearInstalled: componentData?.res.yearInstalled ?? 0,
+        unitRate: componentData?.res.unitRate ?? 0,
+        actionFrequency: componentData?.res.actionFrequency ?? 0
+    })
 
     useEffect(() => {
         const timeout = setTimeout(async () => {
@@ -88,19 +115,29 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 console.error('No component items found')
                 return
             }
-            const { id, lastActionYear, nextActionYear } = componentItems
+            const {
+                id,
+                lastActionYear,
+                nextActionYear,
+                name,
+                category,
+                section,
+                yearInstalled,
+                unitRate,
+                actionFrequency
+            } = componentItems
             await updateComponent({
                 variables: {
                     component: {
                         id: id,
                         lastActionYear: lastActionYear,
                         nextActionYear: nextActionYear,
-                        name: componentItems.name,
-                        category: componentItems.category,
-                        section: componentItems.section,
-                        actionFrequency: componentItems.actionFrequency,
-                        unitRate: componentItems.unitRate,
-                        yearInstalled: componentItems.yearInstalled
+                        name: name,
+                        category: category,
+                        section: section,
+                        yearInstalled: yearInstalled,
+                        unitRate: unitRate,
+                        actionFrequency: actionFrequency
                     }
                 }
             })

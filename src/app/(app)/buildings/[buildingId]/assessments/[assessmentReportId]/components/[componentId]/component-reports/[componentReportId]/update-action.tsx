@@ -1,5 +1,5 @@
 import Header from '@/src/shared/ui/header'
-import XButton from '@/src/shared/ui/x-button'
+import CloseButton from '@/src/shared/ui/close-button'
 import AddAction from '@/src/widgets/add-components/ui/add-action'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import type { ReactNode } from 'react'
@@ -10,7 +10,7 @@ export default function AddActionPage(): ReactNode {
 
     return (
         <>
-            <Stack.Screen options={{ headerRight: () => <XButton /> }} />
+            <Stack.Screen options={{ headerRight: () => <CloseButton /> }} />
             <Header
                 headerText="Action"
                 headerDescription="Describe the condition of this component and recommend the necessary actions."

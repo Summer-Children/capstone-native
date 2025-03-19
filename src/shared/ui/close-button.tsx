@@ -1,9 +1,8 @@
 import { useRouter, useSegments } from 'expo-router'
-import { Pressable, Text } from 'react-native'
-import { X } from 'lucide-react-native'
 import { ReactNode } from 'react'
+import { Pressable, Text } from 'react-native'
 
-export default function XButton(): ReactNode {
+export default function CloseButton(): ReactNode {
     const router = useRouter()
     const segments = useSegments()
 
@@ -17,9 +16,7 @@ export default function XButton(): ReactNode {
 
     return (
         <Pressable onPress={handleClose}>
-            <Text>
-                <X />
-            </Text>
+            <Text className="text-eva-blue-500 text-xl">Close</Text>
         </Pressable>
     )
 }

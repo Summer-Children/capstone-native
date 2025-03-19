@@ -7,12 +7,12 @@ import { SearchBar } from '@/src/features/filter-search/ui/search-bar'
 import { TagList } from '@/src/features/filter-search/ui/tag-list'
 import { SlidersHorizontal } from 'lucide-react-native'
 import { FilterView } from '@/src/features/filter-search/ui/filter-viewer'
-import { GET_BUILDINGS } from '@/src/entities/building'
+import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building'
 import { useQuery } from '@apollo/client'
 
 export default function BuildingArchive(): ReactNode {
     const router = useRouter()
-    const { data, loading, error } = useQuery(GET_BUILDINGS)
+    const { data, loading, error } = useQuery(GET_BUILDINGS_ON_FIRST_LOAD)
     const buildings = data?.res || []
     const [searchQuery, setSearchQuery] = useState('')
     const [filters, setFilters] = useState({ year: '', location: '' })

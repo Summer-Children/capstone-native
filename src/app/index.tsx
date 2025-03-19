@@ -12,7 +12,6 @@ export default function App(): ReactNode {
     if (token) {
         return <Redirect href="/(app)" />
     }
-
     return (
         <View className="flex-1">
             <Footer className="flex flex-col gap-4">

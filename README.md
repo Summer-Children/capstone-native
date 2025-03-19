@@ -63,6 +63,14 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
+## eas build
+
+ref: https://github.com/expo/eas-cli/issues/997
+
+```
+eas build -p ios --profile preview
+```
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:

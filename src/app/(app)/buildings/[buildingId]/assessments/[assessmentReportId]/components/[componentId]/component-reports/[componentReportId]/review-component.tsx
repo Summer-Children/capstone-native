@@ -184,6 +184,7 @@ export default function ReviewComponentPage(): React.ReactNode {
             </ScrollView>
 
             <Footer className="bg-white h-28 flex flex-col justify-center items-center">
+                {/*Minor TODO: the following "Continue to finish" button should navigate to the "Review Assessment" page only when the immediate last route segment is "Review assessment" page */}
                 <Link href={componentListPath} asChild>
                     <Button className="w-full bg-blue-900 mb-2">
                         <Text className="text-white font-medium">Continue to finish</Text>

@@ -1,5 +1,22 @@
 import { graphql } from '@gqlgen'
 
+const GET_BUILDINGS_ON_FIRST_LOAD = graphql(`
+    query BuildingsOnFirstLoad {
+        res: buildings {
+            id
+            userId
+            name
+            address
+            year
+            strataId
+            crfTotalBalance
+            crfMinimumBalance
+            crfAnnualContribution
+            fiscalYear
+        }
+    }
+`)
+
 const GET_BUILDINGS = graphql(`
     query Buildings {
         res: buildings {
@@ -43,4 +60,4 @@ const GET_BUILDING = graphql(`
     }
 `)
 
-export { GET_BUILDINGS, GET_BUILDING }
+export { GET_BUILDINGS, GET_BUILDING, GET_BUILDINGS_ON_FIRST_LOAD }

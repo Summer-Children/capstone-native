@@ -1,5 +1,5 @@
 import { Text } from '@/reusables/components/ui/text'
-import React, { ReactNode } from 'react'
+import { default as React, ReactNode } from 'react'
 import { View } from 'react-native'
 
 interface HeaderProps {
