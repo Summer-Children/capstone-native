@@ -1,7 +1,7 @@
-import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
 import { CREATE_COMPONENT } from '@/src/entities/component/hook/components'
 import { components as initialComponents } from '@/src/entities/component/model/components-list'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import { ComboBox } from '@/src/shared/ui/combo-box'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
@@ -59,7 +59,7 @@ export function AddComponent(): ReactNode {
             <View className="flex-1">
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <Header headerText="Add a building component" headerDescription="Enter your component name" />
+                        <Header headerText="Add a component" />
                         <ComboBox
                             label="Component name"
                             placeholder="Enter component name"
@@ -77,15 +77,15 @@ export function AddComponent(): ReactNode {
                 </TouchableWithoutFeedback>
 
                 <Footer>
-                    <Button
+                    <BottomButton
                         variant="default"
                         disabled={!isRegisteredComponent && !componentInput}
                         onPress={async () => {
                             await handleCreateComponent()
                         }}
                     >
-                        <Text>Save component</Text>
-                    </Button>
+                        <Text>Continue</Text>
+                    </BottomButton>
                 </Footer>
             </View>
         </>

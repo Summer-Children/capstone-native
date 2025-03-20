@@ -1,7 +1,8 @@
-import { Button } from '@/reusables/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/reusables/components/ui/table'
 import { Text } from '@/reusables/components/ui/text'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
+import { LoadingOverlay } from '@/src/shared/ui/loading-overlay'
 import { useMutation } from '@apollo/client'
 import { UPDATE_ASSESSMENT_REPORT } from '@entities/assessment-report/hooks/update-assessment-report'
 import cn from 'clsx'
@@ -22,12 +23,12 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
     const [updateAssessmentReport] = useMutation(UPDATE_ASSESSMENT_REPORT)
 
     const { width } = useWindowDimensions()
-    const MIN_COLUMN_WIDTHS = [100, 100, 100]
+    const MIN_COLUMN_WIDTHS = [50, 100, 100, 100]
     const columnWidths = useMemo(() => {
-        return MIN_COLUMN_WIDTHS.map(minWidth => {
-            const evenWidth = width / MIN_COLUMN_WIDTHS.length
-            return evenWidth > minWidth ? evenWidth : minWidth
-        })
+        const totalWidth = width * 0.91
+        const firstColumnWidth = totalWidth / 7
+        const remainingWidth = (totalWidth - firstColumnWidth) / (MIN_COLUMN_WIDTHS.length - 1)
+        return [firstColumnWidth, remainingWidth, remainingWidth, remainingWidth]
     }, [width])
 
     // TODO: Replace the dummy data with the actual data once the backend is ready (Tomoki will do the calculation part)
@@ -35,17 +36,20 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
         {
             fiscalYear: '2027',
             annualContribution: '$71.204',
-            Expenditures: '$250.00'
+            Expenditures: '$250.00',
+            closingBalance: '$50.000'
         },
         {
             fiscalYear: '2032',
             annualContribution: '$82.545',
-            Expenditures: '$150.00'
+            Expenditures: '$150.00',
+            closingBalance: '$100.000'
         },
         {
             fiscalYear: '2037',
             annualContribution: '$82.500',
-            Expenditures: '$300.00'
+            Expenditures: '$300.00',
+            closingBalance: '$75.000'
         }
     ]
 
@@ -71,7 +75,6 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
 
             if (!pdfUrl) return
 
-            // TODO: need to modify the following pathname to report screen page once Lan merges that page
             router.push({
                 pathname: '/(app)/report',
                 params: { pdfUrl: encodeURIComponent(pdfUrl) }
@@ -88,14 +91,17 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                     <Table aria-labelledby="invoice-table">
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="px-0.5" style={{ width: columnWidths[0] }}>
-                                    <Text>Fiscal year</Text>
+                                <TableHead style={{ width: columnWidths[0] }}>
+                                    <Text className="text-left">Year</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[1] }}>
-                                    <Text>Annual Res.Cout.</Text>
+                                    <Text className="text-right">Contributions</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[2] }}>
-                                    <Text>Expenditures</Text>
+                                    <Text className="text-right"> Expenditures</Text>
+                                </TableHead>
+                                <TableHead style={{ width: columnWidths[3] }}>
+                                    <Text className="text-right">Closing Balance</Text>
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -106,13 +112,16 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                                     className={cn('active:bg-secondary', index % 2 && 'bg-muted/40 ')}
                                 >
                                     <TableCell style={{ width: columnWidths[0] }}>
-                                        <Text>{dummy.fiscalYear}</Text>
+                                        <Text className="text-left">{dummy.fiscalYear}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[1] }}>
-                                        <Text>{dummy.annualContribution}</Text>
+                                        <Text className="text-right">{dummy.annualContribution}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[2] }}>
-                                        <Text>{dummy.Expenditures}</Text>
+                                        <Text className="text-right"> {dummy.Expenditures}</Text>
+                                    </TableCell>
+                                    <TableCell style={{ width: columnWidths[3] }}>
+                                        <Text className="text-right">{dummy.closingBalance}</Text>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -120,15 +129,10 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                     </Table>
                 </ScrollView>
                 <Footer>
-                    {loading ? (
-                        <Text>We're generating your report...</Text>
-                    ) : (
-                        <Button onPress={handleGenerateReport}>
-                            <Text>Generate Report</Text>
-                        </Button>
-                    )}
+                    <BottomButton onPress={handleGenerateReport}>Generate full report</BottomButton>
                 </Footer>
             </View>
+            {loading && <LoadingOverlay>Generating a report...</LoadingOverlay>}
         </>
     )
 }

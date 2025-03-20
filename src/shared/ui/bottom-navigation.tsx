@@ -11,7 +11,7 @@ const iconMap = {
 
 const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Assessment', href: './buildings' },
+    { name: 'Assessment', href: '/buildings' },
     { name: 'Buildings', href: './buildings/archive-list' }
 ] as const
 

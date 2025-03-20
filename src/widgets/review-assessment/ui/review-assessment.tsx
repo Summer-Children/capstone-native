@@ -2,6 +2,7 @@ import { Button } from '@/reusables/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/reusables/components/ui/card'
 import { Separator } from '@/reusables/components/ui/separator'
 import { Text } from '@/reusables/components/ui/text'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
 import { CheckCircleIcon, ChevronIcon, ErrorIcon, LibraryAddIcon } from '@/src/shared/ui/icons'
 import { useQuery } from '@apollo/client'
@@ -177,13 +178,13 @@ export function ReviewAssessment({ buildingId, assessmentReportId }: ReviewAsses
                 </View>
             </ScrollView>
             <Footer>
-                <Button
+                <BottomButton
                     onPress={() => {
                         router.push('./review/depreciation-preview')
                     }}
                 >
-                    <Text>Confirm</Text>
-                </Button>
+                    Confirm assessment
+                </BottomButton>
             </Footer>
         </View>
     )

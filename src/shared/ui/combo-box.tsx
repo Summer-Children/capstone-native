@@ -33,7 +33,7 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
             }}
         >
             <View className="mb-4">
-                {label && <Text className="text-sm font-bold">{label}</Text>}
+                {label && <Text className="text-md text-eva-black-300 mb-1 ">{label}</Text>}
                 <View className="border border-gray-300 rounded-md p-3 bg-white">
                     <TextInput
                         placeholder={placeholder}

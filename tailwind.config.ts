@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 import { hairlineWidth } from 'nativewind/theme'
 import animate from 'tailwindcss-animate'
-// @ts-expect-error no type declrations for this
+// @ts-expect-error no type declarations for this
 import preset from 'nativewind/preset'
 
 const config: Config = {
@@ -63,7 +63,7 @@ const config: Config = {
                 },
                 secondary: {
                     DEFAULT: 'hsl(var(--secondary))',
-                    foreground: 'hsl(var(--sFecondary-foreground))'
+                    foreground: 'hsl(var(--secondary-foreground))'
                 },
                 destructive: {
                     DEFAULT: 'hsl(var(--destructive))',
@@ -85,6 +85,9 @@ const config: Config = {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))'
                 }
+            },
+            fontFamily: {
+                figtree: ['Figtree', 'sans-serif']
             },
             borderWidth: {
                 hairline: hairlineWidth()

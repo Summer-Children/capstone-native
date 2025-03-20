@@ -36,7 +36,8 @@ export default function BuildingArchive(): ReactNode {
         <>
             <Stack.Screen
                 options={{
-                    contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' }
+                    contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' },
+                    headerLeft: () => null
                 }}
             />
             <View className="flex-1 px-4">

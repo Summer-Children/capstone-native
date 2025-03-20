@@ -1,14 +1,15 @@
-import { type ReactNode, useMemo, useState } from 'react'
-import { View } from 'react-native'
-import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
-import { router } from 'expo-router'
-import { ComboBox } from '@shared/ui/combo-box'
-import Header from '@/src/shared/ui/header'
-import Footer from '@/src/shared/ui/footer'
-import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building/hook'
-import { useMutation, useQuery } from '@apollo/client'
 import { CREATE_ASSESSMENT_REPORT } from '@/src/entities/assessment-report/hook/assessment-report'
+import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building/hook'
+import { ArrowIcon } from '@/src/shared/ui'
+import BottomButton from '@/src/shared/ui/bottom-button'
+import Footer from '@/src/shared/ui/footer'
+import Header from '@/src/shared/ui/header'
+import { useMutation, useQuery } from '@apollo/client'
+import { ComboBox } from '@shared/ui/combo-box'
+import { router } from 'expo-router'
+import { type ReactNode, useMemo, useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
 
 export default function SelectBuildingPage(): ReactNode {
     const [buildingLabel, setBuildingLabel] = useState<string | null>(null)
@@ -92,18 +93,30 @@ export default function SelectBuildingPage(): ReactNode {
                 isDropdownVisible={isDropdownVisible}
                 setDropdownVisible={setDropdownVisible}
             />
+            {isNewBldg && buildingLabel !== null && (
+                <TouchableOpacity
+                    className="flex-row items-center justify-between"
+                    onPress={() => {
+                        router.push({
+                            pathname: '../building/create',
+                            params: {
+                                buildingLabel
+                            }
+                        })
+                    }}
+                >
+                    <Text className="text-md text-eva-black-900 py-5 px-4">Not found. Create this building</Text>
+                    <ArrowIcon direction="outward" color="#1c1d1f" />
+                </TouchableOpacity>
+            )}
 
             <Footer>
-                {isNewBldg && buildingLabel !== null && (
-                    <Text className="text-red-500 text-sm mb-2">Not found. Create this building</Text>
-                )}
-                <Button
-                    variant="default"
+                <BottomButton
                     onPress={handleRouter}
-                    disabled={!buildingLabel || buildingLabel === '' || buildingLabel === null}
+                    disabled={!buildingLabel || buildingLabel === '' || buildingLabel === null || isNewBldg}
                 >
-                    <Text>Continue</Text>
-                </Button>
+                    Continue
+                </BottomButton>
             </Footer>
         </View>
     )

@@ -2,13 +2,13 @@ import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
 import { GET_BUILDING } from '@/src/entities/building/hook'
 import { GET_COMPONENTS } from '@/src/entities/component/hook'
+import BottomButton from '@/src/shared/ui/bottom-button'
+import CloseButton from '@/src/shared/ui/close-button'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
 import { useQuery } from '@apollo/client'
-import { ChevronIcon, LibraryAddIcon } from '@shared/ui/icons'
-import CloseButton from '@/src/shared/ui/close-button'
+import { AddCircleIcon, ChevronIcon, LibraryAddIcon } from '@shared/ui/icons'
 import { Link, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router'
-import { CirclePlus } from 'lucide-react-native'
 import { useCallback, type ReactNode } from 'react'
 import { FlatList, View } from 'react-native'
 
@@ -46,7 +46,10 @@ export default function BuildingAssessmentPage(): ReactNode {
     return (
         <View className="flex-1">
             <Stack.Screen
-                options={{ headerTitle: () => <Text>{buildingName}</Text>, headerRight: () => <CloseButton /> }}
+                options={{
+                    headerTitle: () => <Text className="text-eva-black-300 text-xl">{buildingName}</Text>,
+                    headerRight: () => <CloseButton />
+                }}
             />
             <Header
                 headerText="Building assessment"
@@ -54,7 +57,7 @@ export default function BuildingAssessmentPage(): ReactNode {
             />
 
             <View className="flex-row items-center justify-between">
-                <Text className="font-bold text-xl">Components</Text>
+                <Text className="font-bold text-lg">Components</Text>
                 {componentData && componentData.res.length > 0 && (
                     <Link
                         href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/components/add-component`}
@@ -75,15 +78,19 @@ export default function BuildingAssessmentPage(): ReactNode {
 
             <View className="h-2/3 py-4">
                 {componentData && componentData.res.length === 0 && (
-                    <Link
-                        href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/components/add-component`}
-                        asChild
-                    >
-                        <Button variant="link" className="flex-row gap-5 items-center justify-start ">
-                            <CirclePlus />
-                            <Text>Add a component</Text>
-                        </Button>
-                    </Link>
+                    <View className="flex flex-row justify-between items-center py-2 rounded-md bg-eva-white-100 h-[80px]  ">
+                        <Link
+                            href={`/buildings/${String(buildingId)}/assessments/${String(assessmentReportId)}/components/add-component`}
+                            asChild
+                        >
+                            <Button variant="link" className=" flex flex-row gap-4 items-center justify-start ">
+                                <View className="bg-eva-white-50 rounded-lg w-[64px] aspect-square flex items-center justify-center p-5">
+                                    <AddCircleIcon color="#0251FF" variant="solid" />
+                                </View>
+                                <Text>Add a component</Text>
+                            </Button>
+                        </Link>
+                    </View>
                 )}
 
                 <FlatList
@@ -107,9 +114,7 @@ export default function BuildingAssessmentPage(): ReactNode {
                     asChild
                     disabled={!componentData || componentData?.res.length === 0}
                 >
-                    <Button>
-                        <Text>Confirm components</Text>
-                    </Button>
+                    <BottomButton>Confirm components</BottomButton>
                 </Link>
             </Footer>
         </View>
