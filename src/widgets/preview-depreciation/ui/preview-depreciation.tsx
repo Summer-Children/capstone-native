@@ -105,6 +105,9 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                                 <TableHead style={{ width: columnWidths[3] }}>
                                     <Text className="text-right">Closing Balance</Text>
                                 </TableHead>
+                                <TableHead style={{ width: columnWidths[3] }}>
+                                    <Text className="text-right">Closing Balance</Text>
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -121,6 +124,9 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[2] }}>
                                         <Text className="text-right"> {dummy.Expenditures}</Text>
+                                    </TableCell>
+                                    <TableCell style={{ width: columnWidths[3] }}>
+                                        <Text className="text-right">{dummy.closingBalance}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[3] }}>
                                         <Text className="text-right">{dummy.closingBalance}</Text>

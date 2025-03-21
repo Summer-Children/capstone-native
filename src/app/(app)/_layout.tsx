@@ -27,6 +27,7 @@ export default function AppLayout(): ReactNode {
                 screenOptions={{
                     headerTitle: '',
                     contentStyle: { paddingHorizontal: 16, backgroundColor: 'white' },
+                    headerShadowVisible: false,
                     headerLeft: () => (
                         <TouchableOpacity className="bg-eva-white-100 rounded-full p-2" onPress={router.back}>
                             <ArrowIcon color="#1C1D1F" />
