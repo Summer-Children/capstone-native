@@ -51,7 +51,6 @@ export default function SelectBuildingPage(): ReactNode {
             variables: {
                 input: {
                     buildingId: buildingInput.id,
-                    fiscalYear: 0, // TOFIX: something wrong with backend because it can be null
                     draft: true
                 }
             },

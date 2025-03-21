@@ -1,6 +1,6 @@
 import { Button } from '@/reusables/components/ui/button'
 import { Label } from '@/reusables/components/ui/label'
-import { GET_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
+import { GET_COMPONENT_REPORT, useUpdateComponentReport } from '@/src/entities/component-report/hook/component-report'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
 import { useQuery } from '@apollo/client'
@@ -11,10 +11,15 @@ import { Text } from 'reusables/components/ui/text'
 import { X } from 'lucide-react-native'
 import { GET_COMPONENT } from '@/src/entities/component/hook/components'
 import ExpandableText from '@/src/shared/ui/expandable-text'
-
+import { File } from '@/src/_gqlgen/graphql'
+import { AddPhotoIcon } from '@/src/shared/ui/icons/add-photo'
 export default function ReviewComponentPage(): React.ReactNode {
     const { componentId, componentReportId } = useLocalSearchParams()
-    const { data: componentReportData, loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
+    const {
+        refetch: refetchComponentReport,
+        data: componentReportData,
+        loading: componentReportLoading
+    } = useQuery(GET_COMPONENT_REPORT, {
         variables: {
             componentReportId: componentReportId.toString()
         }
@@ -24,17 +29,19 @@ export default function ReviewComponentPage(): React.ReactNode {
             componentId: componentId.toString()
         }
     })
+    const { updateComponentReportMutation } = useUpdateComponentReport()
 
-    // Sample photos data
-    const [photos, setPhotos] = useState([
-        { id: '1', uri: 'placeholder' },
-        { id: '2', uri: 'placeholder' },
-        { id: '3', uri: 'placeholder' }
-    ])
+    const [photos, setPhotos] = useState<Array<File | null>>(componentReportData?.componentReport?.images ?? [])
 
-    // Remove photo handler
-    const removePhoto = (id: string): void => {
-        setPhotos(photos.filter(photo => photo.id !== id))
+    const removePhoto = async (id: string): Promise<void> => {
+        setPhotos(photos.filter(photo => photo?.id !== id))
+        await updateComponentReportMutation({
+            ...componentReportData?.componentReport,
+            id: componentReportData?.componentReport?.id.toString() ?? '',
+            images: [],
+            removeImages: [id]
+        })
+        await refetchComponentReport()
     }
 
     if (componentReportLoading || componentLoading) {
@@ -74,48 +81,49 @@ export default function ReviewComponentPage(): React.ReactNode {
                     <Label className="mb-3 text-gray-600">Photos</Label>
 
                     {/* Photos Carousel */}
-                    {/* TODO: insert real image data */}
-                    <View>
-                        <FlatList
-                            data={photos}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item }) => (
-                                <View className="mr-3 relative">
-                                    <View className="w-40 h-40 bg-gray-200 rounded-lg overflow-hidden justify-center items-center">
-                                        <Image
-                                            source={{
-                                                uri: 'https://fastly.picsum.photos/id/977/200/300.jpg?hmac=YYtcm39X8v9y0KYAb_9s-ufIz_R0Kgbt_EP0F8-jkFU'
-                                            }}
-                                            className="w-12 h-12 object-cover"
-                                            defaultSource={{
-                                                uri: 'https://fastly.picsum.photos/id/977/200/300.jpg?hmac=YYtcm39X8v9y0KYAb_9s-ufIz_R0Kgbt_EP0F8-jkFU'
-                                            }}
-                                        />
+                    <View className="mb-4">
+                        {photos.length > 0 ? (
+                            <FlatList
+                                data={photos}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                keyExtractor={item => item?.id ?? ''}
+                                renderItem={({ item }) => (
+                                    <View className="mr-3 relative">
+                                        <View className="w-40 h-40 bg-gray-200 rounded-lg overflow-hidden justify-center items-center">
+                                            <Image
+                                                source={{
+                                                    uri: item?.url ?? ''
+                                                }}
+                                                className="w-full h-full object-cover"
+                                                defaultSource={{
+                                                    uri: item?.url ?? ''
+                                                }}
+                                            />
+                                        </View>
+                                        <TouchableOpacity
+                                            className="absolute top-2 right-2 w-6 h-6 bg-gray-700 rounded-full items-center justify-center"
+                                            onPress={() => removePhoto(item?.id ?? '')}
+                                        >
+                                            <X size={14} color="white" />
+                                        </TouchableOpacity>
                                     </View>
-                                    <TouchableOpacity
-                                        className="absolute top-2 right-2 w-6 h-6 bg-gray-700 rounded-full items-center justify-center"
-                                        onPress={() => removePhoto(item.id)}
-                                    >
-                                        <X size={14} color="white" />
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                            className="pb-3"
-                        />
+                                )}
+                                className="pb-3"
+                            />
+                        ) : (
+                            <View className="flex-row w-full h-40 bg-gray-200 rounded-lg overflow-hidden justify-center items-center">
+                                <AddPhotoIcon />
+                                <Text className="text-gray-700 font-medium">No image selected</Text>
+                            </View>
+                        )}
                     </View>
 
                     {/* Add More Photos Button */}
                     <Link href="./add-photos" asChild>
                         <TouchableOpacity className="flex-row items-center justify-center bg-gray-100 py-3 px-4 rounded-lg">
-                            <Image
-                                source={{
-                                    uri: 'https://fastly.picsum.photos/id/977/200/300.jpg?hmac=YYtcm39X8v9y0KYAb_9s-ufIz_R0Kgbt_EP0F8-jkFU'
-                                }}
-                                className="w-5 h-5 mr-2"
-                            />
-                            <Text className="text-gray-700 font-medium">Add more photos</Text>
+                            <AddPhotoIcon />
+                            <Text className="text-gray-700 font-medium">Add photos</Text>
                         </TouchableOpacity>
                     </Link>
                 </View>

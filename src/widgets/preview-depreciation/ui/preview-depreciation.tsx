@@ -9,14 +9,15 @@ import cn from 'clsx'
 import { useRouter } from 'expo-router'
 import { ReactNode, useMemo } from 'react'
 import { ScrollView, useWindowDimensions, View } from 'react-native'
-import { CREATE_ASSESSMENT_REPORT_PDF } from '../api/create-report-pdf'
+import { GENERATE_ASSESSMENT_REPORT } from '../api/create-report-pdf'
+import React from 'react'
 
 type DepreciationPreviewtProps = {
     assessmentReportId: string
 }
 
 export default function DepreciationPreview({ assessmentReportId }: DepreciationPreviewtProps): ReactNode {
-    const [generateAssessmentReportPdf, { loading }] = useMutation(CREATE_ASSESSMENT_REPORT_PDF, {
+    const [generateAssessmentReportPdf, { loading }] = useMutation(GENERATE_ASSESSMENT_REPORT, {
         fetchPolicy: 'network-only'
     })
     const router = useRouter()
@@ -54,6 +55,7 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
     ]
 
     const handleGenerateReport = async (): Promise<void> => {
+        console.log('assessmentReportId in generate report', assessmentReportId)
         try {
             await updateAssessmentReport({
                 variables: {

@@ -38,8 +38,6 @@ export default function LoginPage(): ReactNode {
     const handleSubmit = async (): Promise<void> => {
         const data = await signIn({ variables: { input: values } })
 
-        console.log(data)
-
         if (!data.data?.signIn) {
             setErrorMessage('Failed to get token')
             return

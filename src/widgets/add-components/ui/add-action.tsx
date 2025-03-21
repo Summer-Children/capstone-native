@@ -28,6 +28,8 @@ type Props = {
 }
 
 export default function AddAction({ componentReportId, componentId }: Props): ReactNode {
+    const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>()
+    const [componentItems, setComponentItems] = useState<UpdateComponent>()
     const insets = useSafeAreaInsets()
     const { data: componentReportData, loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
         variables: {
@@ -41,7 +43,8 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 priority: d?.componentReport.priority ?? ComponentReportPriority.Low,
                 quantityNeeded: d?.componentReport.quantityNeeded ?? 0,
                 yearReviewed: d?.componentReport.yearReviewed ?? 0,
-                note: d?.componentReport.note ?? ''
+                note: d?.componentReport.note ?? '',
+                images: d?.componentReport.images ?? []
             })
         },
         onError: e => {
@@ -62,40 +65,18 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
     const [updateComponentReport] = useMutation(UPDATE_COMPONENT_REPORT)
     const [updateComponent] = useMutation(UPDATE_COMPONENT)
 
-    if (!componentReportData || !componentData) return <Text>No data found</Text>
-
-    const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>({
-        id: componentReportData?.componentReport.id.toString(),
-        action: componentReportData?.componentReport.action ?? '',
-        condition: componentReportData?.componentReport.condition ?? '',
-        priority: componentReportData?.componentReport.priority ?? ComponentReportPriority.Low,
-        quantityNeeded: componentReportData?.componentReport.quantityNeeded ?? 0,
-        yearReviewed: componentReportData?.componentReport.yearReviewed ?? 0,
-        note: componentReportData?.componentReport.note ?? ''
-    })
-    const [componentItems, setComponentItems] = useState<UpdateComponent>({
-        id: componentData?.res.id.toString(),
-        lastActionYear: componentData?.res.lastActionYear ?? 0,
-        nextActionYear: componentData?.res.nextActionYear ?? 0,
-        name: componentData?.res.name ?? '',
-        category: componentData?.res.category ?? '',
-        section: componentData?.res.section ?? '',
-        yearInstalled: componentData?.res.yearInstalled ?? 0,
-        unitRate: componentData?.res.unitRate ?? 0,
-        actionFrequency: componentData?.res.actionFrequency ?? 0
-    })
-
     useEffect(() => {
         const timeout = setTimeout(async () => {
             if (!componentReportItems) {
                 console.error('No component report items found')
                 return
             }
-            const { id, action, condition, priority, quantityNeeded, yearReviewed, note } = componentReportItems
+            const { id, action, condition, priority, quantityNeeded, yearReviewed, note, images } = componentReportItems
             await updateComponentReport({
                 variables: {
                     input: {
                         id: id,
+                        images: images,
                         action: action,
                         condition: condition,
                         priority: priority,
@@ -162,13 +143,11 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
         router.push('./review-component')
     }
 
-    if (componentReportLoading || componentLoading) {
-        return <Text>Loading...</Text>
-    }
+    if (componentReportLoading || componentLoading) return <Text>Loading...</Text>
+    if (!componentReportData || !componentData) return <Text>No data found</Text>
+    if (!componentReportItems) return <Text>No component report items found</Text>
 
-    if (!componentReportItems) {
-        return <Text>No component report items found</Text>
-    }
+    const finalCost = (componentReportItems.quantityNeeded ?? 0) * (componentItems?.unitRate ?? 0)
 
     return (
         <View className="flex-1">
@@ -331,7 +310,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
 
             <View className="flex flex-col justify-start">
                 <Text>Final Cost</Text>
-                <Text>{componentReportItems?.quantityNeeded * (componentItems?.unitRate ?? 0)}</Text>
+                <Text>{finalCost}</Text>
             </View>
 
             <Footer>

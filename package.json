@@ -14,7 +14,8 @@
     "typecheck": "tsc --build --noEmit",
     "graphql:gen": "graphql-codegen",
     "graphql:watch": "graphql-codegen --watch",
-    "submit-eas": "eas build -p ios --profile preview"
+    "submit-eas": "eas build -p ios --profile preview",
+    "clean-build": "rm -rf .expo/ && rm -rf node_modules/ && rm -rf ./ios/ && rm -rf ./android/"
   },
   "jest": {
     "preset": "jest-expo"

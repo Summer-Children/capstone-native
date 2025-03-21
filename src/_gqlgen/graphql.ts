@@ -21,14 +21,18 @@ export type AssessmentReport = {
   __typename?: 'AssessmentReport';
   building: Building;
   componentReports: Array<Maybe<ComponentReport>>;
+  crfAnnualContribution: Scalars['Int']['output'];
+  crfMinimumBalance: Scalars['Int']['output'];
+  crfTotalBalance: Scalars['Int']['output'];
   draft: Scalars['Boolean']['output'];
   fiscalYear: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
 };
 
-export type AssessmentReportPdfResponse = {
-  __typename?: 'AssessmentReportPDFResponse';
+export type AssessmentReportResponse = {
+  __typename?: 'AssessmentReportResponse';
   assessmentReportId: Scalars['ID']['output'];
+  excelUrl: Scalars['String']['output'];
   pdfUrl: Scalars['String']['output'];
 };
 
@@ -70,6 +74,7 @@ export type ComponentReport = {
   componentId: Scalars['ID']['output'];
   condition?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  images: Array<Maybe<File>>;
   note?: Maybe<Scalars['String']['output']>;
   priority?: Maybe<ComponentReportPriority>;
   quantityNeeded?: Maybe<Scalars['Int']['output']>;
@@ -85,11 +90,6 @@ export enum ComponentReportPriority {
 export type CreateAssessmentReport = {
   buildingId: Scalars['ID']['input'];
   draft: Scalars['Boolean']['input'];
-  fiscalYear: Scalars['Int']['input'];
-};
-
-export type CreateAssessmentReportPdf = {
-  assessmentReportId: Scalars['ID']['input'];
 };
 
 export type CreateBuilding = {
@@ -145,14 +145,16 @@ export type DeleteComponentReport = {
 export type File = {
   __typename?: 'File';
   id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
   url: Scalars['String']['output'];
+};
+
+export type GenerateAssessmentReport = {
+  assessmentReportId: Scalars['ID']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createAssessmentReport: AssessmentReport;
-  createAssessmentReportPDF: AssessmentReportPdfResponse;
   createBuilding: Building;
   createComponent: Component;
   createComponentReport: ComponentReport;
@@ -160,6 +162,7 @@ export type Mutation = {
   deleteBuilding: Scalars['ID']['output'];
   deleteComponent: Scalars['ID']['output'];
   deleteComponentReport: Scalars['ID']['output'];
+  generateAssessmentReport: AssessmentReportResponse;
   signIn: Scalars['String']['output'];
   signUp: Scalars['Boolean']['output'];
   transcribeAudio: ComponentReport;
@@ -172,11 +175,6 @@ export type Mutation = {
 
 export type MutationCreateAssessmentReportArgs = {
   input: CreateAssessmentReport;
-};
-
-
-export type MutationCreateAssessmentReportPdfArgs = {
-  input: CreateAssessmentReportPdf;
 };
 
 
@@ -212,6 +210,11 @@ export type MutationDeleteComponentArgs = {
 
 export type MutationDeleteComponentReportArgs = {
   input: DeleteComponentReport;
+};
+
+
+export type MutationGenerateAssessmentReportArgs = {
+  input: GenerateAssessmentReport;
 };
 
 
@@ -315,7 +318,6 @@ export type TranscribeAudio = {
 
 export type UpdateAssessmentReport = {
   draft?: InputMaybe<Scalars['Boolean']['input']>;
-  fiscalYear?: InputMaybe<Scalars['Int']['input']>;
   id: Scalars['ID']['input'];
 };
 
@@ -345,13 +347,15 @@ export type UpdateComponent = {
 };
 
 export type UpdateComponentReport = {
-  action: Scalars['String']['input'];
-  condition: Scalars['String']['input'];
+  action?: InputMaybe<Scalars['String']['input']>;
+  condition?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  note: Scalars['String']['input'];
-  priority: ComponentReportPriority;
-  quantityNeeded: Scalars['Int']['input'];
-  yearReviewed: Scalars['Int']['input'];
+  images?: InputMaybe<Array<InputMaybe<Scalars['Upload']['input']>>>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  priority?: InputMaybe<ComponentReportPriority>;
+  quantityNeeded?: InputMaybe<Scalars['Int']['input']>;
+  removeImages?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  yearReviewed?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type User = {
@@ -425,7 +429,7 @@ export type GetComponentReportQueryVariables = Exact<{
 }>;
 
 
-export type GetComponentReportQuery = { __typename?: 'Query', componentReport: { __typename?: 'ComponentReport', id: string, componentId: string, assessmentReportId: string, action?: string | null, condition?: string | null, priority?: ComponentReportPriority | null, note?: string | null, quantityNeeded?: number | null, yearReviewed?: number | null } };
+export type GetComponentReportQuery = { __typename?: 'Query', componentReport: { __typename?: 'ComponentReport', id: string, componentId: string, assessmentReportId: string, action?: string | null, condition?: string | null, priority?: ComponentReportPriority | null, note?: string | null, quantityNeeded?: number | null, yearReviewed?: number | null, images: Array<{ __typename?: 'File', id: string, url: string } | null> } };
 
 export type GetComponentReportsQueryVariables = Exact<{
   assessmentReportId: Scalars['ID']['input'];
@@ -439,7 +443,7 @@ export type UpdateComponentReportMutationVariables = Exact<{
 }>;
 
 
-export type UpdateComponentReportMutation = { __typename?: 'Mutation', res: { __typename?: 'ComponentReport', id: string, condition?: string | null, priority?: ComponentReportPriority | null, note?: string | null, quantityNeeded?: number | null, yearReviewed?: number | null, action?: string | null } };
+export type UpdateComponentReportMutation = { __typename?: 'Mutation', res: { __typename?: 'ComponentReport', id: string, condition?: string | null, priority?: ComponentReportPriority | null, note?: string | null, quantityNeeded?: number | null, yearReviewed?: number | null, action?: string | null, images: Array<{ __typename?: 'File', id: string, url: string } | null> } };
 
 export type ComponentsQueryVariables = Exact<{
   buildingId: Scalars['ID']['input'];
@@ -483,12 +487,12 @@ export type UpdateBuildingMutationVariables = Exact<{
 
 export type UpdateBuildingMutation = { __typename?: 'Mutation', updateBuilding: { __typename?: 'Building', id: string, name?: string | null, address?: string | null, year?: number | null, strataId?: string | null, fiscalYear?: number | null, crfAnnualContribution?: number | null, crfTotalBalance?: number | null, crfMinimumBalance?: number | null } };
 
-export type CreateAssessmentReportPdfMutationVariables = Exact<{
-  input: CreateAssessmentReportPdf;
+export type GenerateAssessmentReportMutationVariables = Exact<{
+  input: GenerateAssessmentReport;
 }>;
 
 
-export type CreateAssessmentReportPdfMutation = { __typename?: 'Mutation', res: { __typename?: 'AssessmentReportPDFResponse', pdfUrl: string, assessmentReportId: string } };
+export type GenerateAssessmentReportMutation = { __typename?: 'Mutation', res: { __typename?: 'AssessmentReportResponse', pdfUrl: string, assessmentReportId: string, excelUrl: string } };
 
 
 export const SignInDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SignIn"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignIn"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signIn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<SignInMutation, SignInMutationVariables>;
@@ -500,13 +504,13 @@ export const BuildingsOnFirstLoadDocument = {"kind":"Document","definitions":[{"
 export const BuildingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Buildings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"buildings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"strataId"}},{"kind":"Field","name":{"kind":"Name","value":"crfTotalBalance"}},{"kind":"Field","name":{"kind":"Name","value":"crfMinimumBalance"}},{"kind":"Field","name":{"kind":"Name","value":"crfAnnualContribution"}},{"kind":"Field","name":{"kind":"Name","value":"fiscalYear"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReports"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fiscalYear"}},{"kind":"Field","name":{"kind":"Name","value":"draft"}}]}}]}}]}}]} as unknown as DocumentNode<BuildingsQuery, BuildingsQueryVariables>;
 export const GetBuildingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBuilding"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"building"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"strataId"}},{"kind":"Field","name":{"kind":"Name","value":"crfTotalBalance"}},{"kind":"Field","name":{"kind":"Name","value":"crfMinimumBalance"}},{"kind":"Field","name":{"kind":"Name","value":"crfAnnualContribution"}},{"kind":"Field","name":{"kind":"Name","value":"fiscalYear"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReports"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fiscalYear"}},{"kind":"Field","name":{"kind":"Name","value":"draft"}}]}}]}}]}}]} as unknown as DocumentNode<GetBuildingQuery, GetBuildingQueryVariables>;
 export const CreateComponentReportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateComponentReport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateComponentReport"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createComponentReport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"componentId"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReportId"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"condition"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"quantityNeeded"}},{"kind":"Field","name":{"kind":"Name","value":"yearReviewed"}}]}}]}}]} as unknown as DocumentNode<CreateComponentReportMutation, CreateComponentReportMutationVariables>;
-export const GetComponentReportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetComponentReport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"componentReportId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"componentReport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"componentReportId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"componentReportId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"componentId"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReportId"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"condition"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"quantityNeeded"}},{"kind":"Field","name":{"kind":"Name","value":"yearReviewed"}}]}}]}}]} as unknown as DocumentNode<GetComponentReportQuery, GetComponentReportQueryVariables>;
+export const GetComponentReportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetComponentReport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"componentReportId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"componentReport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"componentReportId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"componentReportId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"componentId"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReportId"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"condition"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"quantityNeeded"}},{"kind":"Field","name":{"kind":"Name","value":"yearReviewed"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetComponentReportQuery, GetComponentReportQueryVariables>;
 export const GetComponentReportsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetComponentReports"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"assessmentReportId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"componentReports"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"assessmentReportId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"assessmentReportId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"componentId"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"condition"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"quantityNeeded"}},{"kind":"Field","name":{"kind":"Name","value":"yearReviewed"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReportId"}}]}}]}}]} as unknown as DocumentNode<GetComponentReportsQuery, GetComponentReportsQueryVariables>;
-export const UpdateComponentReportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateComponentReport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateComponentReport"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"updateComponentReport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"condition"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"quantityNeeded"}},{"kind":"Field","name":{"kind":"Name","value":"yearReviewed"}},{"kind":"Field","name":{"kind":"Name","value":"action"}}]}}]}}]} as unknown as DocumentNode<UpdateComponentReportMutation, UpdateComponentReportMutationVariables>;
+export const UpdateComponentReportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateComponentReport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateComponentReport"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"updateComponentReport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"condition"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"quantityNeeded"}},{"kind":"Field","name":{"kind":"Name","value":"yearReviewed"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateComponentReportMutation, UpdateComponentReportMutationVariables>;
 export const ComponentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Components"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"components"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"buildingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"buildingId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"section"}},{"kind":"Field","name":{"kind":"Name","value":"actionFrequency"}},{"kind":"Field","name":{"kind":"Name","value":"nextActionYear"}},{"kind":"Field","name":{"kind":"Name","value":"yearInstalled"}},{"kind":"Field","name":{"kind":"Name","value":"unitRate"}},{"kind":"Field","name":{"kind":"Name","value":"lastActionYear"}}]}}]}}]} as unknown as DocumentNode<ComponentsQuery, ComponentsQueryVariables>;
 export const CreateComponentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateComponent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"component"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateComponent"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"createComponent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"component"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"section"}},{"kind":"Field","name":{"kind":"Name","value":"actionFrequency"}},{"kind":"Field","name":{"kind":"Name","value":"nextActionYear"}},{"kind":"Field","name":{"kind":"Name","value":"yearInstalled"}},{"kind":"Field","name":{"kind":"Name","value":"unitRate"}}]}}]}}]} as unknown as DocumentNode<CreateComponentMutation, CreateComponentMutationVariables>;
 export const ComponentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Component"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"componentId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"component"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"componentId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"componentId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"buildingId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"section"}},{"kind":"Field","name":{"kind":"Name","value":"actionFrequency"}},{"kind":"Field","name":{"kind":"Name","value":"nextActionYear"}},{"kind":"Field","name":{"kind":"Name","value":"yearInstalled"}},{"kind":"Field","name":{"kind":"Name","value":"unitRate"}},{"kind":"Field","name":{"kind":"Name","value":"lastActionYear"}}]}}]}}]} as unknown as DocumentNode<ComponentQuery, ComponentQueryVariables>;
 export const UpdateComponentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateComponent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"component"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateComponent"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"updateComponent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"component"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"section"}},{"kind":"Field","name":{"kind":"Name","value":"actionFrequency"}},{"kind":"Field","name":{"kind":"Name","value":"nextActionYear"}},{"kind":"Field","name":{"kind":"Name","value":"lastActionYear"}},{"kind":"Field","name":{"kind":"Name","value":"yearInstalled"}},{"kind":"Field","name":{"kind":"Name","value":"unitRate"}}]}}]}}]} as unknown as DocumentNode<UpdateComponentMutation, UpdateComponentMutationVariables>;
 export const CreateBuildingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBuilding"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateBuilding"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBuilding"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"strataId"}},{"kind":"Field","name":{"kind":"Name","value":"fiscalYear"}},{"kind":"Field","name":{"kind":"Name","value":"crfAnnualContribution"}},{"kind":"Field","name":{"kind":"Name","value":"crfTotalBalance"}},{"kind":"Field","name":{"kind":"Name","value":"crfMinimumBalance"}}]}}]}}]} as unknown as DocumentNode<CreateBuildingMutation, CreateBuildingMutationVariables>;
 export const UpdateBuildingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateBuilding"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateBuilding"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBuilding"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"strataId"}},{"kind":"Field","name":{"kind":"Name","value":"fiscalYear"}},{"kind":"Field","name":{"kind":"Name","value":"crfAnnualContribution"}},{"kind":"Field","name":{"kind":"Name","value":"crfTotalBalance"}},{"kind":"Field","name":{"kind":"Name","value":"crfMinimumBalance"}}]}}]}}]} as unknown as DocumentNode<UpdateBuildingMutation, UpdateBuildingMutationVariables>;
-export const CreateAssessmentReportPdfDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAssessmentReportPDF"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateAssessmentReportPDF"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"createAssessmentReportPDF"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pdfUrl"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReportId"}}]}}]}}]} as unknown as DocumentNode<CreateAssessmentReportPdfMutation, CreateAssessmentReportPdfMutationVariables>;
+export const GenerateAssessmentReportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"generateAssessmentReport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GenerateAssessmentReport"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"res"},"name":{"kind":"Name","value":"generateAssessmentReport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pdfUrl"}},{"kind":"Field","name":{"kind":"Name","value":"assessmentReportId"}},{"kind":"Field","name":{"kind":"Name","value":"excelUrl"}}]}}]}}]} as unknown as DocumentNode<GenerateAssessmentReportMutation, GenerateAssessmentReportMutationVariables>;

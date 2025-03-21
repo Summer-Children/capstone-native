@@ -1,10 +1,11 @@
 import { graphql } from '@gqlgen'
 
-export const CREATE_ASSESSMENT_REPORT_PDF = graphql(`
-    mutation CreateAssessmentReportPDF($input: CreateAssessmentReportPDF!) {
-        res: createAssessmentReportPDF(input: $input) {
+export const GENERATE_ASSESSMENT_REPORT = graphql(`
+    mutation generateAssessmentReport($input: GenerateAssessmentReport!) {
+        res: generateAssessmentReport(input: $input) {
             pdfUrl
             assessmentReportId
+            excelUrl
         }
     }
 `)

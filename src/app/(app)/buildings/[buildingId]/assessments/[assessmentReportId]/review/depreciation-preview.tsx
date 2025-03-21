@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { ReactNode } from 'react'
 import { Text } from '@/reusables/components/ui/text'
+import React from 'react'
 
 export default function DepreciationPreviewPage(): ReactNode {
     const { buildingId, assessmentReportId } = useLocalSearchParams()

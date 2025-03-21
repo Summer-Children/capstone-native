@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList, Alert } from 'react-native'
-import { CameraView } from 'expo-camera'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, Image } from 'react-native'
+import { CameraCapturedPicture, CameraView } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import { Camera, CircleCheck, CircleX } from 'lucide-react-native'
-
+import CameraScrollHorizontal from '@/src/entities/component-report/ui/camera-scroll-horizontal'
 interface AddPhotoProps {
     maxSelection: number
-    onSelectPhotos: (photos: MediaLibrary.Asset[]) => void
+    onSelectPhotos: (photos: Array<MediaLibrary.Asset | CameraCapturedPicture>) => Promise<void>
 }
 
 export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): ReactNode {
@@ -43,6 +43,8 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
             const photo = await cameraRef.current.takePictureAsync()
             if (!photo) return Alert.alert('Error', 'Failed to capture photo.')
 
+            await onSelectPhotos([photo])
+
             await MediaLibrary.saveToLibraryAsync(photo.uri)
             setPhotos(
                 (
@@ -59,6 +61,14 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
         }
     }
 
+    const handleSelectPhotos = async (newSelectedPhotos: MediaLibrary.Asset[]): Promise<void> => {
+        try {
+            await onSelectPhotos(newSelectedPhotos)
+        } catch (error) {
+            console.error('asset creation error:', error)
+        }
+    }
+
     const handleToggleSelectPhoto = (toggledAsset: MediaLibrary.Asset): void => {
         setSelectedPhotos(prevSelectedPhotos => {
             let newSelectedPhotos
@@ -71,7 +81,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                 }
                 newSelectedPhotos = [toggledAsset, ...prevSelectedPhotos]
             }
-            onSelectPhotos(newSelectedPhotos)
+            void handleSelectPhotos(newSelectedPhotos)
             return newSelectedPhotos
         })
     }
@@ -98,26 +108,10 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                                 No photos yet.{'\n'}Select or take one!
                             </Text>
                         ) : (
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="px-4">
-                                {selectedPhotos.map(asset => (
-                                    <View
-                                        key={asset.uri}
-                                        className="relative mr-2 w-[145] h-[220] rounded-xl overflow-hidden"
-                                    >
-                                        <Image
-                                            source={{ uri: asset.uri }}
-                                            className="w-full h-full"
-                                            resizeMode="cover"
-                                        />
-                                        <TouchableOpacity
-                                            className="absolute top-2 right-2"
-                                            onPress={() => handleToggleSelectPhoto(asset)}
-                                        >
-                                            <CircleX color="#fff" />
-                                        </TouchableOpacity>
-                                    </View>
-                                ))}
-                            </ScrollView>
+                            <CameraScrollHorizontal
+                                selectedPhotos={selectedPhotos}
+                                handleToggleSelectPhoto={handleToggleSelectPhoto}
+                            />
                         )}
                     </View>
 

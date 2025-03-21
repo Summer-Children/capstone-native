@@ -25,9 +25,6 @@ export default function AudioDescriptionPage(): ReactNode {
                     yearReviewed: new Date().getFullYear()
                 }
             },
-            onCompleted: () => {
-                console.error('Component report created')
-            },
             onError: error => {
                 console.error('Error creating component report', error)
             }

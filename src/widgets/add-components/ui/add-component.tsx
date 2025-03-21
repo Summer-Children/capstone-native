@@ -6,12 +6,16 @@ import { ComboBox } from '@/src/shared/ui/combo-box'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
 import { useMutation } from '@apollo/client'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { default as React, type ReactNode, useState } from 'react'
 import { Alert, Keyboard, TouchableWithoutFeedback, View } from 'react-native'
 
-export function AddComponent(): ReactNode {
-    const { buildingId, assessmentReportId } = useLocalSearchParams()
+type Props = {
+    buildingId: string
+    assessmentReportId: string
+}
+
+export function AddComponent({ buildingId, assessmentReportId }: Props): ReactNode {
     const [components] = useState(initialComponents)
     const [componentInput, setComponentInput] = useState<{ id: string; name: string }>({ id: '', name: '' })
     const [searchComponent, setSearchComponent] = useState<string>('')
@@ -31,7 +35,7 @@ export function AddComponent(): ReactNode {
                     name: selectedComponent.name,
                     category: selectedComponent.category,
                     section: selectedComponent.section,
-                    buildingId: buildingId as string,
+                    buildingId: buildingId,
                     actionFrequency: selectedComponent.actionFrequency,
                     unitRate: selectedComponent.unitRate
                 }
