@@ -5,8 +5,8 @@ import { CreateBuilding } from '@/src/features/create-building/ui/create-buildin
 
 export default function CreateBuildingPage(): ReactNode {
     const router = useRouter()
-    const handleSuccess = (newBuilding: { id: string }): void => {
-        router.push(`/building/success/${newBuilding.id}`)
+    const handleSuccess = ({ id }: { id: string }): void => {
+        router.push(`/buildings/success?id=${id}`)
     }
 
     return (

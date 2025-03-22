@@ -89,6 +89,9 @@ const config: Config = {
             fontFamily: {
                 figtree: ['Figtree', 'sans-serif']
             },
+            boxShadow: {
+                'home-card': '0px 6px 12px rgba(0, 0, 0, 0.08)'
+            },
             borderWidth: {
                 hairline: hairlineWidth()
             },

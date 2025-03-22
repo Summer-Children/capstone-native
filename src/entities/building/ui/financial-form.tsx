@@ -31,6 +31,18 @@ export function FinancialForm(): ReactNode {
         }
     }
 
+    const handleNumericInputChange = (text: string, setter: (value: string) => void): void => {
+        if (text === '') {
+            setter('')
+        } else {
+            const cleaned = text.replace(/[^0-9.]/g, '')
+            const normalized = cleaned.split('.').reduce((acc, part, i) => {
+                return i === 0 ? part : acc + '.' + part
+            }, '')
+            setter(normalized)
+        }
+    }
+
     return (
         <View className="flex flex-col gap-4">
             <CustomInput
@@ -59,21 +71,21 @@ export function FinancialForm(): ReactNode {
             <CustomInput
                 label="CRF Annual Contribution *"
                 value={watch('crfAnnualContribution')}
-                onChangeText={text => setValue('crfAnnualContribution', Number(text))}
+                onChangeText={text => handleNumericInputChange(text, val => setValue('crfAnnualContribution', val))}
                 clearable
             />
 
             <CustomInput
                 label="Total CRF Balance *"
                 value={watch('crfTotalBalance')}
-                onChangeText={text => setValue('crfTotalBalance', Number(text))}
+                onChangeText={text => handleNumericInputChange(text, val => setValue('crfTotalBalance', val))}
                 clearable
             />
 
             <CustomInput
                 label="CRF Minimum Balance *"
                 value={watch('crfMinimumBalance')}
-                onChangeText={text => setValue('crfMinimumBalance', Number(text))}
+                onChangeText={text => handleNumericInputChange(text, val => setValue('crfMinimumBalance', val))}
                 clearable
             />
         </View>

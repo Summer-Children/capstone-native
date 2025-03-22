@@ -32,7 +32,7 @@ export default function SelectBuildingPage(): ReactNode {
         // for new building
         if (isNewBldg) {
             router.push({
-                pathname: '../building/create',
+                pathname: '/buildings/new',
                 params: {
                     buildingLabel
                 }
@@ -56,7 +56,7 @@ export default function SelectBuildingPage(): ReactNode {
             },
             onCompleted: data => {
                 router.push({
-                    pathname: './buildings/[buildingId]/assessments/[assessmentReportId]/components',
+                    pathname: '/buildings/[buildingId]/assessments/[assessmentReportId]/components',
                     params: {
                         buildingId: buildingInput?.id,
                         assessmentReportId: data?.createAssessmentReport.id

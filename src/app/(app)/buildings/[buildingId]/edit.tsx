@@ -5,13 +5,13 @@ import { useRouter, useLocalSearchParams } from 'expo-router'
 import { EditBuilding } from '@/src/features/edit-building/ui/edit-building'
 
 export default function EditBuildingPage(): ReactNode {
-    const { id } = useLocalSearchParams()
+    const { buildingId } = useLocalSearchParams()
     const router = useRouter()
 
     return (
         <View className="flex-1">
             <Header headerText="Building information" />
-            <EditBuilding id={id as string} onSuccess={() => router.push(`/building/detail/${id}`)} />
+            <EditBuilding id={buildingId as string} onSuccess={() => router.push(`/buildings/${buildingId}/detail`)} />
         </View>
     )
 }

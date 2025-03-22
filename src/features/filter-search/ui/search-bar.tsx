@@ -1,26 +1,30 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { View, TextInput, TouchableOpacity } from 'react-native'
 import { SearchIcon } from '@/src/shared/ui/icons/search'
-import { SolidCloseIcon } from '@/src/shared/ui/icons/solid-close'
+import { CloseIcon } from '@/src/shared/ui'
+import { useSearch } from '../model/search'
 
-interface SearchBarProps {
-    searchQuery: string
-    setSearchQuery: (query: string) => void
-}
-
-export const SearchBar = ({ searchQuery, setSearchQuery }: SearchBarProps): ReactNode => {
+export const SearchBar = (): ReactNode => {
+    const { searchQuery, setSearchQuery } = useSearch()
+    const [isFocused, setIsFocused] = useState(false)
     return (
-        <View className="flex-1 flex-row items-center rounded-lg p-2 bg-base-200">
-            <SearchIcon color="#717D96" />
+        <View
+            className={`flex-row items-center rounded-xl p-3 border ${
+                isFocused ? 'border-eva-blue-500' : 'border-eva-white-500'
+            }`}
+        >
+            <SearchIcon size={20} />
             <TextInput
-                placeholder="Search Buildings"
+                placeholder="Find buildings"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 className="ml-2 flex-1"
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
             />
             {searchQuery.length > 0 && (
                 <TouchableOpacity onPress={() => setSearchQuery('')}>
-                    <SolidCloseIcon size={20} />
+                    <CloseIcon size={20} />
                 </TouchableOpacity>
             )}
         </View>

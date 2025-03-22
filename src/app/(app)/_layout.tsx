@@ -38,6 +38,12 @@ export default function AppLayout(): ReactNode {
                 <Stack.Screen name="index" />
                 <Stack.Screen name="buildings/index" />
                 <Stack.Screen name="buildings/archive-list" />
+                <Stack.Screen
+                    name="buildings/[buildingId]/detail"
+                    options={{
+                        headerTransparent: true
+                    }}
+                />
             </Stack>
             {shouldShowBottomNavigation && <BottomNavigation />}
         </>

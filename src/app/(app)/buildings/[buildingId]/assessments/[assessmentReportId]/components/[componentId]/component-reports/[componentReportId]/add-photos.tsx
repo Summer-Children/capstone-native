@@ -9,7 +9,7 @@ import { GET_COMPONENT_REPORT, useUpdateComponentReport } from '@/src/entities/c
 import { useQuery } from '@apollo/client'
 import * as MediaLibrary from 'expo-media-library'
 import { ComponentReportPriority } from '@/src/_gqlgen/graphql'
-import { ReactNativeFile } from 'apollo-upload-client'
+import { convertMediaAssetToFile, convertCameraPictureToFile } from '@/src/shared/lib/file-converter/file-converter'
 import { CameraCapturedPicture } from 'expo-camera'
 
 export default function AddPhotosPage(): ReactNode {
@@ -26,24 +26,6 @@ export default function AddPhotosPage(): ReactNode {
             componentReportId: componentReportId.toString()
         }
     })
-
-    const convertMediaAssetToFile = async (asset: MediaLibrary.Asset): Promise<ReactNativeFile> => {
-        const assetInfo = await MediaLibrary.getAssetInfoAsync(asset)
-        return new ReactNativeFile({
-            uri: assetInfo.localUri,
-            name: assetInfo.filename,
-            type: assetInfo.mediaType
-        })
-    }
-
-    const convertCameraPictureToFile = (picture: CameraCapturedPicture): ReactNativeFile => {
-        const filename = picture.uri.split('/').pop() || `photo_${Date.now()}.jpg`
-        return new ReactNativeFile({
-            uri: picture.uri,
-            name: filename,
-            type: 'image/jpeg'
-        })
-    }
 
     const onSelectPhotos = async (photos: Array<MediaLibrary.Asset | CameraCapturedPicture> | null): Promise<void> => {
         if (!photos || photos.length === 0) return

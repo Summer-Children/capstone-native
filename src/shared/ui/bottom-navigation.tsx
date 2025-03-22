@@ -12,20 +12,21 @@ const iconMap = {
 const navItems = [
     { name: 'Home', href: '/' },
     { name: 'Assessment', href: '/buildings' },
-    { name: 'Buildings', href: './buildings/archive-list' }
+    { name: 'Buildings', href: '/buildings/archive-list' }
 ] as const
 
 const NavItem = ({ name, href }: (typeof navItems)[number]): ReactNode => {
     const pathname = usePathname()
-    const isActive = pathname === href.replace('./', '/')
+    const isActive = pathname === href
     const NavIcon = iconMap[name]
 
     const handlePress = (): void => {
-        if (isActive) return
-        if (name === 'Home' || name === 'Buildings') {
-            router.replace(href)
-        } else {
-            router.push(href)
+        if (!isActive) {
+            if (name === 'Assessment') {
+                router.push(href)
+            } else {
+                router.replace(href)
+            }
         }
     }
 

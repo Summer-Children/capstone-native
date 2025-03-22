@@ -6,7 +6,7 @@ import { Camera, CircleCheck, CircleX } from 'lucide-react-native'
 import CameraScrollHorizontal from '@/src/entities/component-report/ui/camera-scroll-horizontal'
 interface AddPhotoProps {
     maxSelection: number
-    onSelectPhotos: (photos: Array<MediaLibrary.Asset | CameraCapturedPicture>) => Promise<void>
+    onSelectPhotos: (photos: Array<MediaLibrary.Asset | CameraCapturedPicture>) => Promise<void> | void
 }
 
 export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): ReactNode {

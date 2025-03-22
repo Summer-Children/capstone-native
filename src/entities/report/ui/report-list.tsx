@@ -1,24 +1,47 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { ScrollView } from 'react-native'
-import ReportCard from './report-card'
-import { useFetchReports } from '../api/use-fetch-reports'
+import ReportItem from './report-item'
+import FileViewer from '@/src/features/view-file/ui/file-viewer'
 
-const ReportList = (): ReactNode => {
-    const { reports } = useFetchReports()
+interface ReportListProps {
+    pdfUrl: string
+    excelUrl: string
+}
+
+const ReportList = ({ pdfUrl, excelUrl }: ReportListProps): ReactNode => {
+    const [selectedFile, setSelectedFile] = useState<{ url: string; type: 'pdf' | 'xlsx' } | null>(null)
+    const [triggerOpen, setTriggerOpen] = useState(false)
+
+    const handlePreview = (fileUrl: string, fileType: 'pdf' | 'xlsx'): void => {
+        setSelectedFile({ url: fileUrl, type: fileType })
+        setTriggerOpen(prev => !prev)
+    }
 
     return (
-        <ScrollView>
-            {reports.map((report, index) => (
-                <ReportCard
-                    key={index}
-                    title={report.title}
-                    fileType={report.fileType}
-                    fileSize={report.fileSize}
-                    date={report.date}
-                    fileUrl={report.fileUrl}
-                />
-            ))}
-        </ScrollView>
+        <>
+            <ScrollView>
+                {pdfUrl && (
+                    <ReportItem
+                        title="Building Assessment Inventory"
+                        fileType="pdf"
+                        fileUrl={pdfUrl}
+                        onPreview={() => handlePreview(pdfUrl, 'pdf')}
+                    />
+                )}
+
+                {excelUrl && (
+                    <ReportItem
+                        title="Depreciation Report"
+                        fileType="xlsx"
+                        fileUrl={excelUrl}
+                        onPreview={() => handlePreview(excelUrl, 'xlsx')}
+                    />
+                )}
+            </ScrollView>
+            {selectedFile && (
+                <FileViewer fileUrl={selectedFile.url} fileType={selectedFile.type} triggerOpen={triggerOpen} />
+            )}
+        </>
     )
 }
 

@@ -10,7 +10,7 @@ interface ActionButtonProps {
 export function ActionButton({ label, icon, onPress }: ActionButtonProps): ReactNode {
     return (
         <TouchableOpacity
-            className="flex-row gap-1 items-center bg-eva-white-100 rounded-full px-4 py-3"
+            className="flex-row gap-1 items-center justify-center bg-eva-white-100 rounded-full px-4 py-3"
             onPress={onPress}
         >
             {icon}

@@ -7,19 +7,23 @@ interface MapMarkerProps {
     coordinate: { latitude: number; longitude: number }
     onPress: (id: string) => void
     isSelected: boolean
+    color: string
 }
 
-export function MapMarker({ building, coordinate, onPress, isSelected }: MapMarkerProps): ReactNode {
+export function MapMarker({ building, coordinate, onPress, isSelected, color }: MapMarkerProps): ReactNode {
     return (
         <Marker coordinate={coordinate} onPress={() => onPress(building.id)}>
-            <View className="flex items-center shadow-sm z-10">
+            <View className={`flex items-center shadow-sm ${isSelected ? 'z-20' : 'z-10'}`}>
                 <View
                     className={`flex-row items-center ${isSelected ? 'px-4 py-2' : 'px-3 py-1'} rounded-full bg-white`}
                 >
-                    <View className={`w-3 h-3 rounded-full mr-1.5 ${isSelected ? 'bg-red-500' : 'bg-eva-black-300'}`} />
+                    <View
+                        className="w-3 h-3 border border-eva-white-50 rounded-full mr-1.5"
+                        style={{ backgroundColor: color }}
+                    />
 
                     <Text
-                        className={`text-xs ${isSelected ? 'text-eva-black-900 font-bold text-sm' : 'text-eva-black-300'}`}
+                        className={`text-xs font-semibold ${isSelected ? 'text-eva-black-900 font-bold text-sm' : 'text-eva-black-300'}`}
                     >
                         {building.name}
                     </Text>

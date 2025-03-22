@@ -1,40 +1,30 @@
 import React, { ReactNode } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
-import { X } from 'lucide-react-native'
+import { View, TouchableOpacity, Text } from 'react-native'
 
 interface TagListProps {
-    filters: { year: string; location: string }
-    setFilters: (filters: { year: string; location: string }) => void
+    options: string[]
+    selected: string
+    onSelect: (option: string) => void
 }
 
-export const TagList = ({ filters, setFilters }: TagListProps): ReactNode => {
-    const { year, location } = filters
-
-    const removeTag = (key: keyof typeof filters): void => {
-        setFilters({ ...filters, [key]: '' })
-    }
-
+export const TagList = ({ options, selected, onSelect }: TagListProps): ReactNode => {
     return (
-        <View className="py-4">
-            <View className="flex-row flex-wrap gap-2 mb-2">
-                {year && (
-                    <View className="flex-row items-center border border-black rounded-full px-3 py-1">
-                        <Text className="text-base-800 mr-3">{year}</Text>
-                        <TouchableOpacity onPress={() => removeTag('year')}>
-                            <X size={14} color="#2D3648" />
-                        </TouchableOpacity>
-                    </View>
-                )}
-
-                {location && (
-                    <View className="flex-row items-center border border-black rounded-full px-3 py-1">
-                        <Text className="text-base-800 mr-3">{location}</Text>
-                        <TouchableOpacity onPress={() => removeTag('location')}>
-                            <X size={14} color="#2D3648" />
-                        </TouchableOpacity>
-                    </View>
-                )}
-            </View>
+        <View className="flex-row gap-4">
+            {options.map(option => (
+                <TouchableOpacity
+                    key={option}
+                    className={`rounded-full px-4 py-2 flex-row items-center border ${
+                        selected === option ? 'bg-eva-black-900 border-eva-black-900' : 'bg-white border-eva-white-500'
+                    }`}
+                    onPress={() => onSelect(option)}
+                >
+                    <Text
+                        className={`font-semibold text-sm ${selected === option ? 'text-white' : 'text-eva-black-300'}`}
+                    >
+                        {option}
+                    </Text>
+                </TouchableOpacity>
+            ))}
         </View>
     )
 }

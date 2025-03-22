@@ -7,9 +7,11 @@ import { useQuery } from '@apollo/client'
 import { ReactNode, useEffect, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/reusables/components/ui/tabs'
 import { Button } from '@/reusables/components/ui/button'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { GET_BUILDING } from '@/src/entities/building'
 import { UpdateBuilding } from '@/src/_gqlgen/graphql'
+import Footer from '@/src/shared/ui/footer'
+import { getBuildingImageUrl } from '@/src/entities/building/hook/getBuildingImageUrl'
 
 interface Building {
     id: string
@@ -21,6 +23,7 @@ interface Building {
     crfAnnualContribution: number
     crfTotalBalance: number
     crfMinimumBalance: number
+    coverImage?: string
 }
 
 interface EditBuildingProps {
@@ -29,15 +32,16 @@ interface EditBuildingProps {
 }
 
 export function EditBuilding({ id, onSuccess }: EditBuildingProps): ReactNode {
-    const { data } = useQuery<{ building: Building }, { id: string }>(GET_BUILDING, {
+    const { coverImage: newCoverImage } = useLocalSearchParams()
+    const { data } = useQuery(GET_BUILDING, {
         variables: { id },
-        skip: !id
+        skip: !id,
+        fetchPolicy: 'network-only'
     })
-
     const router = useRouter()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { update } = useUpdateBuilding()
-    const building = data?.building
+    const building = data?.res
     const [activeTab, setActiveTab] = useState<'general' | 'financial'>('general')
 
     const methods = useForm<Building>({
@@ -49,18 +53,35 @@ export function EditBuilding({ id, onSuccess }: EditBuildingProps): ReactNode {
             fiscalYear: building?.fiscalYear || undefined,
             crfAnnualContribution: building?.crfAnnualContribution || undefined,
             crfTotalBalance: building?.crfTotalBalance || undefined,
-            crfMinimumBalance: building?.crfMinimumBalance || undefined
+            crfMinimumBalance: building?.crfMinimumBalance || undefined,
+            coverImage: building?.id ? getBuildingImageUrl(building.id) : undefined
         }
     })
 
-    const { reset, handleSubmit } = methods
+    const { reset, setValue, handleSubmit } = methods
     const [formKey] = useState(0)
 
     useEffect(() => {
-        if (data?.building) {
-            reset(data.building)
+        if (building) {
+            reset({
+                name: building.name || '',
+                address: building.address || '',
+                year: building.year ?? undefined,
+                strataId: building.strataId || '',
+                fiscalYear: building.fiscalYear ?? undefined,
+                crfAnnualContribution: building.crfAnnualContribution ?? undefined,
+                crfTotalBalance: building.crfTotalBalance ?? undefined,
+                crfMinimumBalance: building.crfMinimumBalance ?? undefined,
+                coverImage: getBuildingImageUrl(building.id)
+            })
         }
     }, [building, reset])
+
+    useEffect(() => {
+        if (newCoverImage && typeof newCoverImage === 'string') {
+            setValue('coverImage', newCoverImage)
+        }
+    }, [newCoverImage, setValue])
 
     const onSubmit = async (formData: Partial<Building>): Promise<void> => {
         try {
@@ -69,15 +90,17 @@ export function EditBuilding({ id, onSuccess }: EditBuildingProps): ReactNode {
                 return
             }
 
+            const { coverImage, ...rest } = formData
             const updateData: UpdateBuilding = {
                 id,
-                ...formData
+                ...rest,
+                image: coverImage?.startsWith('file://') ? { uri: coverImage } : undefined
             }
 
             const updatedId = await update(updateData)
             if (updatedId) {
                 onSuccess()
-                router.push(`/building/detail/${id}`)
+                router.push(`/buildings/${id}/detail`)
             } else {
                 console.error('Update failed: No ID returned')
             }
@@ -94,21 +117,23 @@ export function EditBuilding({ id, onSuccess }: EditBuildingProps): ReactNode {
                     onValueChange={val => setActiveTab(val as 'general' | 'financial')}
                     className="w-full"
                 >
-                    <TabsList className="flex-row w-full bg-base-100 rounded-xl mb-6">
+                    <TabsList className="flex-row w-full bg-eva-white-100 rounded-2xl mb-6 h-14">
                         <TabsTrigger
                             value="general"
-                            className={`flex-1 rounded-lg h-10 ${activeTab === 'general' ? 'border border-base-200' : 'border-none'}`}
+                            className={`flex-1 rounded-xl h-10 ${activeTab === 'general' ? 'border border-eva-white-100' : 'border-none'}`}
                         >
-                            <Text className={`text-[#002855] ${activeTab === 'general' ? 'font-bold' : 'font-normal'}`}>
+                            <Text
+                                className={`font-bold ${activeTab === 'general' ? 'text-[#1C1D1F]' : 'text-[#5D6368]'}`}
+                            >
                                 General
                             </Text>
                         </TabsTrigger>
                         <TabsTrigger
                             value="financial"
-                            className={`flex-1 rounded-lg h-10 ${activeTab === 'financial' ? 'border border-base-200' : 'border-none'}`}
+                            className={`flex-1 rounded-xl h-10 ${activeTab === 'financial' ? 'border border-eva-white-100' : 'border-none'}`}
                         >
                             <Text
-                                className={`text-[#002855] ${activeTab === 'financial' ? 'font-bold' : 'font-normal'}`}
+                                className={`font-bold ${activeTab === 'financial' ? 'text-[#1C1D1F]' : 'text-[#5D6368]'}`}
                             >
                                 Financial
                             </Text>
@@ -116,16 +141,18 @@ export function EditBuilding({ id, onSuccess }: EditBuildingProps): ReactNode {
                     </TabsList>
                     <ScrollView>
                         <TabsContent value="general">
-                            <GeneralForm />
+                            <GeneralForm mode="edit" buildingId={id} />
                         </TabsContent>
                         <TabsContent value="financial">
                             <FinancialForm />
                         </TabsContent>
                     </ScrollView>
                 </Tabs>
-                <Button className="absolute bottom-0 left-4 right-4 bg-base-800" onPress={handleSubmit(onSubmit)}>
-                    <Text className="text-white font-bold text-base">Update</Text>
-                </Button>
+                <Footer>
+                    <Button className="bg-eva-blue-500" onPress={handleSubmit(onSubmit)}>
+                        <Text className="text-white font-bold text-base">Update</Text>
+                    </Button>
+                </Footer>
             </FormProvider>
         </View>
     )

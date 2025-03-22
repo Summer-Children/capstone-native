@@ -1,86 +1,170 @@
-import { View, FlatList, TouchableOpacity, Modal, Text } from 'react-native'
-import { BuildingCard } from '@/src/entities/building/ui/building-card'
+import { View, FlatList, TouchableOpacity, Text } from 'react-native'
+import { BuildingCard, getBuildingState } from '@/src/entities/building/ui/building-card'
 import { Stack, useRouter } from 'expo-router'
 import Header from '@/src/shared/ui/header'
-import React, { ReactNode, useMemo, useState } from 'react'
-import { SearchBar } from '@/src/features/filter-search/ui/search-bar'
-import { TagList } from '@/src/features/filter-search/ui/tag-list'
-import { SlidersHorizontal } from 'lucide-react-native'
-import { FilterView } from '@/src/features/filter-search/ui/filter-viewer'
-import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building'
+import React, { ReactNode, useRef, useState } from 'react'
+import { GET_BUILDINGS } from '@/src/entities/building'
 import { useQuery } from '@apollo/client'
+import { Building } from '@/src/entities/building/type/building-type'
+import { ActionSheetRef } from 'react-native-actions-sheet'
+import { useSearch } from '@/src/features/filter-search/model/search'
+import {
+    SortActionSheet,
+    FilterChips,
+    LocationFilter,
+    StatusFilter,
+    YearFilter,
+    SearchBar
+} from '@/src/features/filter-search/ui'
+import { BlankState } from '@/src/widgets/home'
+import { AddHomeIcon } from '@/src/shared/ui'
+import { FilterState } from '@/src/features/filter-search/model/filter-state'
 
 export default function BuildingArchive(): ReactNode {
     const router = useRouter()
-    const { data, loading, error } = useQuery(GET_BUILDINGS_ON_FIRST_LOAD)
-    const buildings = data?.res || []
-    const [searchQuery, setSearchQuery] = useState('')
-    const [filters, setFilters] = useState({ year: '', location: '' })
-    const [isFilterModalVisible, setFilterModalVisible] = useState(false)
+    const { data } = useQuery<{ res: Building[] }>(GET_BUILDINGS, {
+        fetchPolicy: 'network-only'
+    })
+    const buildings: Building[] = (data?.res || []).filter((b): b is Building => b !== null)
+    const { searchQuery } = useSearch()
+    const [filters, setFilters] = useState<FilterState>({
+        sortBy: '',
+        location: '',
+        year: '',
+        status: ''
+    })
 
-    const filteredBuildings = useMemo(() => {
-        return buildings.filter(building => {
-            if (!building) return false
-            const matchesSearch = searchQuery ? building.name?.toLowerCase().includes(searchQuery.toLowerCase()) : true
-            const matchesYear = filters.year ? building.year === Number(filters.year) : true
-            const matchesLocation = filters.location ? building.address?.includes(filters.location) : true
+    const updateFilters = (newPart: Partial<FilterState>): void => {
+        setFilters(prev => ({ ...prev, ...newPart }))
+    }
 
-            return matchesSearch && matchesYear && matchesLocation
+    const sortSheetRef = useRef<ActionSheetRef>(null)
+    const yearSheetRef = useRef<ActionSheetRef>(null)
+    const statusSheetRef = useRef<ActionSheetRef>(null)
+    const locationSheetRef = useRef<ActionSheetRef>(null)
+
+    if (buildings.length === 0) {
+        return (
+            <BlankState
+                title="No buildings yet"
+                description="Start by adding a building to begin your assessments. Once you register a building, you’ll be able to track its progress and complete assessments easily."
+                buttons={[
+                    {
+                        label: 'Add Building',
+                        icon: <AddHomeIcon size={16} variant="solid" color="#1C1D1F" />,
+                        onPress: () => router.push('/buildings/new')
+                    }
+                ]}
+            />
+        )
+    }
+
+    const filteredBuildings = buildings
+        .filter(b => {
+            const buildingStatus = getBuildingState(b)
+            const matchesSearch = searchQuery
+                ? [b.name, b.address, b.strataId].some(field =>
+                      field?.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                : true
+            const matchesYear = filters.year ? b.fiscalYear === Number(filters.year) : true
+            const matchesLocation = filters.location ? b.address?.includes(filters.location) : true
+            const matchesStatus = filters.status ? buildingStatus === filters.status.toLowerCase() : true
+            return matchesSearch && matchesYear && matchesLocation && matchesStatus
         })
-    }, [buildings, searchQuery, filters])
+        .sort((a, b) => {
+            if (filters.sortBy === 'Newest First') return Number(b.fiscalYear) - Number(a.fiscalYear)
+            if (filters.sortBy === 'Oldest First') return Number(a.fiscalYear) - Number(b.fiscalYear)
+            if (filters.sortBy === 'A-Z') return a.name.localeCompare(b.name)
+            if (filters.sortBy === 'Z-A') return b.name.localeCompare(a.name)
+            return 0
+        })
 
-    if (loading) return <Text className="text-center mt-10">Loading buildings...</Text>
-    if (error) return <Text className="text-center mt-10 text-red-500">Failed to load buildings</Text>
+    const clearFilters = (): void => {
+        setFilters({ sortBy: '', location: '', year: '', status: '' })
+    }
 
     return (
         <>
             <Stack.Screen
                 options={{
-                    contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' },
+                    headerBackVisible: false,
                     headerLeft: () => null
                 }}
             />
-            <View className="flex-1 px-4">
+            <View className="flex-1 gap-3">
                 <Header headerText="Buildings" />
-                <View className="flex-row justify-between gap-4">
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <TouchableOpacity
-                        className="bg-base-800 rounded-lg flex items-center justify-center p-2 px-2.5"
-                        onPress={() => setFilterModalVisible(true)}
-                    >
-                        <SlidersHorizontal size={20} color="white" />
-                    </TouchableOpacity>
-                </View>
-                <TagList filters={filters} setFilters={setFilters} />
-                <FlatList
-                    data={filteredBuildings}
-                    keyExtractor={item => item?.id?.toString() || ''}
-                    renderItem={({ item }) => {
-                        if (!item) return null
-                        return (
-                            <BuildingCard
-                                building={{
-                                    id: item.id,
-                                    name: item.name || undefined,
-                                    address: item.address || undefined,
-                                    year: item.year || undefined,
-                                    strataId: item.strataId || undefined
-                                }}
-                                onPress={() => router.push(`./${item.id}/detail`)}
-                            />
-                        )
-                    }}
-                />
-            </View>
-            <Modal visible={isFilterModalVisible} animationType="slide">
-                <View className="flex-1">
-                    <FilterView
+                <SearchBar />
+                <View className="flex">
+                    <FilterChips
                         filters={filters}
-                        setFilters={setFilters}
-                        onClose={() => setFilterModalVisible(false)}
+                        setFilters={updateFilters}
+                        onSortPress={() => sortSheetRef.current?.show()}
+                        onYearPress={() => yearSheetRef.current?.show()}
+                        onStatusPress={() => statusSheetRef.current?.show()}
+                        onLocationPress={() => locationSheetRef.current?.show()}
                     />
                 </View>
-            </Modal>
+                <View className="flex-row justify-between items-center my-3 px-2">
+                    <Text className="font-semibold text-eva-black-900">
+                        {`${filteredBuildings.length} result${filteredBuildings.length === 1 ? '' : 's'}`}
+                    </Text>
+
+                    {(filters.sortBy || filters.location || filters.year || filters.status) && (
+                        <TouchableOpacity onPress={clearFilters}>
+                            <Text className="text-eva-blue-500 font-semibold">Clear filters</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+
+                {filteredBuildings.length === 0 ? (
+                    <View className="flex-1 justify-start items-center px-8">
+                        <Text className="text-eva-black-500 text-center font-semibold">No results found</Text>
+                        <Text className="text-eva-black-300 text-center text-sm">
+                            Try adjusting your search or filters to find the building you're looking for.
+                        </Text>
+                    </View>
+                ) : (
+                    <FlatList
+                        data={filteredBuildings}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => {
+                            if (!item) return null
+                            return (
+                                <BuildingCard
+                                    building={item}
+                                    onPress={() => router.push(`/buildings/${item.id}/detail`)}
+                                />
+                            )
+                        }}
+                    />
+                )}
+
+                <SortActionSheet
+                    filters={filters}
+                    setFilters={updateFilters}
+                    ref={sortSheetRef}
+                    onClose={() => sortSheetRef.current?.hide()}
+                />
+                <YearFilter
+                    filters={filters}
+                    setFilters={updateFilters}
+                    ref={yearSheetRef}
+                    onClose={() => yearSheetRef.current?.hide()}
+                />
+                <StatusFilter
+                    filters={filters}
+                    setFilters={updateFilters}
+                    ref={statusSheetRef}
+                    onClose={() => statusSheetRef.current?.hide()}
+                />
+                <LocationFilter
+                    filters={filters}
+                    setFilters={updateFilters}
+                    ref={locationSheetRef}
+                    onClose={() => locationSheetRef.current?.hide()}
+                />
+            </View>
         </>
     )
 }

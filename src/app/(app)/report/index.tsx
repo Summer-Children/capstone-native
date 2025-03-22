@@ -2,44 +2,52 @@ import React, { ReactNode } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import ReportList from '@/src/entities/report/ui/report-list'
 import { useShareFile } from '@/src/features/share-report/lib/use-share-file'
-import { useFetchReports } from '@/src/entities/report/api/use-fetch-reports'
-import { X } from 'lucide-react-native'
 import { ShareIcon } from '@/src/shared/ui/icons/share'
-import { router, Stack } from 'expo-router'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Header from '@/src/shared/ui/header'
+import Footer from '@/src/shared/ui/footer'
 
 const ReportPage = (): ReactNode => {
-    const { reports } = useFetchReports()
+    // TODO: remove the test url when excel generation is ready
+    const {
+        pdfUrl,
+        excelUrl = 'https://docs.google.com/spreadsheets/d/1XMUUFjKqiHFlBKw64fKHoF5TbCYVAXAY/export?format=xlsx'
+    } = useLocalSearchParams()
+    const pdfUrlString = Array.isArray(pdfUrl) ? pdfUrl[0] : pdfUrl || ''
+    const excelUrlString = Array.isArray(excelUrl) ? excelUrl[0] : excelUrl || ''
     const { shareMultipleFiles } = useShareFile()
     const handleBulkAction = async (): Promise<void> => {
-        const fileUrls = reports.map(report => report.fileUrl)
-        await shareMultipleFiles(fileUrls)
+        await shareMultipleFiles([pdfUrl, excelUrl].filter(url => url) as string[])
     }
 
     return (
         <>
             <Stack.Screen
                 options={{
-                    headerShown: true,
-                    headerTitle: '',
                     headerBackVisible: false,
+                    headerLeft: () => null,
                     headerRight: () => (
-                        <TouchableOpacity onPress={() => router.push('/building/detail/1')} className="mr-4">
-                            <X size={24} color="#2D3648" />
+                        <TouchableOpacity onPress={() => router.replace('/buildings/archive-list')}>
+                            <Text className="text-xl text-eva-blue-500">Cancle</Text>
                         </TouchableOpacity>
                     )
                 }}
             />
-            <View className="flex-1">
-                <Header headerText="Report" headerDescription="Your report is ready! Share or view it now!" />
-                <ReportList />
-                <TouchableOpacity
-                    onPress={handleBulkAction}
-                    className="flex-row gap-2 items-center justify-center bg-base-800 py-4 rounded-md"
-                >
-                    <ShareIcon color="white" />
-                    <Text className="text-white font-bold">Share / Download all files</Text>
-                </TouchableOpacity>
+            <View className="flex-1 gap-6">
+                <Header
+                    headerText="Final Report"
+                    headerDescription="Report is ready. Preview, download or share it now!"
+                />
+                <ReportList pdfUrl={pdfUrlString} excelUrl={excelUrlString} />
+                <Footer>
+                    <TouchableOpacity
+                        onPress={handleBulkAction}
+                        className="flex-row gap-3 items-center justify-center bg-eva-blue-500 py-4 rounded-xl"
+                    >
+                        <ShareIcon color="white" />
+                        <Text className="text-white font-semibold">Share / Download all files</Text>
+                    </TouchableOpacity>
+                </Footer>
             </View>
         </>
     )

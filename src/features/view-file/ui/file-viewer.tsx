@@ -1,60 +1,60 @@
-import React, { useState, useEffect, ReactNode } from 'react'
-import { Button, View, Alert } from 'react-native'
+import { useEffect, ReactNode, useRef, useState } from 'react'
+import { Alert } from 'react-native'
 import RNFS from 'react-native-fs'
 import { viewDocument } from '@react-native-documents/viewer'
 
 interface FileViewerProps {
-    fetchedFileUrl: string
-    fileType: 'pdf' | 'excel'
-    buttonText?: string
+    fileUrl: string
+    fileType: 'pdf' | 'xlsx'
+    triggerOpen: boolean
 }
 
-export default function FileViewer({ fetchedFileUrl, fileType, buttonText }: FileViewerProps): ReactNode {
-    const [filePath, setFilePath] = useState<string | null>(null)
+export default function FileViewer({ fileUrl, fileType, triggerOpen }: FileViewerProps): ReactNode {
+    const isMounted = useRef(true)
+    const [localFilePath, setLocalFilePath] = useState<string | null>(null)
+    useEffect(() => {
+        isMounted.current = true
+        const tempFilePath = `${RNFS.DocumentDirectoryPath}/dummy.${fileType}`
 
-    const downloadFile = async (): Promise<void> => {
-        const localFilePath = `${RNFS.DocumentDirectoryPath}/dummy.${fileType === 'pdf' ? 'pdf' : 'xlsx'}`
-
-        try {
-            const fileExists = await RNFS.exists(localFilePath)
-            if (!fileExists) {
-                const options = {
-                    fromUrl: fetchedFileUrl,
-                    toFile: localFilePath
+        const downloadFile = async (): Promise<void> => {
+            try {
+                const fileExists = await RNFS.exists(tempFilePath)
+                if (!fileExists) {
+                    await RNFS.downloadFile({ fromUrl: fileUrl, toFile: tempFilePath }).promise
                 }
-                await RNFS.downloadFile(options).promise
+
+                if (isMounted.current) {
+                    setLocalFilePath(tempFilePath)
+                }
+            } catch {
+                if (isMounted.current) {
+                    Alert.alert('Download Failed', 'Could not download the file.')
+                }
             }
-            setFilePath(localFilePath)
-        } catch {
-            Alert.alert('Download Failed', 'Could not download the Excel file.')
         }
-    }
+
+        void downloadFile()
+
+        return (): void => {
+            isMounted.current = false
+            if (tempFilePath.includes('dummy')) {
+                RNFS.unlink(tempFilePath).catch(err => console.error('File deletion failed:', err))
+            }
+        }
+    }, [fileUrl])
 
     useEffect(() => {
-        // todo: add proper cleanup on unmount
-        void downloadFile()
-    }, [])
-
-    const handleOpenFile = async (): Promise<void> => {
-        if (!filePath) {
-            Alert.alert('No File Found', 'The file is not available. Please try again.')
-            return
-        }
-
-        try {
-            await viewDocument({
-                uri: `file://${filePath}`,
-                mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        if (localFilePath) {
+            void viewDocument({
+                uri: `file://${localFilePath}`,
+                mimeType:
+                    fileType === 'pdf'
+                        ? 'application/pdf'
+                        : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 presentationStyle: 'fullScreen'
             })
-        } catch {
-            Alert.alert('Error', 'Failed to open the file.')
         }
-    }
+    }, [triggerOpen, localFilePath])
 
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button title={buttonText || 'Open File'} onPress={handleOpenFile} />
-        </View>
-    )
+    return null
 }

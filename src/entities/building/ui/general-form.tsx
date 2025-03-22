@@ -1,22 +1,40 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity } from 'react-native'
 import { useFormContext } from 'react-hook-form'
 import { CustomInput } from '@/src/shared/ui/text-input'
-import { Camera } from 'lucide-react-native'
-import { useRouter } from 'expo-router'
-import { ReactNode, useState } from 'react'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { ReactNode, useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import * as Location from 'expo-location'
-import { LocationIcon } from '@/src/shared/ui'
+import { AddPhotoIcon, CameraIcon, LocationIcon } from '@/src/shared/ui'
+import { ActionButton } from '@/src/widgets/home'
+import { getBuildingImageUrl } from '../hook/getBuildingImageUrl'
 
-export function GeneralForm(): ReactNode {
+interface GeneralFormProps {
+    mode: 'edit' | 'create'
+    buildingId?: string
+}
+
+export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
     const { watch, setValue } = useFormContext()
-    const coverImage = watch('coverImage')
     const router = useRouter()
+    const { coverImage: newCoverImage } = useLocalSearchParams()
     const [showPicker, setShowPicker] = useState(false)
     const [inputYear, setInputYear] = useState(watch('year')?.toString() || '')
     const [pickerSelectedYear, setPickerSelectedYear] = useState(inputYear)
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: currentYear - 1899 }, (_, i) => (1900 + i).toString())
+
+    useEffect(() => {
+        if (mode === 'edit' && buildingId) {
+            setValue('coverImage', getBuildingImageUrl(buildingId))
+        }
+    }, [mode, buildingId, setValue])
+
+    useEffect(() => {
+        if (newCoverImage && typeof newCoverImage === 'string') {
+            setValue('coverImage', newCoverImage)
+        }
+    }, [newCoverImage, setValue])
 
     const fetchCurrentLocation = async (): Promise<void> => {
         try {
@@ -68,17 +86,39 @@ export function GeneralForm(): ReactNode {
 
     return (
         <View className="flex-1 flex-col gap-4">
-            <View className="h-32 rounded-xl bg-base-100 items-center justify-center overflow-hidden">
-                {coverImage ? (
-                    <Image source={{ uri: coverImage }} className="w-full h-full" resizeMode="cover" />
+            <View className="h-36 rounded-xl bg-white items-center justify-center border border-eva-white-500 border-dashed">
+                {watch('coverImage') ? (
+                    <>
+                        <Image
+                            source={{ uri: watch('coverImage') }}
+                            className="w-full h-full rounded-xl overflow-hidden"
+                            resizeMode="cover"
+                        />
+                        <TouchableOpacity
+                            className="absolute top-2 right-6"
+                            onPress={() =>
+                                router.push(
+                                    mode === 'edit'
+                                        ? `/buildings/add-photo?source=edit&buildingId=${buildingId}`
+                                        : `/buildings/add-photo?source=create`
+                                )
+                            }
+                        >
+                            <AddPhotoIcon />
+                        </TouchableOpacity>
+                    </>
                 ) : (
-                    <TouchableOpacity
-                        onPress={() => router.push('/building')}
-                        className="flex-row gap-2 items-center bg-base-300 border border-base-200 rounded-full px-6 py-2"
-                    >
-                        <Camera size={24} color="#2D3648" />
-                        <Text className="text-base-800 font-bold text-base">Add Picture</Text>
-                    </TouchableOpacity>
+                    <ActionButton
+                        label="Add a picture of a building"
+                        icon={<CameraIcon size={20} variant="solid" color="#1C1D1F" />}
+                        onPress={() =>
+                            router.push(
+                                mode === 'edit'
+                                    ? `/buildings/add-photo?source=edit&buildingId=${buildingId}`
+                                    : `/buildings/add-photo?source=create`
+                            )
+                        }
+                    />
                 )}
             </View>
 

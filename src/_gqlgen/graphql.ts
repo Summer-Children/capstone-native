@@ -98,6 +98,7 @@ export type CreateBuilding = {
   crfMinimumBalance?: InputMaybe<Scalars['Int']['input']>;
   crfTotalBalance?: InputMaybe<Scalars['Int']['input']>;
   fiscalYear?: InputMaybe<Scalars['Int']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
   name: Scalars['String']['input'];
   strataId: Scalars['String']['input'];
   year?: InputMaybe<Scalars['Int']['input']>;

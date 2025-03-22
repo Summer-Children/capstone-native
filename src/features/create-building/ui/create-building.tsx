@@ -19,6 +19,7 @@ interface CreateBuildingForm {
     crfAnnualContribution: number
     crfTotalBalance: number
     crfMinimumBalance: number
+    coverImage?: string
 }
 
 interface CreateBuildingProps {
@@ -28,9 +29,18 @@ interface CreateBuildingProps {
 export function CreateBuilding({ onSuccess }: CreateBuildingProps): ReactNode {
     const methods = useForm<CreateBuildingForm>({
         mode: 'onSubmit',
-        defaultValues: {}
+        defaultValues: {
+            name: '',
+            address: '',
+            year: undefined,
+            strataId: '',
+            fiscalYear: undefined,
+            crfAnnualContribution: undefined,
+            crfTotalBalance: undefined,
+            crfMinimumBalance: undefined,
+            coverImage: ''
+        }
     })
-
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { create } = useCreateBuilding()
     const [step, setStep] = useState<'general' | 'financial'>('general')
@@ -46,7 +56,12 @@ export function CreateBuilding({ onSuccess }: CreateBuildingProps): ReactNode {
 
     const onSubmit = async (data: CreateBuildingForm): Promise<void> => {
         try {
-            const buildingId = await create(data)
+            const { coverImage, ...rest } = data
+            const payload = {
+                ...rest,
+                image: coverImage?.startsWith('file://') ? { uri: coverImage } : undefined
+            }
+            const buildingId = await create(payload)
             if (buildingId) {
                 onSuccess({ id: buildingId })
             } else {
@@ -62,25 +77,17 @@ export function CreateBuilding({ onSuccess }: CreateBuildingProps): ReactNode {
             <Stack.Screen
                 options={{
                     headerLeft: () => (
-                        <TouchableOpacity
-                            onPress={handleBack}
-                            style={{
-                                width: 40,
-                                height: 40,
-                                borderRadius: 20,
-                                backgroundColor: '#F1F1F1',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <ArrowIcon />
+                        <TouchableOpacity onPress={handleBack} className="bg-eva-white-100 rounded-full p-2">
+                            <ArrowIcon color="#1C1D1F" />
                         </TouchableOpacity>
                     )
                 }}
             />
             <View className="flex-1">
                 <Header headerText={headerText} />
-                <FormProvider {...methods}>{step === 'general' ? <GeneralForm /> : <FinancialForm />}</FormProvider>
+                <FormProvider {...methods}>
+                    {step === 'general' ? <GeneralForm mode="create" /> : <FinancialForm />}
+                </FormProvider>
                 <Footer>
                     <Button
                         className="bg-eva-blue-500"

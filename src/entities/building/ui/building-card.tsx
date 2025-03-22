@@ -1,31 +1,64 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import { Building } from 'lucide-react-native'
-import { ReactNode } from 'react'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { Building as BuildingIcon } from 'lucide-react-native'
+import { Building } from '../type/building-type'
+import { ReactNode, useState } from 'react'
+import { Badge } from '@/src/widgets/home'
+import { getBuildingImageUrl } from '../hook/getBuildingImageUrl'
 
 interface BuildingCardProps {
-    building: {
-        id: string
-        name?: string
-        address?: string
-        year?: number | null
-        strataId?: string | null
-        assessmentReports?: Array<{ id: string; draft: boolean }> | null
-    }
+    building: Building
     onPress: () => void
+    hasShadow?: boolean
 }
-export function BuildingCard({ building, onPress }: BuildingCardProps): ReactNode {
+
+const getBuildingState = (building: Building): 'pending' | 'in progress' | 'complete' => {
+    if (!building.assessmentReports || building.assessmentReports.length === 0) return 'pending'
+    if (building.assessmentReports.some(report => report.draft)) return 'in progress'
+    return 'complete'
+}
+
+export function BuildingCard({ building, onPress, hasShadow }: BuildingCardProps): ReactNode {
+    const [loadFailed, setLoadFailed] = useState(false)
+    const state = getBuildingState(building)
+    const imageUrl = getBuildingImageUrl(building.id)
+
     return (
-        <TouchableOpacity onPress={onPress} className="border border-base-200 rounded-xl p-2 items-center mb-4">
-            <View className="w-full flex gap-2">
-                <View className="w-full h-24 rounded-md bg-base-200 flex items-center justify-center">
-                    <Building color="#000" size={24} />
+        <TouchableOpacity
+            onPress={onPress}
+            className={`bg-white rounded-[20px] mb-4 items-center ${hasShadow ? 'shadow-home-card' : ''}`}
+        >
+            <View className="w-full flex-row gap-2 p-2">
+                <View className="w-1/4 h-28 flex items-center justify-center rounded-xl bg-eva-white-200">
+                    {!loadFailed && imageUrl ? (
+                        <Image
+                            source={{ uri: imageUrl }}
+                            className="w-full h-full"
+                            resizeMode="cover"
+                            onError={() => setLoadFailed(true)}
+                        />
+                    ) : (
+                        <BuildingIcon color="#000" size={24} />
+                    )}
                 </View>
 
-                <View className="flex w-full items-start">
-                    <Text className="text-sm font-semibold text-base-800">{building.name}</Text>
-                    <Text className="text-xs text-base-800">{building.address}</Text>
+                <View className="flex-1 p-2 justify-center">
+                    <Text className="font-semibold text-eva-black-900">{building.name}</Text>
+                    <Text
+                        className="text-sm text-eva-black-300 mb-3"
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={{ maxWidth: '95%' }}
+                    >
+                        {building.address}
+                    </Text>
+                    <View className="flex-row items-center justify-between">
+                        <Text className="text-sm text-eva-black-300">Strata: {building.strataId}</Text>
+                        <Badge state={state} />
+                    </View>
                 </View>
             </View>
         </TouchableOpacity>
     )
 }
+
+export { getBuildingState }

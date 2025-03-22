@@ -2,7 +2,7 @@ import RNFS from 'react-native-fs'
 import Share from 'react-native-share'
 import Toast from 'react-native-toast-message'
 
-type FileType = 'pdf' | 'excel'
+type FileType = 'pdf' | 'xlsx'
 
 interface ShareResult {
     success: boolean
@@ -38,7 +38,7 @@ export const useShareFile = (): UseShareFileReturn => {
                     visibilityTime: 3000,
                     position: 'bottom'
                 })
-            } else if ((fileType === 'pdf' || fileType === 'excel') && result.success) {
+            } else if ((fileType === 'pdf' || fileType === 'xlsx') && result.success) {
                 Toast.show({
                     type: 'success',
                     text1: 'Saved to Files!',
@@ -58,7 +58,7 @@ export const useShareFile = (): UseShareFileReturn => {
         }
     }
 
-    const shareFile = async (fileUrl: string, fileType: 'pdf' | 'excel'): Promise<boolean> => {
+    const shareFile = async (fileUrl: string, fileType: 'pdf' | 'xlsx'): Promise<boolean> => {
         try {
             const localFilePath = await checkAndDownloadFile(fileUrl, fileType)
 
@@ -83,7 +83,7 @@ export const useShareFile = (): UseShareFileReturn => {
         try {
             const localFilePaths = await Promise.all(
                 fileUrls.map(async url => {
-                    const fileType = url.endsWith('pdf') ? 'pdf' : 'excel'
+                    const fileType = url.endsWith('pdf') ? 'pdf' : 'xlsx'
                     return await checkAndDownloadFile(url, fileType)
                 })
             )
@@ -92,7 +92,7 @@ export const useShareFile = (): UseShareFileReturn => {
                 urls: localFilePaths.map(filePath => `file://${filePath}`)
             }
             const result = await Share.open(shareOptions)
-            const firstFileType = fileUrls[0].endsWith('pdf') ? 'pdf' : 'excel'
+            const firstFileType = fileUrls[0].endsWith('pdf') ? 'pdf' : 'xlsx'
             handleToast(result, firstFileType)
             return true
         } catch {
