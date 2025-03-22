@@ -3,22 +3,32 @@ import { Text } from '@/reusables/components/ui/text'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
 import { LoadingOverlay } from '@/src/shared/ui/loading-overlay'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { UPDATE_ASSESSMENT_REPORT } from '@entities/assessment-report/hooks/update-assessment-report'
 import cn from 'clsx'
 import { useRouter } from 'expo-router'
-import { ReactNode, useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { ScrollView, useWindowDimensions, View } from 'react-native'
-import { GENERATE_ASSESSMENT_REPORT } from '../api/create-report-pdf'
-import React from 'react'
+import { GENERATE_PDF_AND_EXCEL } from '../api/create-report-pdf'
+import { GET_ASSESSMENT_REPORT } from '@entities/assessment-report/hook/index'
 
 type DepreciationPreviewtProps = {
     assessmentReportId: string
 }
 
+type TableDataItem = {
+    fiscalYear: string
+    annualContribution: string
+    Expenditures: string
+    closingBalance: string
+}
+
 export default function DepreciationPreview({ assessmentReportId }: DepreciationPreviewtProps): ReactNode {
-    const [generateAssessmentReportPdf, { loading }] = useMutation(GENERATE_ASSESSMENT_REPORT, {
+    const [generatePdfAndExcel, { loading }] = useMutation(GENERATE_PDF_AND_EXCEL, {
         fetchPolicy: 'network-only'
+    })
+    const { data: assessmentReportData } = useQuery(GET_ASSESSMENT_REPORT, {
+        variables: { id: assessmentReportId }
     })
     const router = useRouter()
     const [updateAssessmentReport] = useMutation(UPDATE_ASSESSMENT_REPORT)
@@ -32,30 +42,50 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
         return [firstColumnWidth, remainingWidth, remainingWidth, remainingWidth]
     }, [width])
 
-    // TODO: Replace the dummy data with the actual data once the backend is ready (Tomoki will do the calculation part)
-    const dummyData = [
-        {
-            fiscalYear: '2027',
-            annualContribution: '$71.204',
-            Expenditures: '$250.00',
-            closingBalance: '$50.000'
-        },
-        {
-            fiscalYear: '2032',
-            annualContribution: '$82.545',
-            Expenditures: '$150.00',
-            closingBalance: '$100.000'
-        },
-        {
-            fiscalYear: '2037',
-            annualContribution: '$82.500',
-            Expenditures: '$300.00',
-            closingBalance: '$75.000'
+    const generateTableData = (): TableDataItem[] => {
+        if (!assessmentReportData?.res) return []
+
+        const {
+            fiscalYear,
+            building: { crfAnnualContribution = 0, crfTotalBalance = 0, components = [] }
+        } = assessmentReportData.res
+
+        const tableData = []
+        let closingBalance = crfTotalBalance
+        let contributions = crfAnnualContribution
+
+        for (let i = 0; i < 8; i++) {
+            const year = fiscalYear + i
+
+            if (i > 0) {
+                contributions = parseFloat(((contributions ?? 0) * 1.03).toFixed(2))
+            }
+
+            const expenditures = components.reduce((sum, component) => {
+                let actionYear = component?.nextActionYear ?? 0
+                while (actionYear <= fiscalYear + 7) {
+                    if (actionYear === year) {
+                        sum += component?.unitRate ?? 0
+                    }
+                    actionYear += component?.actionFrequency ?? 0
+                }
+                return sum
+            }, 0)
+
+            closingBalance = (closingBalance ?? 0) + (contributions ?? 0) - (expenditures ?? 0)
+
+            tableData.push({
+                fiscalYear: year.toString(),
+                annualContribution: `$${(contributions ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+                Expenditures: `$${(expenditures ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+                closingBalance: `$${(closingBalance ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+            })
         }
-    ]
+
+        return tableData
+    }
 
     const handleGenerateReport = async (): Promise<void> => {
-        console.log('assessmentReportId in generate report', assessmentReportId)
         try {
             await updateAssessmentReport({
                 variables: {
@@ -65,26 +95,36 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                     }
                 }
             })
-            const { data } = await generateAssessmentReportPdf({
+            const { data } = await generatePdfAndExcel({
                 variables: {
                     input: {
                         assessmentReportId: assessmentReportId
                     }
                 }
             })
+            if (!data) {
+                console.error('No data returned from generatePdfAndExcel mutation')
+                return
+            }
 
-            const pdfUrl = data?.res?.pdfUrl ? `${data.res.pdfUrl}&timestamp=${Date.now()}` : null
+            const pdfUrl = data?.res?.pdfUrl ? `${data.res.pdfUrl}` : null
+            const excelUrl = data?.res?.excelUrl ? `${data.res.excelUrl}` : null
 
-            if (!pdfUrl) return
+            if (!pdfUrl || !excelUrl) return
 
             router.push({
                 pathname: '/(app)/report',
-                params: { pdfUrl: encodeURIComponent(pdfUrl) }
+                params: {
+                    pdfUrl: encodeURIComponent(pdfUrl),
+                    excelUrl: encodeURIComponent(excelUrl)
+                }
             })
         } catch (error) {
             console.error('Failed to generate report:', error)
         }
     }
+
+    const tableData = generateTableData()
 
     return (
         <>
@@ -111,25 +151,22 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {dummyData.map((dummy, index) => (
+                            {tableData.map((data, index) => (
                                 <TableRow
-                                    key={dummy.fiscalYear}
+                                    key={data.fiscalYear}
                                     className={cn('active:bg-secondary', index % 2 && 'bg-muted/40 ')}
                                 >
                                     <TableCell style={{ width: columnWidths[0] }}>
-                                        <Text className="text-left">{dummy.fiscalYear}</Text>
+                                        <Text className="text-left">{data.fiscalYear}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[1] }}>
-                                        <Text className="text-right">{dummy.annualContribution}</Text>
+                                        <Text className="text-right">{data.annualContribution}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[2] }}>
-                                        <Text className="text-right"> {dummy.Expenditures}</Text>
+                                        <Text className="text-right"> {data.Expenditures}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[3] }}>
-                                        <Text className="text-right">{dummy.closingBalance}</Text>
-                                    </TableCell>
-                                    <TableCell style={{ width: columnWidths[3] }}>
-                                        <Text className="text-right">{dummy.closingBalance}</Text>
+                                        <Text className="text-right">{data.closingBalance}</Text>
                                     </TableCell>
                                 </TableRow>
                             ))}

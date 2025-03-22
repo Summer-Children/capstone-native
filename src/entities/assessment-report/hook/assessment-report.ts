@@ -10,30 +10,25 @@ const CREATE_ASSESSMENT_REPORT = graphql(`
 
 const GET_ASSESSMENT_REPORT = graphql(`
     query GetAssessmentReport($id: ID!) {
-        assessmentReport(id: $id) {
+        res: assessmentReport(id: $id) {
             id
             building {
                 id
                 name
+                crfAnnualContribution
+                crfMinimumBalance
+                crfTotalBalance
+                components {
+                    name
+                    unitRate
+                    nextActionYear
+                    actionFrequency
+                }
             }
             fiscalYear
             draft
-            componentReports {
-                id
-                assessmentReportId
-                componentId
-                action
-                condition
-                note
-                priority
-                quantityNeeded
-                yearReviewed
-                component {
-                    id
-                    name
-                }
-            }
         }
     }
 `)
+
 export { CREATE_ASSESSMENT_REPORT, GET_ASSESSMENT_REPORT }
