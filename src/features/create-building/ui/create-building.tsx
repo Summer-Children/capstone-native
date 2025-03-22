@@ -44,7 +44,7 @@ export function CreateBuilding({ onSuccess }: CreateBuildingProps): ReactNode {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { create } = useCreateBuilding()
     const [step, setStep] = useState<'general' | 'financial'>('general')
-    const headerText = step === 'general' ? 'Create a building' : 'Financial details'
+    const headerText = step === 'general' ? 'Create a building profile' : 'Financial details'
 
     const handleBack = (): void => {
         if (step === 'financial') {

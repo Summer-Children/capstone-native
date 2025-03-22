@@ -7,7 +7,7 @@ import { Picker } from '@react-native-picker/picker'
 import * as Location from 'expo-location'
 import { AddPhotoIcon, CameraIcon, LocationIcon } from '@/src/shared/ui'
 import { ActionButton } from '@/src/widgets/home'
-import { getBuildingImageUrl } from '../hook/getBuildingImageUrl'
+import { getBuildingImageUrl } from '../hook/get-building-image-url'
 
 interface GeneralFormProps {
     mode: 'edit' | 'create'

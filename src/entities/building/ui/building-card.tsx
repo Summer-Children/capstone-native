@@ -3,7 +3,7 @@ import { Building as BuildingIcon } from 'lucide-react-native'
 import { Building } from '../type/building-type'
 import { ReactNode, useState } from 'react'
 import { Badge } from '@/src/widgets/home'
-import { getBuildingImageUrl } from '../hook/getBuildingImageUrl'
+import { getBuildingImageUrl } from '../hook/get-building-image-url'
 
 interface BuildingCardProps {
     building: Building
@@ -32,7 +32,7 @@ export function BuildingCard({ building, onPress, hasShadow }: BuildingCardProps
                     {!loadFailed && imageUrl ? (
                         <Image
                             source={{ uri: imageUrl }}
-                            className="w-full h-full"
+                            className="w-full h-full rounded-xl"
                             resizeMode="cover"
                             onError={() => setLoadFailed(true)}
                         />

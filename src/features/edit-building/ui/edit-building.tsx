@@ -11,7 +11,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { GET_BUILDING } from '@/src/entities/building'
 import { UpdateBuilding } from '@/src/_gqlgen/graphql'
 import Footer from '@/src/shared/ui/footer'
-import { getBuildingImageUrl } from '@/src/entities/building/hook/getBuildingImageUrl'
+import { getBuildingImageUrl } from '@/src/entities/building/hook/get-building-image-url'
 
 interface Building {
     id: string

@@ -8,11 +8,7 @@ import Header from '@/src/shared/ui/header'
 import Footer from '@/src/shared/ui/footer'
 
 const ReportPage = (): ReactNode => {
-    // TODO: remove the test url when excel generation is ready
-    const {
-        pdfUrl,
-        excelUrl = 'https://docs.google.com/spreadsheets/d/1XMUUFjKqiHFlBKw64fKHoF5TbCYVAXAY/export?format=xlsx'
-    } = useLocalSearchParams()
+    const { pdfUrl, excelUrl } = useLocalSearchParams()
     const pdfUrlString = Array.isArray(pdfUrl) ? pdfUrl[0] : pdfUrl || ''
     const excelUrlString = Array.isArray(excelUrl) ? excelUrl[0] : excelUrl || ''
     const { shareMultipleFiles } = useShareFile()

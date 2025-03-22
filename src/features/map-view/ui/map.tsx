@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, ReactNode, useState } from 'react'
+import React, { useEffect, useRef, ReactNode, useState, useMemo } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import MapView, { Circle, Region } from 'react-native-maps'
 import { MapMarker } from '@shared/ui/map-marker'
@@ -80,9 +80,17 @@ export function MapViewComponent({ buildings, selectedBuilding, onSelectBuilding
         }
     }
 
+    const firstValidCoordinate = useMemo(() => {
+        for (const building of buildings) {
+            const coord = coordinates[building.id]
+            if (coord) return coord
+        }
+        return null
+    }, [coordinates, buildings])
+
     const initialRegion: Region = {
-        latitude: coordinates[buildings[0].id]?.latitude,
-        longitude: coordinates[buildings[0].id]?.longitude,
+        latitude: firstValidCoordinate?.latitude ?? 49.282986,
+        longitude: firstValidCoordinate?.longitude ?? -123.120807,
         latitudeDelta: 0.05,
         longitudeDelta: 0.05
     }

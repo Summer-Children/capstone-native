@@ -8,14 +8,11 @@ import React from 'react'
 import { Button } from '@/reusables/components/ui/button'
 import AssessmentCard from '@/src/entities/building/ui/assessment-card'
 import { CREATE_ASSESSMENT_REPORT } from '@/src/entities/assessment-report/hook/assessment-report'
-import { getBuildingImageUrl } from '@/src/entities/building/hook/getBuildingImageUrl'
+import { getBuildingImageUrl } from '@/src/entities/building/hook/get-building-image-url'
+import { getReportExcelUrl, getReportPdfUrl } from '@/src/entities/assessment-report/hook'
 
 export default function BuildingDetail(): ReactNode {
     const [loadFailed, setLoadFailed] = useState(false)
-    // TODO: remove the urls when the backend is ready
-    const pdfUrl =
-        'https://evalo-s3-bucket-mdr.s3.us-west-1.amazonaws.com/assessment_reports/building_asset_inventory_6.pdf'
-    const excelUrl = 'https://evalo-s3-bucket-mdr.s3.us-west-1.amazonaws.com/assessment/6/budget.xlsx'
     const { buildingId } = useLocalSearchParams()
     const router = useRouter()
     const { data } = useQuery(GET_BUILDING, {
@@ -31,6 +28,10 @@ export default function BuildingDetail(): ReactNode {
 
     const hasAssessment = building?.assessmentReports?.length > 0
     const isDraft = building?.assessmentReports?.some(report => report?.draft === true)
+
+    const latestAssessmentReportId = building?.assessmentReports?.[0]?.id
+    const pdfUrl = getReportPdfUrl(latestAssessmentReportId as string)
+    const excelUrl = getReportExcelUrl(latestAssessmentReportId as string)
 
     const handleCreateAssessment = async (): Promise<void> => {
         if (!buildingId) return
@@ -140,12 +141,12 @@ export default function BuildingDetail(): ReactNode {
                         showReportFiles={true}
                         reportFiles={[
                             {
-                                name: 'Enter-File_name.pdf',
+                                name: `${building.name}`,
                                 type: 'pdf',
                                 url: pdfUrl
                             },
                             {
-                                name: 'Enter-File_name.xls',
+                                name: `${building.name}`,
                                 type: 'xlsx',
                                 url: excelUrl
                             }
