@@ -1,6 +1,6 @@
-import { Button } from '@/reusables/components/ui/button'
 import { Input } from '@/reusables/components/ui/input'
 import { Text } from '@/reusables/components/ui/text'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import { useMutation } from '@apollo/client'
 import { Link, router } from 'expo-router'
 import { ReactNode, useState } from 'react'
@@ -40,7 +40,7 @@ export default function SignUpPage(): ReactNode {
     }
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 px-6">
             <Header headerText="Sign Up"></Header>
             <View className="flex flex-col gap-4">
                 <Input
@@ -69,10 +69,10 @@ export default function SignUpPage(): ReactNode {
             </View>
 
             {errorMessage && <Text className="text-red-500">Error: {errorMessage}</Text>}
-            <Footer>
-                <Button onPress={handleSubmit}>
+            <Footer className="px-6">
+                <BottomButton onPress={handleSubmit}>
                     <Text>Sign Up</Text>
-                </Button>
+                </BottomButton>
                 <Text>
                     Already have an account?{' '}
                     <Link href="./login" className="font-bold underline">

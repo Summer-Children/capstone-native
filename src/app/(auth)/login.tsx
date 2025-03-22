@@ -1,6 +1,6 @@
-import { Button } from '@/reusables/components/ui/button'
 import { Input } from '@/reusables/components/ui/input'
 import { Text } from '@/reusables/components/ui/text'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import { useMutation } from '@apollo/client'
 import { tokenVar } from '@shared/lib/auth/provider'
 import { Link, router } from 'expo-router'
@@ -49,7 +49,7 @@ export default function LoginPage(): ReactNode {
     }
 
     return (
-        <View className="flex-1 flex-col gap-4 ">
+        <View className="flex-1 flex-col gap-4 px-6 ">
             <Header headerText="Log In"></Header>
             <Input
                 placeholder="Email address"
@@ -65,10 +65,10 @@ export default function LoginPage(): ReactNode {
             />
 
             {errorMessage && <Text className="text-red-500">Error: {errorMessage}</Text>}
-            <Footer>
-                <Button onPress={handleSubmit}>
+            <Footer className="px-6">
+                <BottomButton onPress={handleSubmit}>
                     <Text>Login</Text>
-                </Button>
+                </BottomButton>
                 <Text>
                     Don't have an account?{' '}
                     <Link href="./signup" className="font-bold underline">

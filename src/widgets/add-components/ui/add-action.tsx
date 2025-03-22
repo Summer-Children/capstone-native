@@ -1,5 +1,4 @@
 import { Badge } from '@/reusables/components/ui/badge'
-import { Button } from '@/reusables/components/ui/button'
 import { Input } from '@/reusables/components/ui/input'
 import { Label } from '@/reusables/components/ui/label'
 import {
@@ -11,16 +10,17 @@ import {
     SelectValue
 } from '@/reusables/components/ui/select'
 import { Text } from '@/reusables/components/ui/text'
+import { ComponentReportPriority, UpdateComponent, UpdateComponentReport } from '@/src/_gqlgen/graphql'
+import { GET_COMPONENT_REPORT, UPDATE_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
+import { GET_COMPONENT, UPDATE_COMPONENT } from '@/src/entities/component/hook/components'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
+import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'expo-router'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { Alert, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { ComponentReportPriority, UpdateComponent, UpdateComponentReport } from '@/src/_gqlgen/graphql'
-import { useMutation, useQuery } from '@apollo/client'
-import { GET_COMPONENT, UPDATE_COMPONENT } from '@/src/entities/component/hook/components'
-import { GET_COMPONENT_REPORT, UPDATE_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
 
 type Props = {
     componentReportId: string
@@ -31,6 +31,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
     const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>()
     const [componentItems, setComponentItems] = useState<UpdateComponent>()
     const insets = useSafeAreaInsets()
+
     const { data: componentReportData, loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
         variables: {
             componentReportId: componentReportId.toString()
@@ -72,23 +73,30 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 return
             }
             const { id, action, condition, priority, quantityNeeded, yearReviewed, note, images } = componentReportItems
-            await updateComponentReport({
-                variables: {
-                    input: {
-                        id: id,
-                        images: images,
-                        action: action,
-                        condition: condition,
-                        priority: priority,
-                        quantityNeeded: quantityNeeded,
-                        yearReviewed: yearReviewed,
-                        note: note
+            try {
+                const res = await updateComponentReport({
+                    variables: {
+                        input: {
+                            id,
+                            images,
+                            action,
+                            condition,
+                            priority,
+                            quantityNeeded,
+                            yearReviewed,
+                            note
+                        }
                     }
-                }
-            })
-        }, 2000)
+                })
+                console.log('Successfully updated component report:', res.data)
+            } catch (error) {
+                console.error('Error updating component report:', error)
+            }
+        }, 800)
         return (): void => clearTimeout(timeout)
     }, [componentReportItems])
+
+    console.log('local state:componentReportItems:', componentReportItems)
 
     useEffect(() => {
         const timeout = setTimeout(async () => {
@@ -122,7 +130,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                     }
                 }
             })
-        }, 2000)
+        }, 800)
         return (): void => clearTimeout(timeout)
     }, [componentItems])
 
@@ -134,8 +142,6 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
         left: 12,
         right: 12
     }
-
-    const [conditionValue] = useState<string | null>(null)
 
     const conditions = ['Unknown', 'Failed', 'Poor', 'Fair', 'Good', 'Excellent']
 
@@ -150,9 +156,11 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
     const finalCost = (componentReportItems.quantityNeeded ?? 0) * (componentItems?.unitRate ?? 0)
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 flex flex-col gap-5">
             <View className="flex flex-row justify-between items-center">
-                <Label>Type of action</Label>
+                <Label className="font-bold text-eva-black-900" style={{ fontSize: 20 }}>
+                    Type of action
+                </Label>
                 <Select
                     defaultValue={{
                         value: componentReportItems.action ?? '',
@@ -191,11 +199,24 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 </Select>
             </View>
 
-            <Label>Frequency</Label>
-
+            <View>
+                <Label className="text-eva-black-300">Frequency</Label>
+                <Input
+                    defaultValue={componentItems?.actionFrequency?.toString()}
+                    onChangeText={value => {
+                        if (!componentItems) {
+                            Alert.alert('No value is set')
+                            return
+                        }
+                        setComponentItems({ ...componentItems, actionFrequency: Number(value) })
+                    }}
+                    aria-labelledby="inputLabel"
+                    aria-errormessage="inputError"
+                />
+            </View>
             <View className="flex flex-row justify-between items-center">
                 <View className="flex flex-col">
-                    <Label>Last renovation</Label>
+                    <Label className="text-eva-black-300">Last renovation</Label>
                     <Input
                         placeholder="Write a year"
                         defaultValue={componentItems?.lastActionYear?.toString()}
@@ -212,7 +233,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 </View>
 
                 <View className="flex flex-col">
-                    <Label>Next renovation</Label>
+                    <Label className="text-eva-black-300">Next renovation</Label>
                     <Input
                         placeholder="Write a year"
                         defaultValue={componentItems?.nextActionYear?.toString()}
@@ -230,21 +251,25 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
             </View>
 
             <View>
-                <Label>Component condition</Label>
-                <View className="flex flex-row gap-x-2 flex-wrap">
+                <Label className="text-eva-black-300">Component condition</Label>
+                <View className="flex flex-row gap-x-2 gap-y-2 flex-wrap">
                     {conditions.map(condition => (
                         <View key={condition}>
                             <Pressable
-                                className="active:bg-grey-500"
-                                onPress={() =>
+                                style={{ zIndex: 1 }}
+                                onPress={() => {
+                                    console.log('condition is clicked:', condition)
                                     setComponentReportItems({ ...componentReportItems, condition: condition })
-                                }
+                                }}
                             >
                                 <Badge
-                                    variant={condition === conditionValue ? 'default' : 'outline'}
-                                    className="px-3 py-1"
+                                    className={`px-3 py-2  ${
+                                        condition === componentReportItems?.condition
+                                            ? 'bg-eva-black-900 text-eva-white-50'
+                                            : 'text-eva-white-300'
+                                    }`}
                                 >
-                                    <Text>{condition}</Text>
+                                    <Text className="text-lg font-semibold">{condition}</Text>
                                 </Badge>
                             </Pressable>
                         </View>
@@ -253,7 +278,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
             </View>
 
             <View>
-                <Label>Quantity</Label>
+                <Label className="text-eva-black-300">Quantity</Label>
                 <View className="flex flex-row">
                     <Input
                         defaultValue={componentReportItems?.quantityNeeded?.toString()}
@@ -268,6 +293,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                         aria-errormessage="inputError"
                         className="flex-1"
                     />
+
                     <Select defaultValue={{ value: 'ft2', label: 'ft2' }}>
                         <SelectTrigger className="w-24">
                             <SelectValue
@@ -293,7 +319,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
             </View>
 
             <View>
-                <Label>Price per quantity</Label>
+                <Label className="text-eva-black-300">Price per quantity</Label>
                 <Input
                     defaultValue={componentItems?.unitRate?.toString()}
                     onChangeText={value => {
@@ -308,15 +334,15 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 />
             </View>
 
-            <View className="flex flex-col justify-start">
-                <Text>Final Cost</Text>
-                <Text>{finalCost}</Text>
+            <View className="flex flex-row justify-between items-center">
+                <Text className="font-bold text-xl text-eva-black-900">Final Cost</Text>
+                <Text className="font-bold text-xl text-eva-black-300">
+                    {finalCost > 0 ? `$${finalCost}` : 'To be calculated'}
+                </Text>
             </View>
 
             <Footer>
-                <Button onPress={handleDone}>
-                    <Text>Continue</Text>
-                </Button>
+                <BottomButton onPress={handleDone}>Continue</BottomButton>
             </Footer>
         </View>
     )

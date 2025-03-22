@@ -1,16 +1,16 @@
-import { Button } from '@/reusables/components/ui/button'
+import { ComponentReportPriority } from '@/src/_gqlgen/graphql'
+import { GET_COMPONENT_REPORT, useUpdateComponentReport } from '@/src/entities/component-report/hook/component-report'
 import { AddPhoto } from '@/src/features/add-photo/ui'
-import Header from '@/src/shared/ui/header'
+import { convertCameraPictureToFile, convertMediaAssetToFile } from '@/src/shared/lib/file-converter/file-converter'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import CloseButton from '@/src/shared/ui/close-button'
+import Header from '@/src/shared/ui/header'
+import { useQuery } from '@apollo/client'
+import { CameraCapturedPicture } from 'expo-camera'
+import * as MediaLibrary from 'expo-media-library'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import React, { ReactNode, useState } from 'react'
 import { Text } from 'reusables/components/ui/text'
-import { GET_COMPONENT_REPORT, useUpdateComponentReport } from '@/src/entities/component-report/hook/component-report'
-import { useQuery } from '@apollo/client'
-import * as MediaLibrary from 'expo-media-library'
-import { ComponentReportPriority } from '@/src/_gqlgen/graphql'
-import { convertMediaAssetToFile, convertCameraPictureToFile } from '@/src/shared/lib/file-converter/file-converter'
-import { CameraCapturedPicture } from 'expo-camera'
 
 export default function AddPhotosPage(): ReactNode {
     const { componentReportId } = useLocalSearchParams()
@@ -67,9 +67,9 @@ export default function AddPhotosPage(): ReactNode {
             <Header headerText="Add Component Photos"></Header>
             <AddPhoto maxSelection={5} onSelectPhotos={onSelectPhotos} />
 
-            <Button onPress={handleContinue}>
+            <BottomButton onPress={handleContinue}>
                 <Text>Continue</Text>
-            </Button>
+            </BottomButton>
         </>
     )
 }

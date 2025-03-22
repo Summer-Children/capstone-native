@@ -78,6 +78,7 @@ export default function SelectBuildingPage(): ReactNode {
         <View className="flex-1">
             <Header headerText="First select your building" />
             <ComboBox
+                label="building name"
                 placeholder="Search for a building"
                 options={data.res.map(building => ({ id: building?.id ?? '', val: building?.name ?? '' })) ?? []}
                 value={buildingLabel ?? ''}
