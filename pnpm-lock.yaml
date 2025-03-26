@@ -11,6 +11,9 @@ importers:
       '@apollo/client':
         specifier: ^3.12.10
         version: 3.13.4(@types/react@18.3.18)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@expo/cli':
+        specifier: ^0.22.22
+        version: 0.22.22(graphql@16.10.0)
       '@expo/html-elements':
         specifier: 0.4.2
         version: 0.4.2
@@ -149,9 +152,6 @@ importers:
       expo-camera:
         specifier: ^16.0.17
         version: 16.0.18(expo@52.0.39(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1)))(graphql@16.10.0)(react-native-webview@13.12.5(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native-web@0.19.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
-      expo-cli:
-        specifier: ^6.3.10
-        version: 6.3.10(expo@52.0.39(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1)))(graphql@16.10.0)(react-native-webview@13.12.5(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))
       expo-constants:
         specifier: ~17.0.7
         version: 17.0.8(expo@52.0.39(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1)))(graphql@16.10.0)(react-native-webview@13.12.5(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))
@@ -330,6 +330,9 @@ importers:
       eslint-plugin-prettier:
         specifier: ^5.2.3
         version: 5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.1.1(eslint@9.22.0(jiti@2.4.2)))(eslint@9.22.0(jiti@2.4.2))(prettier@3.5.3)
+      expo-cli:
+        specifier: ^6.3.10
+        version: 6.3.10(expo@52.0.39(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1)))(graphql@16.10.0)(react-native-webview@13.12.5(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.6(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))
       globals:
         specifier: ^15.15.0
         version: 15.15.0
@@ -1245,6 +1248,10 @@ packages:
 
   '@expo/cli@0.22.20':
     resolution: {integrity: sha512-BU2ASlw0Gaj3ou/TxVsgvzK+XK8Z14Yq3mmLyvMcMAQrdExZLNmvMZ3A3x6q2uMgSJM3aoQBUuVXS/Ny+lYgDA==}
+    hasBin: true
+
+  '@expo/cli@0.22.22':
+    resolution: {integrity: sha512-sOttVuk/8gdnsiSeDpnRNpLgBJHLbyQQC0QBGd2iHpr/x6xSYpgoRO6AqwAwGtQsk4ZEPZ83ulvccei1IIPdwg==}
     hasBin: true
 
   '@expo/code-signing-certificates@0.0.5':
@@ -11002,6 +11009,87 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@expo/cli@0.22.22(graphql@16.10.0)':
+    dependencies:
+      '@0no-co/graphql.web': 1.1.2(graphql@16.10.0)
+      '@babel/runtime': 7.26.10
+      '@expo/code-signing-certificates': 0.0.5
+      '@expo/config': 10.0.11
+      '@expo/config-plugins': 9.0.17
+      '@expo/devcert': 1.1.4
+      '@expo/env': 0.4.2
+      '@expo/image-utils': 0.6.5
+      '@expo/json-file': 9.0.2
+      '@expo/metro-config': 0.19.12
+      '@expo/osascript': 2.1.6
+      '@expo/package-manager': 1.7.2
+      '@expo/plist': 0.2.2
+      '@expo/prebuild-config': 8.0.29
+      '@expo/rudder-sdk-node': 1.1.1
+      '@expo/spawn-async': 1.7.2
+      '@expo/ws-tunnel': 1.0.6
+      '@expo/xcpretty': 4.3.2
+      '@react-native/dev-middleware': 0.76.7
+      '@urql/core': 5.1.1(graphql@16.10.0)
+      '@urql/exchange-retry': 1.3.1(@urql/core@5.1.1(graphql@16.10.0))
+      accepts: 1.3.8
+      arg: 5.0.2
+      better-opn: 3.0.2
+      bplist-creator: 0.0.7
+      bplist-parser: 0.3.2
+      cacache: 18.0.4
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      compression: 1.8.0
+      connect: 3.7.0
+      debug: 4.4.0
+      env-editor: 0.4.2
+      fast-glob: 3.3.3
+      form-data: 3.0.3
+      freeport-async: 2.0.0
+      fs-extra: 8.1.0
+      getenv: 1.0.0
+      glob: 10.4.5
+      internal-ip: 4.3.0
+      is-docker: 2.2.1
+      is-wsl: 2.2.0
+      lodash.debounce: 4.0.8
+      minimatch: 3.1.2
+      node-forge: 1.3.1
+      npm-package-arg: 11.0.3
+      ora: 3.4.0
+      picomatch: 3.0.1
+      pretty-bytes: 5.6.0
+      pretty-format: 29.7.0
+      progress: 2.0.3
+      prompts: 2.4.2
+      qrcode-terminal: 0.11.0
+      require-from-string: 2.0.2
+      requireg: 0.2.2
+      resolve: 1.22.10
+      resolve-from: 5.0.0
+      resolve.exports: 2.0.3
+      semver: 7.7.1
+      send: 0.19.1
+      slugify: 1.6.6
+      source-map-support: 0.5.21
+      stacktrace-parser: 0.1.11
+      structured-headers: 0.4.1
+      tar: 6.2.1
+      temp-dir: 2.0.0
+      tempy: 0.7.1
+      terminal-link: 2.1.1
+      undici: 6.21.2
+      unique-string: 2.0.0
+      wrap-ansi: 7.0.0
+      ws: 8.18.1
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - graphql
+      - supports-color
+      - utf-8-validate
+
   '@expo/code-signing-certificates@0.0.5':
     dependencies:
       node-forge: 1.3.1
@@ -16861,7 +16949,7 @@ snapshots:
   globby@6.1.0:
     dependencies:
       array-union: 1.0.2
-      glob: 7.1.6
+      glob: 7.2.3
       object-assign: 4.1.1
       pify: 2.3.0
       pinkie-promise: 2.0.1
@@ -17111,7 +17199,7 @@ snapshots:
       depd: 1.1.2
       inherits: 2.0.3
       setprototypeof: 1.1.0
-      statuses: 1.4.0
+      statuses: 1.5.0
 
   http-errors@2.0.0:
     dependencies:

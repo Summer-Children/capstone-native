@@ -1,8 +1,11 @@
 import { registerRootComponent } from 'expo'
+import { ExpoRoot } from 'expo-router'
 
-import App from './App'
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function App() {
+    // eslint-disable-next-line no-undef
+    const ctx = require.context('./src/app')
+    return <ExpoRoot context={ctx} />
+}
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
 registerRootComponent(App)
