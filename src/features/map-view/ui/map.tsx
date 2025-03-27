@@ -14,12 +14,48 @@ interface MapViewComponentProps {
     onSelectBuilding: (id: string) => void
 }
 
+// Default location: Langara college
+const DEFAULT_COORDS = {
+    latitude: 49.224972,
+    longitude: -123.10758
+}
+
 export function MapViewComponent({ buildings, selectedBuilding, onSelectBuilding }: MapViewComponentProps): ReactNode {
     const [coordinates, setCoordinates] = useState<{ [key: string]: { latitude: number; longitude: number } }>({})
     const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null)
+    const [, setErrorMsg] = useState<string | null>(null)
     const [isLocating, setIsLocating] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
     const mapRef = useRef<MapView | null>(null)
+
+    const requestLocationPermission = async (): Promise<boolean> => {
+        try {
+            const { granted } = await Location.requestForegroundPermissionsAsync()
+            if (!granted) {
+                setErrorMsg('Permission to access location was denied')
+                return false
+            }
+            return true
+        } catch (error) {
+            console.error('Error requesting location permission:', error)
+            return false
+        }
+    }
+
+    const getUserLocation = async (): Promise<{ latitude: number; longitude: number } | null> => {
+        if (!(await requestLocationPermission())) return null
+
+        try {
+            const location = await Location.getCurrentPositionAsync({})
+            return {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            }
+        } catch (error) {
+            console.error('Error getting user location:', error)
+            return null
+        }
+    }
 
     useEffect(() => {
         const fetchCoordinates = async (): Promise<void> => {
@@ -46,6 +82,30 @@ export function MapViewComponent({ buildings, selectedBuilding, onSelectBuilding
     }, [buildings])
 
     useEffect(() => {
+        const initUserLocation = async (): Promise<void> => {
+            const location = await getUserLocation()
+            setUserLocation(location)
+        }
+
+        void initUserLocation()
+    }, [])
+
+    useEffect(() => {
+        const noBuildingHasCoords = !buildings.some(b => coordinates[b.id])
+        if (userLocation && noBuildingHasCoords) {
+            mapRef.current?.animateToRegion(
+                {
+                    latitude: userLocation.latitude,
+                    longitude: userLocation.longitude,
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05
+                },
+                350
+            )
+        }
+    }, [userLocation, coordinates, buildings])
+
+    useEffect(() => {
         if (selectedBuilding && coordinates[selectedBuilding]) {
             requestAnimationFrame(() => {
                 mapRef.current?.animateToRegion({
@@ -61,39 +121,39 @@ export function MapViewComponent({ buildings, selectedBuilding, onSelectBuilding
     const locateUser = async (): Promise<void> => {
         setIsLocating(true)
         try {
-            const location = await Location.getCurrentPositionAsync({})
-            setUserLocation({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude
-            })
+            const location = await getUserLocation()
+            if (!location) return
 
-            mapRef.current?.animateToRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01
-            })
-        } catch (error) {
-            console.error('Error getting user location:', error)
+            setUserLocation(location)
+
+            mapRef.current?.animateToRegion(
+                {
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01
+                },
+                350
+            )
         } finally {
             setTimeout(() => setIsLocating(false), 1500)
         }
     }
 
-    const firstValidCoordinate = useMemo(() => {
-        for (const building of buildings) {
-            const coord = coordinates[building.id]
-            if (coord) return coord
-        }
-        return null
-    }, [coordinates, buildings])
+    const initialRegion = useMemo<Region>(() => {
+        const firstBuildingWithCoords = buildings.find(b => coordinates[b.id])
+        const center = firstBuildingWithCoords
+            ? coordinates[firstBuildingWithCoords.id]
+            : userLocation
+              ? userLocation
+              : DEFAULT_COORDS
 
-    const initialRegion: Region = {
-        latitude: firstValidCoordinate?.latitude ?? 49.282986,
-        longitude: firstValidCoordinate?.longitude ?? -123.120807,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05
-    }
+        return {
+            ...center,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05
+        }
+    }, [coordinates, buildings, userLocation])
 
     return (
         <View className="flex-1 mb-10 rounded-2xl overflow-hidden">

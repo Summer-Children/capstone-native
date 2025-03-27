@@ -8,6 +8,7 @@ import { apolloClient } from '../shared/api/clients'
 import { AuthProvider } from '../shared/lib/auth/provider'
 import './index.css'
 import { StatusBar } from 'expo-status-bar'
+import { AppToast } from '../shared/ui/custom-toast'
 import AppLoading from 'expo-app-loading'
 import {
     useFonts,
@@ -55,6 +56,7 @@ export default function RootLayout(): ReactNode {
                     <SafeAreaProvider>
                         <SafeAreaView className="flex-1" edges={['right', 'bottom', 'left']}>
                             <Slot />
+                            <AppToast />
                         </SafeAreaView>
                         <PortalHost />
                     </SafeAreaProvider>

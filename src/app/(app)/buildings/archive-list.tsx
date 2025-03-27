@@ -44,22 +44,6 @@ export default function BuildingArchive(): ReactNode {
     const statusSheetRef = useRef<ActionSheetRef>(null)
     const locationSheetRef = useRef<ActionSheetRef>(null)
 
-    if (buildings.length === 0) {
-        return (
-            <BlankState
-                title="No buildings yet"
-                description="Start by adding a building to begin your assessments. Once you register a building, you’ll be able to track its progress and complete assessments easily."
-                buttons={[
-                    {
-                        label: 'Add Building',
-                        icon: <AddHomeIcon size={16} variant="solid" color="#1C1D1F" />,
-                        onPress: () => router.push('/buildings/new')
-                    }
-                ]}
-            />
-        )
-    }
-
     const filteredBuildings = buildings
         .filter(b => {
             const buildingStatus = getBuildingState(b)
@@ -89,83 +73,117 @@ export default function BuildingArchive(): ReactNode {
         <>
             <Stack.Screen
                 options={{
+                    contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' },
                     headerBackVisible: false,
                     headerLeft: () => null
                 }}
             />
-            <View className="flex-1 gap-3">
-                <Header headerText="Buildings" />
-                <SearchBar />
-                <View className="flex">
-                    <FilterChips
+
+            <Header headerText="Buildings" className="px-4" />
+
+            {buildings.length === 0 ? (
+                <BlankState
+                    title="No buildings yet"
+                    description="Start by adding a building to begin your assessments. Once you register a building, you’ll be able to track its progress and complete assessments easily."
+                    buttons={[
+                        {
+                            label: 'Add Building',
+                            icon: <AddHomeIcon size={16} variant="solid" color="#1C1D1F" />,
+                            onPress: () => router.push('/buildings/new')
+                        }
+                    ]}
+                />
+            ) : (
+                <View className="flex-1 gap-3">
+                    <SearchBar className="mx-4" />
+                    <View className="flex pl-4">
+                        <FilterChips
+                            filters={filters}
+                            setFilters={updateFilters}
+                            onSortPress={() => sortSheetRef.current?.show()}
+                            onYearPress={() => yearSheetRef.current?.show()}
+                            onStatusPress={() => statusSheetRef.current?.show()}
+                            onLocationPress={() => locationSheetRef.current?.show()}
+                        />
+                    </View>
+                    <View className="flex-row justify-between items-center my-3 px-4">
+                        <Text className="font-semibold text-eva-black-900">
+                            {`${filteredBuildings.length} result${filteredBuildings.length === 1 ? '' : 's'}`}
+                        </Text>
+
+                        {(filters.sortBy || filters.location || filters.year || filters.status) && (
+                            <TouchableOpacity onPress={clearFilters}>
+                                <Text className="text-eva-blue-500 font-semibold text-sm">Clear filters</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+
+                    {filteredBuildings.length === 0 ? (
+                        <View className="flex-1 justify-start items-center px-8">
+                            <Text className="text-eva-black-500 text-center font-semibold">No results found</Text>
+                            <Text className="text-eva-black-300 text-center text-sm">
+                                Try adjusting your search or filters to find the building you're looking for.
+                            </Text>
+                        </View>
+                    ) : (
+                        <FlatList
+                            className="px-4"
+                            data={filteredBuildings}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) => {
+                                if (!item) return null
+                                const status = getBuildingState(item)
+                                return (
+                                    <BuildingCard
+                                        building={item}
+                                        onPress={() => {
+                                            if (status === 'in progress') {
+                                                const inProgressReport = item.assessmentReports.find(
+                                                    report => report.draft
+                                                )
+                                                if (inProgressReport) {
+                                                    router.push(
+                                                        `/buildings/${item.id}/assessments/${inProgressReport.id}/components`
+                                                    )
+                                                } else {
+                                                    console.warn('No in-progress report found')
+                                                }
+                                            } else {
+                                                router.push(`/buildings/${item.id}/detail`)
+                                            }
+                                        }}
+                                    />
+                                )
+                            }}
+                        />
+                    )}
+
+                    <SortActionSheet
                         filters={filters}
                         setFilters={updateFilters}
-                        onSortPress={() => sortSheetRef.current?.show()}
-                        onYearPress={() => yearSheetRef.current?.show()}
-                        onStatusPress={() => statusSheetRef.current?.show()}
-                        onLocationPress={() => locationSheetRef.current?.show()}
+                        ref={sortSheetRef}
+                        onClose={() => sortSheetRef.current?.hide()}
+                    />
+                    <YearFilter
+                        filters={filters}
+                        setFilters={updateFilters}
+                        ref={yearSheetRef}
+                        onClose={() => yearSheetRef.current?.hide()}
+                    />
+                    <StatusFilter
+                        filters={filters}
+                        setFilters={updateFilters}
+                        ref={statusSheetRef}
+                        onClose={() => statusSheetRef.current?.hide()}
+                    />
+                    <LocationFilter
+                        filters={filters}
+                        setFilters={updateFilters}
+                        ref={locationSheetRef}
+                        onClose={() => locationSheetRef.current?.hide()}
                     />
                 </View>
-                <View className="flex-row justify-between items-center my-3 px-2">
-                    <Text className="font-semibold text-eva-black-900">
-                        {`${filteredBuildings.length} result${filteredBuildings.length === 1 ? '' : 's'}`}
-                    </Text>
-
-                    {(filters.sortBy || filters.location || filters.year || filters.status) && (
-                        <TouchableOpacity onPress={clearFilters}>
-                            <Text className="text-eva-blue-500 font-semibold">Clear filters</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
-
-                {filteredBuildings.length === 0 ? (
-                    <View className="flex-1 justify-start items-center px-8">
-                        <Text className="text-eva-black-500 text-center font-semibold">No results found</Text>
-                        <Text className="text-eva-black-300 text-center text-sm">
-                            Try adjusting your search or filters to find the building you're looking for.
-                        </Text>
-                    </View>
-                ) : (
-                    <FlatList
-                        data={filteredBuildings}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) => {
-                            if (!item) return null
-                            return (
-                                <BuildingCard
-                                    building={item}
-                                    onPress={() => router.push(`/buildings/${item.id}/detail`)}
-                                />
-                            )
-                        }}
-                    />
-                )}
-
-                <SortActionSheet
-                    filters={filters}
-                    setFilters={updateFilters}
-                    ref={sortSheetRef}
-                    onClose={() => sortSheetRef.current?.hide()}
-                />
-                <YearFilter
-                    filters={filters}
-                    setFilters={updateFilters}
-                    ref={yearSheetRef}
-                    onClose={() => yearSheetRef.current?.hide()}
-                />
-                <StatusFilter
-                    filters={filters}
-                    setFilters={updateFilters}
-                    ref={statusSheetRef}
-                    onClose={() => statusSheetRef.current?.hide()}
-                />
-                <LocationFilter
-                    filters={filters}
-                    setFilters={updateFilters}
-                    ref={locationSheetRef}
-                    onClose={() => locationSheetRef.current?.hide()}
-                />
-            </View>
+            )}
         </>
     )
 }

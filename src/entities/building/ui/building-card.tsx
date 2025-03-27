@@ -43,7 +43,7 @@ export function BuildingCard({ building, onPress, hasShadow }: BuildingCardProps
                 </View>
 
                 <View className="flex-1 p-2 justify-center">
-                    <Text className="font-semibold text-eva-black-900">{building.name}</Text>
+                    <Text className="font-semibold text-eva-black-900 text-base">{building.name}</Text>
                     <Text
                         className="text-sm text-eva-black-300 mb-3"
                         numberOfLines={1}

@@ -30,7 +30,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ title, fileType, fileUrl, onPre
                     <Text className="font-semibold text-eva-black-900">{title}</Text>
                 </View>
                 <TouchableOpacity className="bg-eva-white-100 rounded-full py-2 px-4" onPress={onPreview}>
-                    <Text className="font-bold text-sm">Preview</Text>
+                    <Text className="font-semibold text-sm">Preview</Text>
                 </TouchableOpacity>
             </View>
             <TouchableOpacity

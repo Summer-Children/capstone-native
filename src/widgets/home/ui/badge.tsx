@@ -33,7 +33,7 @@ export function Badge({ state }: BadgeProps): ReactNode {
     return (
         <View className="flex-row items-center gap-1 px-2 py-1 rounded-full" style={{ backgroundColor: bgColor }}>
             <View className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-            <Text className="text-xs font-bold" style={{ color: textColor }}>
+            <Text className="text-xs font-semibold" style={{ color: textColor }}>
                 {label}
             </Text>
         </View>

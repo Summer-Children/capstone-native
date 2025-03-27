@@ -1,5 +1,5 @@
 import { View, TouchableOpacity } from 'react-native'
-import { PdfIcon, XlsIcon, ChevronIcon, AssignmentIcon } from '@/src/shared/ui'
+import { PdfIcon, XlsIcon, AssignmentIcon } from '@/src/shared/ui'
 import { ActionButton } from '@/src/widgets/home'
 import { ReactNode, useState } from 'react'
 import { useRouter } from 'expo-router'
@@ -34,24 +34,21 @@ export default function AssessmentCard({
     assessmentReportId
 }: AssessmentCardProps): ReactNode {
     const router = useRouter()
-    const [selectedFile, setSelectedFile] = useState<{ url: string; type: 'pdf' | 'xlsx' } | null>(null)
+    const [selectedFile, setSelectedFile] = useState<{ url: string; type: 'pdf' | 'xlsx'; name: string } | null>(null)
     const [triggerOpen, setTriggerOpen] = useState(false)
 
-    const handlePreview = (fileUrl: string, fileType: 'pdf' | 'xlsx'): void => {
-        setSelectedFile({ url: fileUrl, type: fileType.toLowerCase() as 'pdf' | 'xlsx' })
+    const handlePreview = (fileUrl: string, fileType: 'pdf' | 'xlsx', fileName: string): void => {
+        setSelectedFile({ url: fileUrl, type: fileType.toLowerCase() as 'pdf' | 'xlsx', name: fileName })
         setTriggerOpen(prev => !prev)
     }
     return (
         <>
-            <View className="mx-4 py-5 flex flex-row justify-between items-center border-t border-eva-white-200">
+            <View className="m-4 mt-6 pt-4 flex flex-row justify-between items-center border-t border-eva-white-200">
                 <Text className="font-semibold text-eva-black-50">Assessment</Text>
-                <View className="flex flex-row items-center gap-1">
-                    <Text className="text-eva-black-500">{year}</Text>
-                    <ChevronIcon direction="down" color="#5D6368" />
-                </View>
+                <Text className="text-eva-black-500">{year}</Text>
             </View>
 
-            <View className="px-4 py-5 border border-eva-white-200 rounded-xl mx-4 bg-white">
+            <View className="px-4 py-5 border border-eva-white-200 rounded-xl mx-4 bg-white mb-10">
                 <View className="mb-5">
                     <Text className="font-semibold text-eva-black-950 mb-3">Financial information</Text>
                     <View className="flex flex-col gap-2">
@@ -81,10 +78,10 @@ export default function AssessmentCard({
                                         <Text className="text-eva-black-950 font-semibold">{file.name}</Text>
                                     </View>
                                     <TouchableOpacity
-                                        className="bg-gray-100 px-4 py-3 rounded-full"
-                                        onPress={() => handlePreview(file.url, file.type)}
+                                        className="bg-gray-100 px-4 py-2 rounded-full"
+                                        onPress={() => handlePreview(file.url, file.type, file.name)}
                                     >
-                                        <Text className="text-eva-black-900 font-semibold">Preview</Text>
+                                        <Text className="text-eva-black-900 font-semibold text-sm">Preview</Text>
                                     </TouchableOpacity>
                                 </View>
                             ))}
@@ -100,7 +97,12 @@ export default function AssessmentCard({
             </View>
 
             {selectedFile && (
-                <FileViewer fileUrl={selectedFile.url} fileType={selectedFile.type} triggerOpen={triggerOpen} />
+                <FileViewer
+                    fileUrl={selectedFile.url}
+                    fileType={selectedFile.type}
+                    fileName={selectedFile.name}
+                    triggerOpen={triggerOpen}
+                />
             )}
         </>
     )

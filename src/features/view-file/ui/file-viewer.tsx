@@ -6,15 +6,16 @@ import { viewDocument } from '@react-native-documents/viewer'
 interface FileViewerProps {
     fileUrl: string
     fileType: 'pdf' | 'xlsx'
+    fileName: string
     triggerOpen: boolean
 }
 
-export default function FileViewer({ fileUrl, fileType, triggerOpen }: FileViewerProps): ReactNode {
+export default function FileViewer({ fileUrl, fileType, fileName, triggerOpen }: FileViewerProps): ReactNode {
     const isMounted = useRef(true)
     const [localFilePath, setLocalFilePath] = useState<string | null>(null)
     useEffect(() => {
         isMounted.current = true
-        const tempFilePath = `${RNFS.DocumentDirectoryPath}/dummy.${fileType}`
+        const tempFilePath = `${RNFS.DocumentDirectoryPath}/${fileName}.${fileType}`
 
         const downloadFile = async (): Promise<void> => {
             try {
@@ -37,9 +38,7 @@ export default function FileViewer({ fileUrl, fileType, triggerOpen }: FileViewe
 
         return (): void => {
             isMounted.current = false
-            if (tempFilePath.includes('dummy')) {
-                RNFS.unlink(tempFilePath).catch(err => console.error('File deletion failed:', err))
-            }
+            RNFS.unlink(tempFilePath).catch(err => console.error('File deletion failed:', err))
         }
     }, [fileUrl])
 

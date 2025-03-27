@@ -91,6 +91,12 @@
         }
       ],
       [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Evalo to use your location."
+        }
+      ],
+      [
         "react-native-share",
         {
           "ios": [

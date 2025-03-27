@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import React, { ReactNode } from 'react'
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, Image } from 'react-native'
 import { Text } from '@/reusables/components/ui/text'
 import { router, usePathname } from 'expo-router'
 import { HomeIcon, CheckCircleIcon, BuildingsIcon } from './icons'
@@ -13,17 +14,18 @@ const iconMap = {
 const navItems = [
     { name: 'Home', href: '/' },
     { name: 'Assessment', href: '/buildings' },
-    { name: 'Buildings', href: '/buildings/archive-list' }
+    { name: 'Buildings', href: '/buildings/archive-list' },
+    { name: 'Profile', href: '/user' }
 ] as const
 
 const NavItem = ({ name, href }: (typeof navItems)[number]): ReactNode => {
     const pathname = usePathname()
     const isActive = pathname === href
-    const NavIcon = iconMap[name]
+    const NavIcon = iconMap[name as keyof typeof iconMap]
 
     const handlePress = (): void => {
         if (!isActive) {
-            if (name === 'Assessment') {
+            if (name === 'Assessment' || name === 'Profile') {
                 router.push(href)
             } else {
                 router.replace(href)
@@ -36,15 +38,25 @@ const NavItem = ({ name, href }: (typeof navItems)[number]): ReactNode => {
             <View
                 className={`w-11 h-11 flex items-center justify-center rounded-full ${isActive ? 'bg-eva-blue-50' : ''}`}
             >
-                {NavIcon && (
-                    <NavIcon
-                        size={24}
-                        color={isActive ? '#0251FF' : '#5D6368'}
-                        variant={isActive ? 'solid' : 'outline'}
+                {name === 'Profile' ? (
+                    <Image
+                        source={require('@/assets/images/avatar.png')}
+                        style={{ width: 24, height: 24 }}
+                        resizeMode="contain"
                     />
+                ) : (
+                    NavIcon && (
+                        <NavIcon
+                            size={24}
+                            color={isActive ? '#0251FF' : '#5D6368'}
+                            variant={isActive ? 'solid' : 'outline'}
+                        />
+                    )
                 )}
             </View>
-            <Text className={`text-sm font-bold ${isActive ? 'text-eva-blue-500' : 'text-eva-black-300'}`}>{name}</Text>
+            <Text className={`text-xs font-semibold ${isActive ? 'text-eva-blue-500' : 'text-eva-black-300'}`}>
+                {name}
+            </Text>
         </TouchableOpacity>
     )
 }

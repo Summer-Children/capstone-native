@@ -25,7 +25,7 @@ const ReportPage = (): ReactNode => {
                     headerLeft: () => null,
                     headerRight: () => (
                         <TouchableOpacity onPress={() => router.replace('/buildings/archive-list')}>
-                            <Text className="text-xl text-eva-blue-500">Cancle</Text>
+                            <Text className="text-eva-blue-500 font-semibold">Cancel</Text>
                         </TouchableOpacity>
                     )
                 }}

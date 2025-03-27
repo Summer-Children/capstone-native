@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react'
-import { View, TouchableOpacity, ScrollView } from 'react-native'
+import React, { ReactNode, useState } from 'react'
+import { View, TouchableOpacity, ScrollView, Image } from 'react-native'
 import { Text } from '@/reusables/components/ui/text'
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router'
 import { ImageIcon } from 'lucide-react-native'
@@ -9,6 +9,8 @@ import { GET_BUILDING } from '@/src/entities/building'
 import { useMutation, useQuery } from '@apollo/client'
 import Footer from '@/src/shared/ui/footer'
 import { CREATE_ASSESSMENT_REPORT } from '@/src/entities/assessment-report/hook/assessment-report'
+import { getBuildingImageUrl } from '@/src/entities/building/hook/get-building-image-url'
+import BottomButton from '@/src/shared/ui/bottom-button'
 
 export default function BuildingSuccess(): ReactNode {
     const { id } = useLocalSearchParams()
@@ -17,9 +19,11 @@ export default function BuildingSuccess(): ReactNode {
         variables: { id: id as string },
         skip: !id
     })
+    const [loadFailed, setLoadFailed] = useState(false)
     const [createAssessmentReport] = useMutation(CREATE_ASSESSMENT_REPORT)
     const building = data?.res
     if (!building) return <Text>No building found</Text>
+    const imageUrl = getBuildingImageUrl(building.id)
 
     const handleCreateAssessment = async (): Promise<void> => {
         if (!id) return
@@ -51,17 +55,26 @@ export default function BuildingSuccess(): ReactNode {
                     headerLeft: () => null,
                     headerRight: () => (
                         <TouchableOpacity onPress={() => router.replace('/buildings/archive-list')}>
-                            <Text className="text-xl text-eva-blue-500">Close</Text>
+                            <Text className="text-xl text-eva-blue-500 font-semibold">Close</Text>
                         </TouchableOpacity>
                     )
                 }}
             />
 
             <ScrollView className="flex-1">
-                <Header headerText="Your building have been created" />
+                <Header headerText="Your building has been created" />
                 <View className="pb-4 flex gap-4">
                     <View className="h-60 bg-eva-white-200 rounded-xl overflow-hidden justify-center items-center">
-                        <ImageIcon size={50} color="#2D3648" />
+                        {!loadFailed ? (
+                            <Image
+                                source={{ uri: imageUrl }}
+                                className="w-full h-full"
+                                resizeMode="cover"
+                                onError={() => setLoadFailed(true)}
+                            />
+                        ) : (
+                            <ImageIcon size={50} color="#2D3648" />
+                        )}
                     </View>
                     <View className="flex px-4">
                         <Text className="text-2xl font-bold text-eva-black-900">{building.name}</Text>
@@ -73,9 +86,9 @@ export default function BuildingSuccess(): ReactNode {
             </ScrollView>
 
             <Footer className="flex gap-4 mx-4">
-                <Button className="bg-eva-blue-500 rounded-xl items-center" onPress={handleCreateAssessment}>
-                    <Text className="text-white font-bold">Start assessment</Text>
-                </Button>
+                <BottomButton onPress={handleCreateAssessment}>
+                    <Text>Start assessment</Text>
+                </BottomButton>
 
                 <Button
                     variant="outline"

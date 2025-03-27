@@ -1,10 +1,8 @@
-import { Button } from '@/reusables/components/ui/button'
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { Text } from '@/reusables/components/ui/text'
 import { BuildingCarousel } from '@/src/features/map-view/ui/building-carousel'
 import { MapViewComponent } from '@/src/features/map-view/ui/map'
-import { tokenVar } from '@shared/lib/auth/provider'
 import { router, Stack } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
 import { AddHomeIcon, AssignmentIcon } from '@/src/shared/ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { View, Image } from 'react-native'
@@ -37,13 +35,20 @@ export default function Homepage(): ReactNode {
         }
     }, [visibleBuildings])
 
-    const logout = async (): Promise<void> => {
-        tokenVar(null)
-        await SecureStore.deleteItemAsync('authToken')
-    }
-
     const handleCardPress = (id: string): void => {
-        router.push(`/buildings/${id}/detail`)
+        const building = buildings.find(b => b.id === id)
+        if (!building) return
+        const status = getBuildingState(building)
+        if (status === 'in progress') {
+            const inProgressReport = building.assessmentReports?.find(report => report.draft)
+            if (inProgressReport) {
+                router.push(`/buildings/${id}/assessments/${inProgressReport.id}/components`)
+            } else {
+                console.warn('No in-progress report found for building', id)
+            }
+        } else {
+            router.push(`/buildings/${id}/detail`)
+        }
     }
 
     return (
@@ -52,19 +57,17 @@ export default function Homepage(): ReactNode {
                 options={{
                     contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' },
                     headerBackVisible: false,
-                    headerLeft: () => null
+                    headerLeft: () => (
+                        <Image
+                            source={require('@/assets/images/logo.png')}
+                            resizeMode="contain"
+                            style={{ width: 40, height: 40 }}
+                        />
+                    )
                 }}
             />
-            <View className="flex px-4 gap-2">
-                {/* eslint-disable-next-line @typescript-eslint/no-require-imports */}
-                <Image source={require('@/assets/images/logo.png')} resizeMode="contain" className="w-10 h-10" />
-                <View className="flex-row justify-between items-center">
-                    <H2 className="text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
-                    <Button onPress={logout}>
-                        <Text>Log out </Text>
-                    </Button>
-                </View>
-            </View>
+
+            <H2 className="px-4 text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
 
             {loading ? (
                 <View className="flex-1 flex items-center justify-center">
@@ -75,7 +78,7 @@ export default function Homepage(): ReactNode {
                     <Text className="text-lg font-bold text-red-500"> Failed to load data </Text>
                 </View>
             ) : buildings.length > 0 ? (
-                <View className="flex-1 p-4">
+                <View className="flex-1 p-4 relative">
                     <View className="flex-row gap-4 mb-8">
                         <ActionButton
                             label="New Assessment"
@@ -89,7 +92,7 @@ export default function Homepage(): ReactNode {
                         />
                     </View>
 
-                    <Text className="text-lg font-bold mb-2">
+                    <Text className="text-lg font-semibold mb-2">
                         {`${totalPendingAssessments} Pending assessment${totalPendingAssessments === 1 ? '' : 's'}`}
                     </Text>
 
@@ -98,7 +101,8 @@ export default function Homepage(): ReactNode {
                         selectedBuilding={selectedBuilding}
                         onSelectBuilding={handleMarkerPress}
                     />
-                    <View className="absolute bottom-0 w-full">
+
+                    <View className="absolute bottom-0 left-0 right-0 z-30">
                         <BuildingCarousel
                             buildings={visibleBuildings}
                             selectedBuilding={selectedBuilding}

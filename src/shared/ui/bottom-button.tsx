@@ -12,7 +12,7 @@ type BottomButtonProps = {
 const BottomButton = forwardRef<View, BottomButtonProps>(({ className, children, ...props }, ref) => {
     return (
         <>
-            <Button ref={ref} size="lg" className={clsx(className, 'bg-eva-blue-500')} {...props}>
+            <Button ref={ref} size="lg" className={clsx(className, 'bg-eva-blue-500 rounded-xl')} {...props}>
                 <Text className="text-white font-bold">{children}</Text>
             </Button>
         </>

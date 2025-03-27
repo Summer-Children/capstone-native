@@ -9,11 +9,11 @@ interface ReportListProps {
 }
 
 const ReportList = ({ pdfUrl, excelUrl }: ReportListProps): ReactNode => {
-    const [selectedFile, setSelectedFile] = useState<{ url: string; type: 'pdf' | 'xlsx' } | null>(null)
+    const [selectedFile, setSelectedFile] = useState<{ url: string; type: 'pdf' | 'xlsx'; name: string } | null>(null)
     const [triggerOpen, setTriggerOpen] = useState(false)
 
-    const handlePreview = (fileUrl: string, fileType: 'pdf' | 'xlsx'): void => {
-        setSelectedFile({ url: fileUrl, type: fileType })
+    const handlePreview = (fileUrl: string, fileType: 'pdf' | 'xlsx', fileName: string): void => {
+        setSelectedFile({ url: fileUrl, type: fileType, name: fileName })
         setTriggerOpen(prev => !prev)
     }
 
@@ -25,7 +25,7 @@ const ReportList = ({ pdfUrl, excelUrl }: ReportListProps): ReactNode => {
                         title="Building Assessment Inventory"
                         fileType="pdf"
                         fileUrl={pdfUrl}
-                        onPreview={() => handlePreview(pdfUrl, 'pdf')}
+                        onPreview={() => handlePreview(pdfUrl, 'pdf', 'Building Assessment Inventory')}
                     />
                 )}
 
@@ -34,12 +34,17 @@ const ReportList = ({ pdfUrl, excelUrl }: ReportListProps): ReactNode => {
                         title="Depreciation Report"
                         fileType="xlsx"
                         fileUrl={excelUrl}
-                        onPreview={() => handlePreview(excelUrl, 'xlsx')}
+                        onPreview={() => handlePreview(excelUrl, 'xlsx', 'Depreciation Report')}
                     />
                 )}
             </ScrollView>
             {selectedFile && (
-                <FileViewer fileUrl={selectedFile.url} fileType={selectedFile.type} triggerOpen={triggerOpen} />
+                <FileViewer
+                    fileUrl={selectedFile.url}
+                    fileType={selectedFile.type}
+                    fileName={selectedFile.name}
+                    triggerOpen={triggerOpen}
+                />
             )}
         </>
     )

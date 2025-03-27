@@ -17,6 +17,7 @@ export const LocationFilter = forwardRef<ActionSheetRef, LocationFilterProps>(
     ({ filters, setFilters, onClose }, ref) => {
         const [search, setSearch] = useState(filters.location || '')
         const [isFocused, setIsFocused] = useState(false)
+        const [, setErrorMsg] = useState<string | null>(null)
         const [history, setHistory] = useState<string[]>([])
         const [currentLocation, setCurrentLocation] = useState<string | null>(null)
 
@@ -26,6 +27,11 @@ export const LocationFilter = forwardRef<ActionSheetRef, LocationFilterProps>(
 
         useEffect((): void => {
             void (async (): Promise<void> => {
+                const { granted } = await Location.requestForegroundPermissionsAsync()
+                if (!granted) {
+                    setErrorMsg('Permission to access location was denied')
+                    return
+                }
                 const userLocation = await Location.getCurrentPositionAsync({})
                 const reverseGeocode = await Location.reverseGeocodeAsync(userLocation.coords)
                 if (reverseGeocode.length > 0) {
@@ -106,7 +112,7 @@ export const LocationFilter = forwardRef<ActionSheetRef, LocationFilterProps>(
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    className="p-2 flex-row items-center"
+                                    className="p-2 flex-row items-center gap-1"
                                     onPress={() => selectLocation(item)}
                                 >
                                     <SearchHistoryIcon size={20} color="#1C1D1F" />

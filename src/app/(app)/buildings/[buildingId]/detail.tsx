@@ -1,11 +1,12 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { View, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { ImageIcon } from 'lucide-react-native'
 import { ReactNode, useState } from 'react'
 import { GET_BUILDING } from '@/src/entities/building'
 import { useMutation, useQuery } from '@apollo/client'
 import React from 'react'
-import { Button } from '@/reusables/components/ui/button'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import AssessmentCard from '@/src/entities/building/ui/assessment-card'
 import { CREATE_ASSESSMENT_REPORT } from '@/src/entities/assessment-report/hook/assessment-report'
 import { getBuildingImageUrl } from '@/src/entities/building/hook/get-building-image-url'
@@ -62,22 +63,19 @@ export default function BuildingDetail(): ReactNode {
                     contentStyle: { paddingHorizontal: 0 },
                     headerRight: () => (
                         <TouchableOpacity
-                            onPress={() => router.push(`/buildings/${buildingId}/edit`)}
+                            onPress={() => router.replace(`/buildings/${buildingId}/edit`)}
                             style={{
-                                backgroundColor: 'rgba(255, 255, 255, 0.5)',
                                 paddingVertical: 6,
                                 paddingHorizontal: 12,
-                                borderRadius: 8,
-                                marginRight: 10
+                                borderRadius: 8
                             }}
                         >
-                            <Text className="text-eva-black-900 font-bold">Edit building</Text>
+                            <Text className="text-eva-black-900 font-semibold">Edit building</Text>
                         </TouchableOpacity>
                     )
                 }}
             />
             <ScrollView className="flex-1 bg-white" contentContainerStyle={{ flexGrow: 1 }}>
-                {/* TODO: replace the element if it has coverimage */}
                 <View>
                     <View className="w-full h-64 bg-eva-white-200 flex items-center justify-center">
                         {!loadFailed ? (
@@ -94,7 +92,7 @@ export default function BuildingDetail(): ReactNode {
                 </View>
 
                 <View className="flex mt-4 px-4">
-                    <Text className="text-2xl font-bold text-eva-black-900">{building.name}</Text>
+                    <Text className="text-2xl font-semibold text-eva-black-900">{building.name}</Text>
                     <View className="flex">
                         <Text className="text-sm text-eva-black-300">{building.address}</Text>
                         <Text className="text-sm text-eva-black-300">Built in {building.year}</Text>
@@ -105,30 +103,14 @@ export default function BuildingDetail(): ReactNode {
                 {!hasAssessment && (
                     <View className="flex-1 justify-center px-4">
                         <Text className="text-2xl text-center font-semibold text-eva-black-200 px-14">
-                            You haven’t perform an assessment yet
+                            You haven’t performed an assessment yet
                         </Text>
                     </View>
                 )}
 
-                <Button
-                    className="bg-eva-blue-500 rounded-xl items-center mx-4 my-6"
-                    onPress={handleCreateAssessment}
-                    disabled={hasAssessment && isDraft}
-                >
-                    <Text className="text-white font-bold">Start assessment</Text>
-                </Button>
-
-                {hasAssessment && isDraft && (
-                    <AssessmentCard
-                        buildingId={String(buildingId)}
-                        assessmentReportId={String(building.assessmentReports[0]?.id)}
-                        year={building.fiscalYear ?? 0}
-                        crfAnnualContribution={(building.crfAnnualContribution ?? 0).toLocaleString()}
-                        crfBalance={(building.crfTotalBalance ?? 0).toLocaleString()}
-                        crfMinBalance={(building.crfMinimumBalance ?? 0).toLocaleString()}
-                        showReportFiles={false}
-                    />
-                )}
+                <BottomButton onPress={handleCreateAssessment} className="mx-4 mt-6">
+                    <Text>Start assessment</Text>
+                </BottomButton>
 
                 {hasAssessment && !isDraft && (
                     <AssessmentCard

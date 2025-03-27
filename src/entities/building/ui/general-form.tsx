@@ -15,10 +15,11 @@ interface GeneralFormProps {
 }
 
 export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
-    const { watch, setValue } = useFormContext()
+    const { watch, setValue, register } = useFormContext()
     const router = useRouter()
-    const { coverImage: newCoverImage } = useLocalSearchParams()
+    const { coverImage: newCoverImage, fileName, fileType } = useLocalSearchParams()
     const [showPicker, setShowPicker] = useState(false)
+    const [, setErrorMsg] = useState<string | null>(null)
     const [inputYear, setInputYear] = useState(watch('year')?.toString() || '')
     const [pickerSelectedYear, setPickerSelectedYear] = useState(inputYear)
     const currentYear = new Date().getFullYear()
@@ -33,11 +34,28 @@ export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
     useEffect(() => {
         if (newCoverImage && typeof newCoverImage === 'string') {
             setValue('coverImage', newCoverImage)
+            if (fileName && typeof fileName === 'string') {
+                setValue('fileName', fileName)
+            }
+            if (fileType && typeof fileType === 'string') {
+                setValue('fileType', fileType)
+            }
         }
-    }, [newCoverImage, setValue])
+    }, [newCoverImage, fileName, fileType, setValue])
+
+    useEffect(() => {
+        register('fileName')
+        register('fileType')
+    }, [register])
 
     const fetchCurrentLocation = async (): Promise<void> => {
         try {
+            const { granted } = await Location.requestForegroundPermissionsAsync()
+            if (!granted) {
+                setErrorMsg('Permission to access location was denied')
+                return
+            }
+
             const location = await Location.getCurrentPositionAsync({
                 accuracy: Location.Accuracy.BestForNavigation
             })
@@ -86,7 +104,11 @@ export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
 
     return (
         <View className="flex-1 flex-col gap-4">
-            <View className="h-36 rounded-xl bg-white items-center justify-center border border-eva-white-500 border-dashed">
+            <View
+                className={`h-36 rounded-xl bg-white items-center justify-center ${
+                    watch('coverImage') ? 'border-nonce' : 'border border-eva-white-500 border-dashed'
+                }`}
+            >
                 {watch('coverImage') ? (
                     <>
                         <Image

@@ -24,7 +24,7 @@ export function MapMarker({ building, coordinate, onPress, isSelected, color }: 
                     />
 
                     <Text
-                        className={`text-xs font-semibold ${isSelected ? 'text-eva-black-900 font-bold text-sm' : 'text-eva-black-300'}`}
+                        className={`text-xs font-semibold ${isSelected ? 'text-eva-black-900 text-sm' : 'text-eva-black-300'}`}
                     >
                         {building.name}
                     </Text>

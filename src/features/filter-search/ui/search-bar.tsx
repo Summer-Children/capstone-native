@@ -4,14 +4,18 @@ import { SearchIcon } from '@/src/shared/ui/icons/search'
 import { CloseIcon } from '@/src/shared/ui'
 import { useSearch } from '../model/search'
 
-export const SearchBar = (): ReactNode => {
+interface SearchBarProps {
+    className?: string
+}
+
+export const SearchBar = ({ className }: SearchBarProps): ReactNode => {
     const { searchQuery, setSearchQuery } = useSearch()
     const [isFocused, setIsFocused] = useState(false)
     return (
         <View
             className={`flex-row items-center rounded-xl p-3 border ${
                 isFocused ? 'border-eva-blue-500' : 'border-eva-white-500'
-            }`}
+            } ${className}`}
         >
             <SearchIcon size={20} />
             <TextInput
