@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import ReportList from '@/src/entities/report/ui/report-list'
 import { useShareFile } from '@/src/features/share-report/lib/use-share-file'
 import { ShareIcon } from '@/src/shared/ui/icons/share'

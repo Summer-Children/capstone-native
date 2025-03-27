@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, TouchableOpacity, Image } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { Building as BuildingIcon } from 'lucide-react-native'
 import { Building } from '../type/building-type'
 import { ReactNode, useState } from 'react'

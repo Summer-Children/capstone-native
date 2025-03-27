@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { TouchableOpacity, Text } from 'react-native'
+import { TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 
 interface ActionButtonProps {
     label: string

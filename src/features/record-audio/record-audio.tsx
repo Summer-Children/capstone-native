@@ -2,9 +2,9 @@ import { Waveform, type IWaveformRef } from '@simform_solutions/react-native-aud
 import { Circle, CirclePause, CircleStop, RotateCcw, Undo2 } from 'lucide-react-native'
 import React from 'react'
 import { ReactNode, useRef, useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import AudioRecorderPlayer from 'react-native-audio-recorder-player'
-
+import { Text } from '@/reusables/components/ui/text'
 export function RecordAudio(): ReactNode {
     const [isRecording, setIsRecording] = useState(false)
     const [recorderPlayer] = useState(() => new AudioRecorderPlayer())

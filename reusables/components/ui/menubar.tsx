@@ -221,7 +221,10 @@ MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName
 const MenubarShortcut = ({ className, ...props }: TextProps): ReactNode => {
     return (
         <Text
-            className={cn('ml-auto text-xs native:text-sm tracking-widest text-muted-foreground', className)}
+            className={cn(
+                'ml-auto text-xs native:text-sm tracking-widest text-muted-foreground ios:font-semibold android:font-semibold',
+                className
+            )}
             {...props}
         />
     )

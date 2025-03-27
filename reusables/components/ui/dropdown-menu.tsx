@@ -31,7 +31,10 @@ const DropdownMenuSubTrigger = React.forwardRef<
     const Icon = Platform.OS === 'web' ? ChevronRight : open ? ChevronUp : ChevronDown
     return (
         <TextClassContext.Provider
-            value={cn('select-none text-sm native:text-lg text-primary', open && 'native:text-accent-foreground')}
+            value={cn(
+                'select-none text-sm native:text-lg text-primary ios:font-semibold',
+                open && 'native:text-accent-foreground'
+            )}
         >
             <DropdownMenuPrimitive.SubTrigger
                 ref={ref}
@@ -208,7 +211,10 @@ DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName
 const DropdownMenuShortcut = ({ className, ...props }: TextProps): ReactNode => {
     return (
         <Text
-            className={cn('ml-auto text-xs native:text-sm tracking-widest text-muted-foreground', className)}
+            className={cn(
+                'ml-auto text-xs native:text-sm tracking-widest text-muted-foreground ios:font-semibold',
+                className
+            )}
             {...props}
         />
     )

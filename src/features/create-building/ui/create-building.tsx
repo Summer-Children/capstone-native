@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { Button } from '@/reusables/components/ui/button'
 import { GeneralForm } from '@/src/entities/building/ui/general-form'
 import { FinancialForm } from '@/src/entities/building/ui/financial-form'

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { router, usePathname } from 'expo-router'
 import { HomeIcon, CheckCircleIcon, BuildingsIcon } from './icons'
 

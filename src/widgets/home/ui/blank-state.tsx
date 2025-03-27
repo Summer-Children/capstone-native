@@ -1,6 +1,7 @@
 import { BuildingsIcon } from '@/src/shared/ui'
 import React, { ReactNode } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { ActionButton } from './action-button'
 
 interface BlankStateProps {

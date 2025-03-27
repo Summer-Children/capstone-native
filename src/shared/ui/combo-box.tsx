@@ -1,4 +1,5 @@
-import { View, Text, TextInput, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, TextInput, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 
 interface ComboBoxProps {
     label?: string

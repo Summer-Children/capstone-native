@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 
 interface BadgeProps {
     state: 'pending' | 'in progress' | 'complete'

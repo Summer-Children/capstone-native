@@ -13,8 +13,10 @@ import { GET_BUILDINGS } from '@/src/entities/building'
 import { Building } from '@/src/entities/building/type/building-type'
 import { getBuildingState } from '@/src/entities/building/ui/building-card'
 import { ActionButton, BlankState } from '@/src/widgets/home'
+import { H2 } from '@/reusables/components/ui/typography'
 
 export default function Homepage(): ReactNode {
+    const accountName = 'Carolina' // TODO: get account name from user but I suppose we dont have time
     const { data, loading, error } = useQuery<{ res: Building[] }>(GET_BUILDINGS, {
         fetchPolicy: 'network-only'
     })
@@ -57,7 +59,7 @@ export default function Homepage(): ReactNode {
                 {/* eslint-disable-next-line @typescript-eslint/no-require-imports */}
                 <Image source={require('@/assets/images/logo.png')} resizeMode="contain" className="w-10 h-10" />
                 <View className="flex-row justify-between items-center">
-                    <Text className="text-[32px] font-bold text-eva-blue-900">Hello</Text>
+                    <H2 className="text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
                     <Button onPress={logout}>
                         <Text>Log out </Text>
                     </Button>

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, TouchableOpacity, ScrollView } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router'
 import { ImageIcon } from 'lucide-react-native'
 import Header from '@/src/shared/ui/header'

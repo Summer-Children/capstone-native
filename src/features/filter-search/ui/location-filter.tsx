@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useEffect } from 'react'
-import { View, TextInput, FlatList, TouchableOpacity, Text } from 'react-native'
+import { View, TextInput, FlatList, TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { ActionSheetRef } from 'react-native-actions-sheet'
 import { CustomActionSheet } from './action-sheet'
 import * as Location from 'expo-location'

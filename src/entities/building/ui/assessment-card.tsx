@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { PdfIcon, XlsIcon, ChevronIcon, AssignmentIcon } from '@/src/shared/ui'
 import { ActionButton } from '@/src/widgets/home'
 import { ReactNode, useState } from 'react'
 import { useRouter } from 'expo-router'
 import FileViewer from '@/src/features/view-file/ui/file-viewer'
+import { Text } from '@/reusables/components/ui/text'
 
 type ReportFile = {
     name: string

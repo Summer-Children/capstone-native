@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import { View, ScrollView, TouchableOpacity, Text } from 'react-native'
+import { View, ScrollView, TouchableOpacity } from 'react-native'
 import { ChevronIcon, CloseIcon } from '@/src/shared/ui'
+import { Text } from '@/reusables/components/ui/text'
 import { FilterState } from '../model/filter-state'
 
 interface FilterChipsProps {

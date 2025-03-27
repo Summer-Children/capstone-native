@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, Image } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, FlatList, Alert, Image } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { CameraCapturedPicture, CameraView } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import { Camera, CircleCheck, CircleX } from 'lucide-react-native'

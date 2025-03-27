@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Text, Pressable, View, NativeSyntheticEvent, TextLayoutEventData } from 'react-native'
+import { Pressable, View, NativeSyntheticEvent, TextLayoutEventData } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 
 interface ExpandableTextProps {
     text: string

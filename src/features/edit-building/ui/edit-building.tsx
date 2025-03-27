@@ -1,4 +1,5 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { GeneralForm } from '@/src/entities/building/ui/general-form'
 import { FinancialForm } from '@/src/entities/building/ui/financial-form'
 import { useForm, FormProvider } from 'react-hook-form'

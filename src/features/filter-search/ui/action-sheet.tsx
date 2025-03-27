@@ -1,6 +1,7 @@
 import { Button } from '@/reusables/components/ui/button'
 import React, { forwardRef, useRef } from 'react'
-import { View, Text, TouchableOpacity, ViewStyle } from 'react-native'
+import { View, TouchableOpacity, ViewStyle } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet'
 
 interface Props {

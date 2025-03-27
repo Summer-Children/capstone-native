@@ -1,7 +1,8 @@
 import { Button } from '@/reusables/components/ui/button'
 import clsx from 'clsx'
 import { ReactNode, forwardRef } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 
 type BottomButtonProps = {
     className?: string

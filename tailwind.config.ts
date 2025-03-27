@@ -10,6 +10,22 @@ const config: Config = {
     presets: [preset],
     theme: {
         extend: {
+            fontFamily: {
+                light: 'Figtree_300Light',
+                normal: 'Figtree_400Regular',
+                medium: 'Figtree_500Medium',
+                semibold: 'Figtree_600SemiBold',
+                bold: 'Figtree_700Bold',
+                extrabold: 'Figtree_800ExtraBold',
+                black: 'Figtree_900Black',
+                'light-italic': 'Figtree_300Light_Italic',
+                'normal-italic': 'Figtree_400Regular_Italic',
+                'medium-italic': 'Figtree_500Medium_Italic',
+                'semibold-italic': 'Figtree_600SemiBold_Italic',
+                'bold-italic': 'Figtree_700Bold_Italic',
+                'extrabold-italic': 'Figtree_800ExtraBold_Italic',
+                'black-italic': 'Figtree_900Black_Italic'
+            },
             colors: {
                 eva: {
                     white: {
@@ -85,9 +101,6 @@ const config: Config = {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))'
                 }
-            },
-            fontFamily: {
-                figtree: ['Figtree', 'sans-serif']
             },
             boxShadow: {
                 'home-card': '0px 6px 12px rgba(0, 0, 0, 0.08)'

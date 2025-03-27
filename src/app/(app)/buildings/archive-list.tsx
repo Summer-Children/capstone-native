@@ -1,4 +1,5 @@
-import { View, FlatList, TouchableOpacity, Text } from 'react-native'
+import { View, FlatList, TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { BuildingCard, getBuildingState } from '@/src/entities/building/ui/building-card'
 import { Stack, useRouter } from 'expo-router'
 import Header from '@/src/shared/ui/header'

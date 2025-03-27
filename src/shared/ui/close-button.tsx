@@ -1,6 +1,7 @@
 import { useRouter, useSegments } from 'expo-router'
 import { ReactNode } from 'react'
-import { Pressable, Text } from 'react-native'
+import { Pressable } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 
 export default function CloseButton(): ReactNode {
     const router = useRouter()

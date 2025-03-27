@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { ActionSheetRef } from 'react-native-actions-sheet'
 import { CustomActionSheet } from './action-sheet'
 import { TagList } from './tag-list'

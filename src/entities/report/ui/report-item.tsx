@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
+import { Text } from '@/reusables/components/ui/text'
 import { PdfIcon, XlsIcon, ShareIcon } from '@/src/shared/ui/icons'
 import { useShareFile } from '@/src/features/share-report/lib/use-share-file'
 

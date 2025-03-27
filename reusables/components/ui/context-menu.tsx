@@ -199,7 +199,10 @@ ContextMenuSeparator.displayName = ContextMenuPrimitive.Separator.displayName
 const ContextMenuShortcut = ({ className, ...props }: TextProps): ReactNode => {
     return (
         <Text
-            className={cn('ml-auto text-xs native:text-sm tracking-widest text-muted-foreground', className)}
+            className={cn(
+                'ml-auto text-xs native:text-sm tracking-widest text-muted-foreground ios:font-semibold',
+                className
+            )}
             {...props}
         />
     )

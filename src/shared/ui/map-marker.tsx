@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { Marker } from 'react-native-maps'
+import { Text } from '@/reusables/components/ui/text'
 
 interface MapMarkerProps {
     building: { id: string; name: string }
