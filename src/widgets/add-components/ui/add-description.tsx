@@ -29,8 +29,6 @@ export function AddDescription({ onGoNext, initialValue }: Props): ReactNode {
         router.push(targetPath)
     }
 
-    console.log('isAudioDescription:', isAudioDescription)
-
     return (
         <View className="flex-1">
             {isAudioDescription && (

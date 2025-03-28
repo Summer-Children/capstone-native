@@ -6,7 +6,6 @@ import * as SecureStore from 'expo-secure-store'
 import { createUploadLink } from 'apollo-upload-client'
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? ''
-console.log('API_URL:', API_URL)
 
 const authLink = setContext(async (_, { headers }) => {
     const token = await SecureStore.getItemAsync('authToken')

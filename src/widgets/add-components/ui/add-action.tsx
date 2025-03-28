@@ -44,8 +44,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 priority: d?.componentReport.priority ?? ComponentReportPriority.Low,
                 quantityNeeded: d?.componentReport.quantityNeeded ?? 0,
                 yearReviewed: d?.componentReport.yearReviewed ?? 0,
-                note: d?.componentReport.note ?? '',
-                images: d?.componentReport.images ?? []
+                note: d?.componentReport.note ?? ''
             })
         },
         onError: e => {
@@ -72,13 +71,12 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 console.error('No component report items found')
                 return
             }
-            const { id, action, condition, priority, quantityNeeded, yearReviewed, note, images } = componentReportItems
+            const { id, action, condition, priority, quantityNeeded, yearReviewed, note } = componentReportItems
             try {
                 const res = await updateComponentReport({
                     variables: {
                         input: {
                             id,
-                            images,
                             action,
                             condition,
                             priority,

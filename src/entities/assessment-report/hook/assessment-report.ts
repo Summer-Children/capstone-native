@@ -8,27 +8,43 @@ const CREATE_ASSESSMENT_REPORT = graphql(`
     }
 `)
 
-const GET_ASSESSMENT_REPORT = graphql(`
-    query GetAssessmentReport($id: ID!) {
+const GET_ASSESSMENT_REPORTS_BY_BUILDINGID = graphql(`
+    query GetAssessmentReports($buildingId: ID!) {
+        res: assessmentReports(buildingId: $buildingId) {
+            id
+            fiscalYear
+        }
+    }
+`)
+
+const GET_ASSESSMENT_REPORT_FOR_PREVIEW = graphql(`
+    query GetAssessmentReportForPreview($id: ID!) {
         res: assessmentReport(id: $id) {
             id
+            fiscalYear
+            draft
+            componentReports {
+                quantityNeeded
+                component {
+                    id
+                }
+            }
             building {
                 id
                 name
-                crfAnnualContribution
-                crfMinimumBalance
-                crfTotalBalance
                 components {
+                    id
                     name
                     unitRate
                     nextActionYear
                     actionFrequency
                 }
             }
-            fiscalYear
-            draft
+            crfAnnualContribution
+            crfMinimumBalance
+            crfTotalBalance
         }
     }
 `)
 
-export { CREATE_ASSESSMENT_REPORT, GET_ASSESSMENT_REPORT }
+export { CREATE_ASSESSMENT_REPORT, GET_ASSESSMENT_REPORTS_BY_BUILDINGID, GET_ASSESSMENT_REPORT_FOR_PREVIEW }

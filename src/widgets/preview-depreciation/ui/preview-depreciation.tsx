@@ -1,4 +1,12 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/reusables/components/ui/table'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow
+} from '@/reusables/components/ui/table'
 import { Text } from '@/reusables/components/ui/text'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
@@ -10,7 +18,7 @@ import { useRouter } from 'expo-router'
 import React, { ReactNode, useMemo } from 'react'
 import { ScrollView, useWindowDimensions, View } from 'react-native'
 import { GENERATE_PDF_AND_EXCEL } from '../api/create-report-pdf'
-import { GET_ASSESSMENT_REPORT } from '@entities/assessment-report/hook/index'
+import { GET_ASSESSMENT_REPORT_FOR_PREVIEW } from '@entities/assessment-report/hook/index'
 
 type DepreciationPreviewtProps = {
     assessmentReportId: string
@@ -27,7 +35,7 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
     const [generatePdfAndExcel, { loading }] = useMutation(GENERATE_PDF_AND_EXCEL, {
         fetchPolicy: 'network-only'
     })
-    const { data: assessmentReportData } = useQuery(GET_ASSESSMENT_REPORT, {
+    const { data: assessmentReportData } = useQuery(GET_ASSESSMENT_REPORT_FOR_PREVIEW, {
         variables: { id: assessmentReportId }
     })
     const router = useRouter()
@@ -47,7 +55,10 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
 
         const {
             fiscalYear,
-            building: { crfAnnualContribution = 0, crfTotalBalance = 0, components = [] }
+            componentReports,
+            building: { components = [] },
+            crfAnnualContribution,
+            crfTotalBalance
         } = assessmentReportData.res
 
         const tableData = []
@@ -62,10 +73,13 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
             }
 
             const expenditures = components.reduce((sum, component) => {
+                const quantity =
+                    componentReports?.find(report => report?.component.id === component?.id)?.quantityNeeded ?? 0
+
                 let actionYear = component?.nextActionYear ?? 0
                 while (actionYear <= fiscalYear + 7) {
                     if (actionYear === year) {
-                        sum += component?.unitRate ?? 0
+                        sum += (component?.unitRate ?? 0) * quantity
                     }
                     actionYear += component?.actionFrequency ?? 0
                 }
@@ -134,16 +148,13 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                         <TableHeader>
                             <TableRow>
                                 <TableHead style={{ width: columnWidths[0] }}>
-                                    <Text className="text-left">Year</Text>
+                                    <Text className="text-left text-eva-black-400">Year</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[1] }}>
                                     <Text className="text-right">Contributions</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[2] }}>
                                     <Text className="text-right"> Expenditures</Text>
-                                </TableHead>
-                                <TableHead style={{ width: columnWidths[3] }}>
-                                    <Text className="text-right">Closing Balance</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[3] }}>
                                     <Text className="text-right">Closing Balance</Text>
@@ -157,19 +168,86 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                                     className={cn('active:bg-secondary', index % 2 && 'bg-muted/40 ')}
                                 >
                                     <TableCell style={{ width: columnWidths[0] }}>
-                                        <Text className="text-left">{data.fiscalYear}</Text>
+                                        <Text className="text-left text-eva-black-900">{data.fiscalYear}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[1] }}>
-                                        <Text className="text-right">{data.annualContribution}</Text>
+                                        <Text className="text-right text-eva-black-900">{data.annualContribution}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[2] }}>
-                                        <Text className="text-right"> {data.Expenditures}</Text>
+                                        <Text className="text-right text-eva-black-900"> {data.Expenditures}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[3] }}>
-                                        <Text className="text-right">{data.closingBalance}</Text>
+                                        <Text
+                                            className={`text-right ${
+                                                parseFloat(data.closingBalance.replace(/[$,]/g, '')) < 0
+                                                    ? 'text-red-600'
+                                                    : 'text-eva-black-900'
+                                            }`}
+                                        >
+                                            {data.closingBalance}
+                                        </Text>
                                     </TableCell>
                                 </TableRow>
                             ))}
+
+                            <TableFooter>
+                                <TableRow className="border-t">
+                                    <TableCell style={{ width: columnWidths[0] }}>
+                                        <Text
+                                            className="text-left bold text-eva-black-950 font-[Figtree_700Bold]"
+                                            style={{ fontWeight: 'bold' }}
+                                        >
+                                            Total
+                                        </Text>
+                                    </TableCell>
+                                    <TableCell style={{ width: columnWidths[1] }}>
+                                        <Text className="text-right font-bold text-eva-black-900">
+                                            {`$${tableData
+                                                .reduce(
+                                                    (sum, row) =>
+                                                        sum + parseFloat(row.annualContribution.replace(/[$,]/g, '')),
+                                                    0
+                                                )
+                                                .toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
+                                        </Text>
+                                    </TableCell>
+                                    <TableCell style={{ width: columnWidths[2] }}>
+                                        <Text className="text-right font-bold text-eva-black-900">
+                                            {`$${tableData
+                                                .reduce(
+                                                    (sum, row) =>
+                                                        sum + parseFloat(row.Expenditures.replace(/[$,]/g, '')),
+                                                    0
+                                                )
+                                                .toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
+                                        </Text>
+                                    </TableCell>
+                                    <TableCell style={{ width: columnWidths[3] }}>
+                                        {((): ReactNode => {
+                                            const totalContribution = tableData.reduce(
+                                                (sum, row) =>
+                                                    sum + parseFloat(row.annualContribution.replace(/[$,]/g, '')),
+                                                0
+                                            )
+                                            const totalExpenditure = tableData.reduce(
+                                                (sum, row) => sum + parseFloat(row.Expenditures.replace(/[$,]/g, '')),
+                                                0
+                                            )
+                                            const totalBalance = totalContribution - totalExpenditure
+                                            return (
+                                                <Text
+                                                    className={cn(
+                                                        'text-right font-bold',
+                                                        totalBalance < 0 ? 'text-red-600' : 'text-eva-black-900'
+                                                    )}
+                                                >
+                                                    {`$${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
+                                                </Text>
+                                            )
+                                        })()}
+                                    </TableCell>
+                                </TableRow>
+                            </TableFooter>
                         </TableBody>
                     </Table>
                 </ScrollView>

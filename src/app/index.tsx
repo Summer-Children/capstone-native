@@ -5,11 +5,9 @@ import LogoSvg from '@assets/images/logo.svg'
 import { tokenVar } from '@shared/lib/auth/provider'
 import { Redirect, router } from 'expo-router'
 import React, { ReactNode } from 'react'
-import { NativeModules, View } from 'react-native'
+import { View } from 'react-native'
 import BottomButton from '../shared/ui/bottom-button'
 import Footer from '../shared/ui/footer'
-
-console.log('Available native modules:', NativeModules)
 
 export default function App(): ReactNode {
     const token = useReactiveVar(tokenVar)

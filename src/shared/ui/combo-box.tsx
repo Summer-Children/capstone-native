@@ -4,10 +4,10 @@ import { Text } from '@/reusables/components/ui/text'
 interface ComboBoxProps {
     label?: string
     placeholder: string
-    options: { id: string; val: string }[]
+    options: { id: string; val: string; fiscalYear?: number }[]
     value?: string
     onChangeText: (text: string) => void
-    onSelect: (item: { id: string; val: string }) => void
+    onSelect: (item: { id: string; val: string; fiscalYear?: number }) => void
     isDropdownVisible?: boolean
     setDropdownVisible?: (visible: boolean) => void
 }

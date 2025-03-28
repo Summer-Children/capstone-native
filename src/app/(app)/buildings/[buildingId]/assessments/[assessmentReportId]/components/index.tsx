@@ -14,6 +14,7 @@ import { FlatList, View } from 'react-native'
 
 export default function BuildingAssessmentPage(): ReactNode {
     const { buildingId, assessmentReportId } = useLocalSearchParams()
+
     const { data: buildingData, loading: buildingLoading } = useQuery(GET_BUILDING, {
         variables: { id: buildingId as string },
         fetchPolicy: 'network-only'

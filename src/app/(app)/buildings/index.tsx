@@ -1,19 +1,27 @@
 import { Text } from '@/reusables/components/ui/text'
-import { CREATE_ASSESSMENT_REPORT } from '@/src/entities/assessment-report/hook/assessment-report'
+import {
+    CREATE_ASSESSMENT_REPORT,
+    GET_ASSESSMENT_REPORTS_BY_BUILDINGID
+} from '@/src/entities/assessment-report/hook/assessment-report'
 import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building/hook'
 import { ArrowIcon } from '@/src/shared/ui'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery, useLazyQuery } from '@apollo/client'
 import { ComboBox } from '@shared/ui/combo-box'
 import { router } from 'expo-router'
 import { type ReactNode, useMemo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
+type AssessmentReport = {
+    id: string
+    fiscalYear: number
+}
+
 export default function SelectBuildingPage(): ReactNode {
     const [buildingLabel, setBuildingLabel] = useState<string | null>(null)
-    const [buildingInput, setBuildingInput] = useState<{ id: string; val: string } | null>(null)
+    const [buildingInput, setBuildingInput] = useState<{ id: string; val: string; fiscalYear: number } | null>(null)
 
     const [isDropdownVisible, setDropdownVisible] = useState(false)
 
@@ -26,27 +34,38 @@ export default function SelectBuildingPage(): ReactNode {
         )
     }, [buildingLabel, data])
 
+    const [getAssessmentReports] = useLazyQuery(GET_ASSESSMENT_REPORTS_BY_BUILDINGID)
     const [createAssessmentReport] = useMutation(CREATE_ASSESSMENT_REPORT)
 
+    // only for existing building
     const handleRouter = async (): Promise<void> => {
-        // for new building
-        if (isNewBldg) {
-            router.push({
-                pathname: '/buildings/new',
-                params: {
-                    buildingLabel
-                }
-            })
-            return
-        }
-
         if (!buildingInput) {
             // TOFIX:
             console.error('Building input is null')
             return
         }
 
-        // for existing building
+        // Check if there is already an assessment report for the selected building and for the same fiscal year. If there is one, use that existing assessment report. If not, create a new one.
+        const { data: assessmentReportsData } = await getAssessmentReports({
+            variables: { buildingId: buildingInput.id }
+        })
+
+        const existingAssessmentReport = assessmentReportsData?.res?.find(
+            (assessmentReport): assessmentReport is AssessmentReport =>
+                assessmentReport !== null && assessmentReport.fiscalYear === buildingInput?.fiscalYear
+        )
+
+        if (existingAssessmentReport) {
+            router.push({
+                pathname: '/buildings/[buildingId]/assessments/[assessmentReportId]/components',
+                params: {
+                    buildingId: buildingInput?.id,
+                    assessmentReportId: existingAssessmentReport.id
+                }
+            })
+            return
+        }
+
         await createAssessmentReport({
             variables: {
                 input: {
@@ -54,6 +73,12 @@ export default function SelectBuildingPage(): ReactNode {
                     draft: true
                 }
             },
+            refetchQueries: [
+                {
+                    query: GET_ASSESSMENT_REPORTS_BY_BUILDINGID,
+                    variables: { buildingId: buildingInput.id }
+                }
+            ],
             onCompleted: data => {
                 router.push({
                     pathname: '/buildings/[buildingId]/assessments/[assessmentReportId]/components',
@@ -80,13 +105,22 @@ export default function SelectBuildingPage(): ReactNode {
             <ComboBox
                 label="building name"
                 placeholder="Search for a building"
-                options={data.res.map(building => ({ id: building?.id ?? '', val: building?.name ?? '' })) ?? []}
+                options={
+                    data.res.map(building => ({
+                        id: building?.id ?? '',
+                        val: building?.name ?? '',
+                        fiscalYear: building?.fiscalYear ?? 0
+                    })) ?? []
+                }
                 value={buildingLabel ?? ''}
                 onChangeText={text => {
                     setBuildingLabel(text)
                 }}
                 onSelect={item => {
-                    setBuildingInput(item)
+                    setBuildingInput({
+                        ...item,
+                        fiscalYear: item.fiscalYear ?? 0
+                    })
                     setBuildingLabel(item.val)
                     setDropdownVisible(false)
                 }}
