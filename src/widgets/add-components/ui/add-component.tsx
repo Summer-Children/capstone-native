@@ -5,6 +5,7 @@ import BottomButton from '@/src/shared/ui/bottom-button'
 import { ComboBox } from '@/src/shared/ui/combo-box'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
+import { ArrowIcon } from '@/src/shared/ui/icons'
 import { useMutation } from '@apollo/client'
 import { Stack, useRouter } from 'expo-router'
 import { default as React, type ReactNode, useState } from 'react'
@@ -76,6 +77,8 @@ export function AddComponent({ buildingId, assessmentReportId }: Props): ReactNo
                             }}
                             isDropdownVisible={componentDropdownVisible}
                             setDropdownVisible={setComponentDropdownVisible}
+                            trailingIcon={<ArrowIcon direction="outward" color="#1c1d1f" width={18} height={18} />}
+                            notFoundMsg={`${searchComponent} wasn’t found, double check your component name and try again`}
                         />
                     </View>
                 </TouchableWithoutFeedback>

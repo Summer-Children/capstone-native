@@ -2,15 +2,16 @@ import { Button } from '@/reusables/components/ui/button'
 import { Text } from '@/reusables/components/ui/text'
 import { GET_BUILDING } from '@/src/entities/building/hook'
 import { GET_COMPONENTS } from '@/src/entities/component/hook'
+import { componentImages } from '@/src/entities/component/model/components-list'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import CloseButton from '@/src/shared/ui/close-button'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
 import { useQuery } from '@apollo/client'
-import { AddCircleIcon, ChevronIcon, LibraryAddIcon } from '@shared/ui/icons'
+import { AddCircleIcon, ExclamationIcon, LibraryAddIcon } from '@shared/ui/icons'
 import { Link, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { useCallback, type ReactNode } from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, Image, View } from 'react-native'
 
 export default function BuildingAssessmentPage(): ReactNode {
     const { buildingId, assessmentReportId } = useLocalSearchParams()
@@ -100,10 +101,23 @@ export default function BuildingAssessmentPage(): ReactNode {
                     data={componentData?.res}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <View className="flex flex-row justify-between items-center p-2 rounded-md bg-eva-white-100 h-[5rem] ">
+                        <View
+                            className={
+                                'flex flex-row justify-start gap-4 items-center p-2 rounded-xl bg-eva-white-100 h-[5rem]'
+                            }
+                        >
                             {/* <Image source={{ uri: item?.image }} className="w-10 h-10 mr-2" /> */}
+                            <View className="flex flex-row gap-2 items-center justify-center overflow-hidden h-[4rem] aspect-square rounded-xl">
+                                {item?.name && componentImages[item?.name] ? (
+                                    <Image source={componentImages[item?.name]} className="object-cover" />
+                                ) : (
+                                    <View className="w-10 h-10 mr-2 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <ExclamationIcon color="#FFFFFF" width={20} height={20} fontVariant="normal" />
+                                    </View>
+                                )}
+                            </View>
                             <Text className="font-bold">{item?.name}</Text>
-                            <ChevronIcon direction="right"></ChevronIcon>
+                            {/* <ChevronIcon direction="right" className="absolute right-2"></ChevronIcon> */}
                         </View>
                     )}
                 />

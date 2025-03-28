@@ -4,7 +4,7 @@ import {
     GET_ASSESSMENT_REPORTS_BY_BUILDINGID
 } from '@/src/entities/assessment-report/hook/assessment-report'
 import { GET_BUILDINGS_ON_FIRST_LOAD } from '@/src/entities/building/hook'
-import { ArrowIcon } from '@/src/shared/ui'
+import { ArrowIcon, LocationIcon } from '@/src/shared/ui'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
 import Header from '@/src/shared/ui/header'
@@ -30,7 +30,8 @@ export default function SelectBuildingPage(): ReactNode {
     })
     const isNewBldg = useMemo(() => {
         return !(
-            buildingLabel && data?.res.some(building => building?.name?.toLowerCase() === buildingLabel.toLowerCase())
+            buildingLabel &&
+            data?.res.some(building => building?.address?.toLowerCase() === buildingLabel.toLowerCase())
         )
     }, [buildingLabel, data])
 
@@ -103,12 +104,12 @@ export default function SelectBuildingPage(): ReactNode {
         <View className="flex-1">
             <Header headerText="First select your building" />
             <ComboBox
-                label="building name"
+                label="Building name"
                 placeholder="Search for a building"
                 options={
                     data.res.map(building => ({
                         id: building?.id ?? '',
-                        val: building?.name ?? '',
+                        val: building?.address ?? '',
                         fiscalYear: building?.fiscalYear ?? 0
                     })) ?? []
                 }
@@ -126,13 +127,14 @@ export default function SelectBuildingPage(): ReactNode {
                 }}
                 isDropdownVisible={isDropdownVisible}
                 setDropdownVisible={setDropdownVisible}
+                prefixIcon={<LocationIcon width={20} height={20} />}
             />
             {isNewBldg && buildingLabel !== null && (
                 <TouchableOpacity
                     className="flex-row items-center justify-between"
                     onPress={() => {
                         router.push({
-                            pathname: '../building/create',
+                            pathname: '../buildings/new',
                             params: {
                                 buildingLabel
                             }

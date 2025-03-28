@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 export enum Section {
     Structure = 'Structure',
     BuildingEnclosure = 'Building Enclosure',
@@ -33,6 +35,7 @@ export interface Component {
     section: Section
     actionFrequency: number
     unitRate: number
+    image?: string
 }
 
 const rawComponents: Component[] = [
@@ -42,7 +45,8 @@ const rawComponents: Component[] = [
         category: Category.StructuralSystem,
         section: Section.Structure,
         actionFrequency: 50,
-        unitRate: 5000
+        unitRate: 5000,
+        image: '/assets/images/components/foundation.png' // NEEDTOFIX
     },
     {
         id: '02',
@@ -50,7 +54,8 @@ const rawComponents: Component[] = [
         category: Category.StructuralSystem,
         section: Section.Structure,
         actionFrequency: 50,
-        unitRate: 3500
+        unitRate: 3500,
+        image: '/assets/images/components/door.png' // NEEDTOFIX
     },
     {
         id: '03',
@@ -58,7 +63,8 @@ const rawComponents: Component[] = [
         category: Category.StructuralSystem,
         section: Section.Structure,
         actionFrequency: 50,
-        unitRate: 4000
+        unitRate: 4000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '04',
@@ -66,7 +72,8 @@ const rawComponents: Component[] = [
         category: Category.StructuralSystem,
         section: Section.Structure,
         actionFrequency: 50,
-        unitRate: 6000
+        unitRate: 6000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '05',
@@ -74,7 +81,8 @@ const rawComponents: Component[] = [
         category: Category.StructuralSystem,
         section: Section.Structure,
         actionFrequency: 45,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '06',
@@ -82,7 +90,8 @@ const rawComponents: Component[] = [
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
         actionFrequency: 40,
-        unitRate: 1500
+        unitRate: 1500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '07',
@@ -90,7 +99,8 @@ const rawComponents: Component[] = [
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
         actionFrequency: 45,
-        unitRate: 2000
+        unitRate: 2000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '08',
@@ -98,7 +108,8 @@ const rawComponents: Component[] = [
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
         actionFrequency: 50,
-        unitRate: 3000
+        unitRate: 3000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '09',
@@ -106,7 +117,8 @@ const rawComponents: Component[] = [
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
         actionFrequency: 35,
-        unitRate: 1200
+        unitRate: 1200,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '10',
@@ -114,7 +126,8 @@ const rawComponents: Component[] = [
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
         actionFrequency: 30,
-        unitRate: 800
+        unitRate: 800,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '11',
@@ -122,7 +135,8 @@ const rawComponents: Component[] = [
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
         actionFrequency: 35,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/door.png'
     },
     {
         id: '12',
@@ -130,7 +144,8 @@ const rawComponents: Component[] = [
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
         actionFrequency: 30,
-        unitRate: 1800
+        unitRate: 1800,
+        image: '/assets/images/components/door.png'
     },
     {
         id: '13',
@@ -138,7 +153,8 @@ const rawComponents: Component[] = [
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
         actionFrequency: 30,
-        unitRate: 1500
+        unitRate: 1500,
+        image: '/assets/images/components/door.png'
     },
     {
         id: '14',
@@ -146,7 +162,8 @@ const rawComponents: Component[] = [
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
         actionFrequency: 35,
-        unitRate: 2200
+        unitRate: 2200,
+        image: '/assets/images/components/door.png'
     },
     {
         id: '15',
@@ -154,7 +171,8 @@ const rawComponents: Component[] = [
         category: Category.Roofing,
         section: Section.Roofing,
         actionFrequency: 40,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '16',
@@ -162,7 +180,8 @@ const rawComponents: Component[] = [
         category: Category.Roofing,
         section: Section.Roofing,
         actionFrequency: 35,
-        unitRate: 1800
+        unitRate: 1800,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '17',
@@ -170,7 +189,8 @@ const rawComponents: Component[] = [
         category: Category.Roofing,
         section: Section.Roofing,
         actionFrequency: 45,
-        unitRate: 3500
+        unitRate: 3500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '18',
@@ -178,7 +198,8 @@ const rawComponents: Component[] = [
         category: Category.Roofing,
         section: Section.Roofing,
         actionFrequency: 35,
-        unitRate: 2800
+        unitRate: 2800,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '19',
@@ -194,7 +215,8 @@ const rawComponents: Component[] = [
         category: Category.Balconies,
         section: Section.Balconies,
         actionFrequency: 40,
-        unitRate: 1200
+        unitRate: 1200,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '21',
@@ -202,7 +224,8 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 25,
-        unitRate: 1000
+        unitRate: 1000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '22',
@@ -210,7 +233,8 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 25,
-        unitRate: 1500
+        unitRate: 1500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '23',
@@ -218,7 +242,8 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 30,
-        unitRate: 900
+        unitRate: 900,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '24',
@@ -226,7 +251,8 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 20,
-        unitRate: 600
+        unitRate: 600,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '25',
@@ -234,7 +260,8 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 20,
-        unitRate: 1200
+        unitRate: 1200,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '26',
@@ -242,7 +269,8 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 20,
-        unitRate: 1500
+        unitRate: 1500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '27',
@@ -250,7 +278,8 @@ const rawComponents: Component[] = [
         category: Category.FireSafetySystem,
         section: Section.FireProtection,
         actionFrequency: 60,
-        unitRate: 4000
+        unitRate: 4000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '28',
@@ -258,7 +287,8 @@ const rawComponents: Component[] = [
         category: Category.FireSafetySystem,
         section: Section.FireProtection,
         actionFrequency: 55,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '29',
@@ -266,7 +296,8 @@ const rawComponents: Component[] = [
         category: Category.Suppression,
         section: Section.FireProtection,
         actionFrequency: 60,
-        unitRate: 5000
+        unitRate: 5000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '30',
@@ -274,7 +305,8 @@ const rawComponents: Component[] = [
         category: Category.HeatingCooling,
         section: Section.MechanicalSystems,
         actionFrequency: 45,
-        unitRate: 3500
+        unitRate: 3500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '31',
@@ -282,7 +314,8 @@ const rawComponents: Component[] = [
         category: Category.HeatingCooling,
         section: Section.MechanicalSystems,
         actionFrequency: 40,
-        unitRate: 1200
+        unitRate: 1200,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '32',
@@ -290,7 +323,8 @@ const rawComponents: Component[] = [
         category: Category.Ventilation,
         section: Section.MechanicalSystems,
         actionFrequency: 45,
-        unitRate: 4000
+        unitRate: 4000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '33',
@@ -298,7 +332,8 @@ const rawComponents: Component[] = [
         category: Category.Ventilation,
         section: Section.MechanicalSystems,
         actionFrequency: 45,
-        unitRate: 3000
+        unitRate: 3000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '34',
@@ -306,7 +341,8 @@ const rawComponents: Component[] = [
         category: Category.Ventilation,
         section: Section.MechanicalSystems,
         actionFrequency: 40,
-        unitRate: 2000
+        unitRate: 2000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '35',
@@ -314,7 +350,8 @@ const rawComponents: Component[] = [
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
         actionFrequency: 50,
-        unitRate: 3500
+        unitRate: 3500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '36',
@@ -322,7 +359,8 @@ const rawComponents: Component[] = [
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
         actionFrequency: 45,
-        unitRate: 4000
+        unitRate: 4000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '37',
@@ -330,7 +368,8 @@ const rawComponents: Component[] = [
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
         actionFrequency: 50,
-        unitRate: 3000
+        unitRate: 3000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '38',
@@ -338,7 +377,8 @@ const rawComponents: Component[] = [
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
         actionFrequency: 55,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '39',
@@ -346,7 +386,8 @@ const rawComponents: Component[] = [
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
         actionFrequency: 30,
-        unitRate: 1800
+        unitRate: 1800,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '40',
@@ -354,7 +395,8 @@ const rawComponents: Component[] = [
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
         actionFrequency: 55,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '41',
@@ -362,7 +404,8 @@ const rawComponents: Component[] = [
         category: Category.Elevator,
         section: Section.MechanicalSystems,
         actionFrequency: 60,
-        unitRate: 8000
+        unitRate: 8000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '42',
@@ -370,7 +413,8 @@ const rawComponents: Component[] = [
         category: Category.Elevator,
         section: Section.MechanicalSystems,
         actionFrequency: 35,
-        unitRate: 3000
+        unitRate: 3000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '43',
@@ -378,7 +422,8 @@ const rawComponents: Component[] = [
         category: Category.Distribution,
         section: Section.ElectricalSystems,
         actionFrequency: 55,
-        unitRate: 4500
+        unitRate: 4500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '44',
@@ -386,7 +431,8 @@ const rawComponents: Component[] = [
         category: Category.Lighting,
         section: Section.ElectricalSystems,
         actionFrequency: 40,
-        unitRate: 1500
+        unitRate: 1500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '45',
@@ -394,7 +440,8 @@ const rawComponents: Component[] = [
         category: Category.Lighting,
         section: Section.ElectricalSystems,
         actionFrequency: 45,
-        unitRate: 2000
+        unitRate: 2000,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
         id: '46',
@@ -402,10 +449,66 @@ const rawComponents: Component[] = [
         category: Category.Lighting,
         section: Section.ElectricalSystems,
         actionFrequency: 60,
-        unitRate: 2500
+        unitRate: 2500,
+        image: '/assets/images/components/pipe.png' // NEEDTOFIX
     }
 ]
 
+import { ImageSourcePropType } from 'react-native'
+
+// since we dont have images for components, we are using default images
+export const componentImages: Record<string, ImageSourcePropType> = {
+    // Structure
+    Foundation: require('@/assets/images/components/window.png'),
+    'Slab on Grade': require('@/assets/images/components/window.png'),
+    'Suspended Slab': require('@/assets/images/components/window.png'),
+    Superstructure: require('@/assets/images/components/window.png'),
+    'Parking Garage Driveway': require('@/assets/images/components/window.png'),
+
+    // Building Enclosure
+    'Vinyl Siding Assembly': require('@/assets/images/components/window.png'),
+    'Fibre Cement Siding': require('@/assets/images/components/window.png'),
+    'Stone Veneer Cladding': require('@/assets/images/components/window.png'),
+    'Soffit Assembly': require('@/assets/images/components/window.png'),
+    'Exterior Painting': require('@/assets/images/components/window.png'),
+
+    // Windows & Doors
+    'Windows & Sliding Doors': require('@/assets/images/components/window.png'),
+    'Main Door': require('@/assets/images/components/window.png'),
+    'Exterior Doors': require('@/assets/images/components/window.png'),
+    'Garage Overhead Doors': require('@/assets/images/components/window.png'),
+
+    // Roofing
+    'SBS Membrane Roofing': require('@/assets/images/components/window.png'),
+    'Asphalt Shingle Roofing': require('@/assets/images/components/window.png'),
+    'Podium Roof Assembly': require('@/assets/images/components/window.png'),
+    'Glazed Metal Framed Canopy': require('@/assets/images/components/window.png'),
+
+    // Mechanical Systems
+    'Hydronic Heating System': require('@/assets/images/components/window.png'),
+    'Electric Baseboards': require('@/assets/images/components/window.png'),
+    'Make Up Air Unit': require('@/assets/images/components/window.png'),
+    'Water Distribution': require('@/assets/images/components/window.png'),
+    'Domestic Hot Water System': require('@/assets/images/components/window.png'),
+    'Drainage System': require('@/assets/images/components/window.png'),
+    'Sump Pumps': require('@/assets/images/components/window.png'),
+    'Irrigation System': require('@/assets/images/components/window.png'),
+    'Gas Piping': require('@/assets/images/components/window.png'),
+
+    // Elevator
+    'Elevator Controller & Equipment': require('@/assets/images/components/window.png'),
+    'Elevator Cabin Finishes': require('@/assets/images/components/window.png'),
+
+    // Electrical Systems
+    'Supply Equipment': require('@/assets/images/components/window.png'),
+    'Interior Lighting': require('@/assets/images/components/window.png'),
+    'Exterior Lighting': require('@/assets/images/components/window.png'),
+    'Emergency Lighting': require('@/assets/images/components/window.png')
+}
+
+export const getComponentImage = (componentName: string): ImageSourcePropType => {
+    return componentImages[componentName] || require('@/assets/images/components/window.png')
+}
 export const components: Component[] = rawComponents.map((el, i) => ({
     ...el,
     id: (i + 1).toString().padStart(2, '0')

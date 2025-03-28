@@ -28,7 +28,7 @@
         ],
         "ITSAppUsesNonExemptEncryption": false
       },
-      "bundleIdentifier": "com.anonymous.capstone",
+      "bundleIdentifier": "com.anonymous.evalo",
       "runtimeVersion": "1.0.0"
     },
     "android": {
