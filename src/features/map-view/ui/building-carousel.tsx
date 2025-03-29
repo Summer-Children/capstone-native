@@ -33,7 +33,7 @@ export function BuildingCarousel({
         <Carousel
             ref={carouselRef}
             width={sliderWidth}
-            height={130}
+            height={128}
             data={buildings.slice(0, 5)}
             loop={false}
             snapEnabled

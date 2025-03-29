@@ -22,8 +22,6 @@ export default function Homepage(): ReactNode {
     const filteredBuildings = buildings.filter(b => getBuildingState(b) !== 'complete')
     const visibleBuildings = [...filteredBuildings].sort((a, b) => Number(b.id) - Number(a.id)).slice(0, 5)
 
-    const totalPendingAssessments = filteredBuildings.length
-
     const handleMarkerPress = (id: string): void => {
         setSelectedBuilding(id)
     }
@@ -93,7 +91,7 @@ export default function Homepage(): ReactNode {
                     </View>
 
                     <Text className="text-lg font-semibold mb-2">
-                        {`${totalPendingAssessments} Pending assessment${totalPendingAssessments === 1 ? '' : 's'}`}
+                        {`${visibleBuildings.length} Pending assessment${visibleBuildings.length === 1 ? '' : 's'}`}
                     </Text>
 
                     <MapViewComponent

@@ -9,7 +9,7 @@ export default function CloseButton(): ReactNode {
 
     const handleClose = (): void => {
         if (segments.length > 1) {
-            router.push('/(app)')
+            router.replace('/(app)')
         } else {
             router.push('../')
         }

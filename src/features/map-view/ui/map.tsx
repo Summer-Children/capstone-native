@@ -156,7 +156,7 @@ export function MapViewComponent({ buildings, selectedBuilding, onSelectBuilding
     }, [coordinates, buildings, userLocation])
 
     return (
-        <View className="flex-1 mb-10 rounded-2xl overflow-hidden">
+        <View className="flex-1 rounded-2xl overflow-hidden mb-10">
             <MapView ref={mapRef} style={StyleSheet.absoluteFillObject} initialRegion={initialRegion}>
                 {isLoaded &&
                     buildings.map(building => {
