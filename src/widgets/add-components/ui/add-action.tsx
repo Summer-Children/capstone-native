@@ -1,4 +1,4 @@
-import { Badge } from '@/reusables/components/ui/badge'
+import { Button } from '@/reusables/components/ui/button'
 import { Input } from '@/reusables/components/ui/input'
 import { Label } from '@/reusables/components/ui/label'
 import {
@@ -10,7 +10,7 @@ import {
     SelectValue
 } from '@/reusables/components/ui/select'
 import { Text } from '@/reusables/components/ui/text'
-import { ComponentReportPriority, UpdateComponent, UpdateComponentReport } from '@/src/_gqlgen/graphql'
+import { ComponentReportPriority, type UpdateComponent, type UpdateComponentReport } from '@/src/_gqlgen/graphql'
 import { GET_COMPONENT_REPORT, UPDATE_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
 import { GET_COMPONENT, UPDATE_COMPONENT } from '@/src/entities/component/hook/components'
 import BottomButton from '@/src/shared/ui/bottom-button'
@@ -19,7 +19,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'expo-router'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
-import { Alert, Pressable, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type Props = {
@@ -66,6 +66,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
     const [updateComponent] = useMutation(UPDATE_COMPONENT)
 
     useEffect(() => {
+        console.log('componentReportItems:', componentReportItems)
         const timeout = setTimeout(async () => {
             if (!componentReportItems) {
                 console.error('No component report items found')
@@ -252,25 +253,33 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 <Label className="text-eva-black-300">Component condition</Label>
                 <View className="flex flex-row gap-x-2 gap-y-2 flex-wrap">
                     {conditions.map(condition => (
-                        <View key={condition}>
-                            <Pressable
-                                style={{ zIndex: 1 }}
-                                onPress={() => {
-                                    console.log('condition is clicked:', condition)
-                                    setComponentReportItems({ ...componentReportItems, condition: condition })
+                        <Button
+                            key={condition}
+                            variant="outline"
+                            size="sm"
+                            className={` ${
+                                condition === componentReportItems?.condition
+                                    ? 'bg-eva-black-900 text-eva-white-50'
+                                    : 'bg-white text-eva-black-300'
+                            }`}
+                            onPress={() => {
+                                setComponentReportItems({ ...componentReportItems, condition: condition })
+                            }}
+                        >
+                            <Text
+                                className="text-lg font-semibold"
+                                style={{
+                                    backgroundColor:
+                                        condition === componentReportItems?.condition ? '#1C1D1F' : '#FFFFFF',
+                                    color: condition === componentReportItems?.condition ? '#F7F7F7' : '#5D6368',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
                                 }}
                             >
-                                <Badge
-                                    className={`px-3 py-2  ${
-                                        condition === componentReportItems?.condition
-                                            ? 'bg-eva-black-900 text-eva-white-50'
-                                            : 'text-eva-white-300'
-                                    }`}
-                                >
-                                    <Text className="text-lg font-semibold">{condition}</Text>
-                                </Badge>
-                            </Pressable>
-                        </View>
+                                {condition}
+                            </Text>
+                        </Button>
                     ))}
                 </View>
             </View>

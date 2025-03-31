@@ -28,12 +28,14 @@ export default function SelectBuildingPage(): ReactNode {
     const { data, loading, error } = useQuery(GET_BUILDINGS_ON_FIRST_LOAD, {
         fetchPolicy: 'network-only'
     })
+    const concatAddress = (name: string, address: string): string => `${address} - ${name}`
+    const buildingsWithAddress = data?.res.map(building => concatAddress(building?.name ?? '', building?.address ?? ''))
     const isNewBldg = useMemo(() => {
         return !(
             buildingLabel &&
-            data?.res.some(building => building?.address?.toLowerCase() === buildingLabel.toLowerCase())
+            buildingsWithAddress?.some(building => building?.toLowerCase() === buildingLabel.toLowerCase())
         )
-    }, [buildingLabel, data])
+    }, [buildingLabel, buildingsWithAddress])
 
     const [getAssessmentReports] = useLazyQuery(GET_ASSESSMENT_REPORTS_BY_BUILDINGID)
     const [createAssessmentReport] = useMutation(CREATE_ASSESSMENT_REPORT)
@@ -109,7 +111,7 @@ export default function SelectBuildingPage(): ReactNode {
                 options={
                     data.res.map(building => ({
                         id: building?.id ?? '',
-                        val: building?.address ?? '',
+                        val: concatAddress(building?.name ?? '', building?.address ?? ''),
                         fiscalYear: building?.fiscalYear ?? 0
                     })) ?? []
                 }

@@ -1,10 +1,14 @@
-import { Button } from '@/reusables/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/reusables/components/ui/tabs'
 import { Text } from '@/reusables/components/ui/text'
 import { Textarea } from '@/reusables/components/ui/textarea'
+import { TRANSCRIBE_AUDIO } from '@/src/entities/component-report/hook/audio'
+import { useMutation } from '@apollo/client'
 import { RecordAudio } from '@/src/features/record-audio/record-audio'
+import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
-import { Href, useRouter } from 'expo-router'
+import { LoadingOverlay } from '@/src/shared/ui/loading-overlay'
+import { ReactNativeFile } from 'apollo-upload-client'
+import { Href, useLocalSearchParams, useRouter } from 'expo-router'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { View } from 'react-native'
@@ -16,73 +20,82 @@ type Props = {
 
 export function AddDescription({ onGoNext, initialValue }: Props): ReactNode {
     const [value, setValue] = useState<string | null | undefined>(initialValue)
-
-    const [tab, setTab] = useState<'audio' | 'text'>('audio')
+    const { descriptionType } = useLocalSearchParams<{ descriptionType: 'audio' | 'text' }>()
+    const [tab, setTab] = useState<'audio' | 'text'>(descriptionType ?? 'audio')
+    const [transcribeAudio, { loading }] = useMutation(TRANSCRIBE_AUDIO)
     const router = useRouter()
-    const handleDone = async (): Promise<void> => {
-        if (tab === 'audio') {
-            // TODO: Save the audio description
-        } else {
-            // TODO: Save the text description
-        }
-        const targetPath = await onGoNext(value)
 
+    const handleDone = async (): Promise<void> => {
+        const targetPath = await onGoNext(value)
         router.push(targetPath)
+    }
+
+    if (loading) {
+        return (
+            <View className="flex-1 items-center justify-center">
+                <LoadingOverlay>Transcribing audio...</LoadingOverlay>
+            </View>
+        )
     }
 
     return (
         <View className="flex-1">
-            <Tabs value={tab} onValueChange={setTab as (value: string) => void} className="flex flex-col justify-start">
-                <TabsList className="w-full flex flex-row bg-eva-white-100 rounded-xl h-10 box-border mb-6">
-                    <TabsTrigger value="audio" className="flex-1 w-1/2 rounded-xl px-4 ">
-                        <View className="flex flex-col justify-around" style={{ height: '100%' }}>
-                            <Text>Record an audio</Text>
-                        </View>
+            <Tabs value={tab} onValueChange={setTab as (value: string) => void} className="flex-1">
+                <TabsList className="flex flex-row w-full bg-eva-white-100 rounded-xl h-10 mb-6">
+                    <TabsTrigger value="audio" className="flex-1 rounded-xl w-1/2">
+                        <Text>Record an audio</Text>
                     </TabsTrigger>
-                    <TabsTrigger value="text" className="flex-1 w-1/2 rounded-xl px-4 ">
-                        <View className="flex flex-col justify-around" style={{ height: '100%' }}>
-                            <Text>Type your text</Text>
-                        </View>
+                    <TabsTrigger value="text" className="flex-1 rounded-xl w-1/2">
+                        <Text>Type your text</Text>
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="audio">
-                    <View className="flex flex-col justify-between">
-                        <View className="h-auto w-full rounded-md p-4 bg-eva-white-100">
-                            <Text className="w-full" style={{ flexWrap: 'wrap' }}>
+
+                <TabsContent value="audio" className="flex-1">
+                    <View className="flex-col justify-between">
+                        <View className="h-auto w-full rounded-md p-4 bg-eva-white-100 mb-6">
+                            <Text className="w-full text-eva-black-900">
                                 We'll transcribe your record, and style and enhance the transcript using AI ✨
                             </Text>
                         </View>
 
-                        <RecordAudio />
+                        <RecordAudio
+                            onRecord={async uri => {
+                                const file = new ReactNativeFile({ uri })
+                                await transcribeAudio({
+                                    variables: {
+                                        input: {
+                                            audio: file
+                                        }
+                                    },
+                                    onCompleted: data => {
+                                        setValue(data.transcribeAudio)
+                                        setTab('text')
+                                    },
+                                    onError: error => {
+                                        console.error('Error transcribing audio', error)
+                                    }
+                                })
+                            }}
+                        />
                     </View>
                 </TabsContent>
                 <TabsContent value="text">
-                    <View className="flex flex-col gap-4">
-                        <View className="h-auto w-full rounded-md p-4 bg-eva-white-100">
-                            <Text className="w-full" style={{ flexWrap: 'wrap' }}>
-                                We'll transcribe your record, and style and enhance the transcript using AI ✨
-                            </Text>
-                        </View>
+                    <View className="flex-col gap-4">
                         <Textarea
                             placeholder="Write a component description"
-                            defaultValue={initialValue ?? ''}
+                            defaultValue={value ?? ''}
                             onChangeText={setValue}
                             aria-labelledby="textareaLabel"
                             className="min-h-[218px] max-h-[218px]"
                         />
-                        <Button variant="link" size="sm" onPress={() => setTab('audio')}>
-                            <Text className="font-bold" style={{ fontSize: 16 }}>
-                                Don't want to type? Record an audio
-                            </Text>
-                        </Button>
                     </View>
                 </TabsContent>
             </Tabs>
 
             <Footer>
-                <Button onPress={handleDone}>
-                    <Text>Done</Text>
-                </Button>
+                <BottomButton onPress={handleDone} disabled={!value}>
+                    Continue
+                </BottomButton>
             </Footer>
         </View>
     )

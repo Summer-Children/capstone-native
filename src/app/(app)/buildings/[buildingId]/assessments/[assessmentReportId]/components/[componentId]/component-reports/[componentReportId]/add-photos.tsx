@@ -15,7 +15,8 @@ import { Text } from 'reusables/components/ui/text'
 export default function AddPhotosPage(): ReactNode {
     const { componentReportId } = useLocalSearchParams()
     const router = useRouter()
-    const [selectedPhotos, setSelectedPhotos] = useState<Array<MediaLibrary.Asset>>([])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [selectedPhotos, setSelectedPhotos] = useState<Array<any>>([])
     const { updateComponentReportMutation } = useUpdateComponentReport()
     const {
         data: componentReportData,
@@ -47,7 +48,7 @@ export default function AddPhotosPage(): ReactNode {
                 action: componentReportData?.componentReport?.action || '',
                 note: componentReportData?.componentReport?.note || '',
                 priority: componentReportData?.componentReport?.priority || ComponentReportPriority.Low,
-                quantityNeeded: componentReportData?.componentReport?.quantityNeeded || 0,
+                quantityNeeded: componentReportData?.componentReport?.quantityNeeded || 0, // TOFIX
                 yearReviewed: componentReportData?.componentReport?.yearReviewed || 0,
                 condition: componentReportData?.componentReport?.condition || 'good',
                 images: selectedPhotos,

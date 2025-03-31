@@ -31,7 +31,7 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
     notFoundMsg
 }) => {
     const filteredOptions = value
-        ? options.filter(option => option.val.toLowerCase().includes(value.toLowerCase()))
+        ? options.filter(option => option.val.toLowerCase().trim().includes(value.toLowerCase().trim()))
         : options
 
     const handleOutsidePress = (): void => {
