@@ -17,7 +17,7 @@ export default function CloseButton(): ReactNode {
 
     return (
         <Pressable onPress={handleClose}>
-            <Text className="text-eva-blue-500 text-xl font-semibold">Close</Text>
+            <Text className="text-eva-blue-500 text-xl font-semibold">Cancel</Text>
         </Pressable>
     )
 }

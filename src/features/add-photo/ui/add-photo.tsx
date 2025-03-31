@@ -105,7 +105,7 @@ export function AddPhoto({ maxSelection, onSelectPhotos }: AddPhotoProps): React
                 <>
                     <View className="h-72 justify-center items-center">
                         {selectedPhotos.length === 0 ? (
-                            <Text className="text-center text-2xl text-eva-black-600 font-bold">
+                            <Text className="text-center text-2xl text-eva-black-650 font-bold">
                                 No photos yet.{'\n'}Select or take one!
                             </Text>
                         ) : (

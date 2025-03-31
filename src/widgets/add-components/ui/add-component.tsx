@@ -1,4 +1,5 @@
 import { Text } from '@/reusables/components/ui/text'
+import { GET_ASSESSMENT_REPORT_FOR_PREVIEW } from '@/src/entities/assessment-report/hook'
 import { CREATE_COMPONENT } from '@/src/entities/component/hook/components'
 import { components as initialComponents } from '@/src/entities/component/model/components-list'
 import BottomButton from '@/src/shared/ui/bottom-button'
@@ -41,6 +42,15 @@ export function AddComponent({ buildingId, assessmentReportId }: Props): ReactNo
                     unitRate: selectedComponent.unitRate
                 }
             },
+            // NOTE: I added the following refetchQueries because I need to reflect the latest changes in this GET_ASSESSMENT_REPORT_FOR_PREVIEW query, which will be called in the review-depreviation screen
+            refetchQueries: [
+                {
+                    query: GET_ASSESSMENT_REPORT_FOR_PREVIEW,
+                    variables: {
+                        id: assessmentReportId
+                    }
+                }
+            ],
             onCompleted: data => {
                 router.push(
                     `/buildings/${buildingId}/assessments/${assessmentReportId}/components/${data.res.id}/add-component-report`

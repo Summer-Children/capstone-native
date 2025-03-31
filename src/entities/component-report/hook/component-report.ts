@@ -47,6 +47,14 @@ const GET_COMPONENT_REPORT = graphql(`
                 id
                 url
             }
+            component {
+                name
+                unitRate
+                actionFrequency
+                nextActionYear
+                lastActionYear
+                yearInstalled
+            }
         }
     }
 `)

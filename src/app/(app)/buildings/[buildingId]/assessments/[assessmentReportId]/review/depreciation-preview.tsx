@@ -25,7 +25,7 @@ export default function DepreciationPreviewPage(): ReactNode {
             />
             <Header
                 headerText="Depreciation preview"
-                headerDescription="Preview your depreciation report on most critical years. Progressive Annual Increase is 3.0% every year."
+                headerDescription="Preview your depreciation report on most critical years. Progressive annual increase is 3.0%."
             ></Header>
             <DepreciationPreview assessmentReportId={assessmentReportId as string} />
         </>

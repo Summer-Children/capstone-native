@@ -42,7 +42,7 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
     const [updateAssessmentReport] = useMutation(UPDATE_ASSESSMENT_REPORT)
 
     const { width } = useWindowDimensions()
-    const MIN_COLUMN_WIDTHS = [50, 100, 100, 100]
+    const MIN_COLUMN_WIDTHS = [30, 120, 120, 140]
     const columnWidths = useMemo(() => {
         const totalWidth = width * 0.91
         const firstColumnWidth = totalWidth / 7
@@ -73,8 +73,10 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
             }
 
             const expenditures = components.reduce((sum, component) => {
-                const quantity =
-                    componentReports?.find(report => report?.component.id === component?.id)?.quantityNeeded ?? 0
+                const quantityRaw = componentReports?.find(
+                    report => report?.component.id === component?.id
+                )?.quantityNeeded
+                const quantity = Number(quantityRaw) || 0
 
                 let actionYear = component?.nextActionYear ?? 0
                 while (actionYear <= fiscalYear + 7) {
@@ -148,16 +150,16 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                         <TableHeader>
                             <TableRow>
                                 <TableHead style={{ width: columnWidths[0] }}>
-                                    <Text className="text-left text-eva-black-400">Year</Text>
+                                    <Text className="text-left text-eva-black-400 text-sm">Year</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[1] }}>
-                                    <Text className="text-right">Contributions</Text>
+                                    <Text className="text-right text-eva-black-400 text-sm">Contributions</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[2] }}>
-                                    <Text className="text-right"> Expenditures</Text>
+                                    <Text className="text-right text-eva-black-400 text-sm"> Expenditures</Text>
                                 </TableHead>
                                 <TableHead style={{ width: columnWidths[3] }}>
-                                    <Text className="text-right">Closing Balance</Text>
+                                    <Text className="text-right text-eva-black-400 text-xs">Closing Balance</Text>
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -168,17 +170,22 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                                     className={cn('active:bg-secondary', index % 2 && 'bg-muted/40 ')}
                                 >
                                     <TableCell style={{ width: columnWidths[0] }}>
-                                        <Text className="text-left text-eva-black-900">{data.fiscalYear}</Text>
+                                        <Text className="text-left text-eva-black-900 text-sm">{data.fiscalYear}</Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[1] }}>
-                                        <Text className="text-right text-eva-black-900">{data.annualContribution}</Text>
+                                        <Text className="text-right text-eva-black-900 text-sm">
+                                            {data.annualContribution}
+                                        </Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[2] }}>
-                                        <Text className="text-right text-eva-black-900"> {data.Expenditures}</Text>
+                                        <Text className="text-right text-eva-black-900 text-sm">
+                                            {' '}
+                                            {data.Expenditures}
+                                        </Text>
                                     </TableCell>
                                     <TableCell style={{ width: columnWidths[3] }}>
                                         <Text
-                                            className={`text-right ${
+                                            className={`text-right text-sm ${
                                                 parseFloat(data.closingBalance.replace(/[$,]/g, '')) < 0
                                                     ? 'text-red-600'
                                                     : 'text-eva-black-900'
@@ -194,7 +201,7 @@ export default function DepreciationPreview({ assessmentReportId }: Depreciation
                                 <TableRow className="border-t">
                                     <TableCell style={{ width: columnWidths[0] }}>
                                         <Text
-                                            className="text-left bold text-eva-black-950 font-[Figtree_700Bold]"
+                                            className="text-left bold text-eva-black-950 "
                                             style={{ fontWeight: 'bold' }}
                                         >
                                             Total

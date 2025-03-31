@@ -5,7 +5,7 @@ import { Text as RNText } from 'react-native'
 import { cn } from 'reusables/lib/utils'
 
 const TextClassContext = React.createContext<string | undefined>(undefined)
-const baseTextColor = 'text-eva-blue-900'
+const baseTextColor = 'text-eva-black-900'
 
 const Text = React.forwardRef<TextRef, SlottableTextProps>(({ className, asChild = false, ...props }, ref) => {
     const textClass = React.useContext(TextClassContext)

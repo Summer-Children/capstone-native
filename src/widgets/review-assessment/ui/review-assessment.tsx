@@ -4,8 +4,10 @@ import { Separator } from '@/reusables/components/ui/separator'
 import { Text } from '@/reusables/components/ui/text'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
-import { CheckCircleIcon, ChevronIcon, ErrorIcon, LibraryAddIcon } from '@/src/shared/ui/icons'
+import { ChevronIcon, LibraryAddIcon } from '@/src/shared/ui/icons'
 import { useQuery } from '@apollo/client'
+import CheckCircleSvg from '@assets/images/check-circle.svg'
+import ErrorCircleSvg from '@assets/images/error-circle.svg'
 import { GET_COMPONENT_REPORTS_BY_ASSESSMENT_REPORT_ID } from '@entities/component-report/hook/component-report'
 import { GET_COMPONENTS } from '@entities/component/hook'
 import { Href, Link, router, useFocusEffect } from 'expo-router'
@@ -63,8 +65,8 @@ export function ReviewAssessment({ buildingId, assessmentReportId }: ReviewAsses
     )
 
     // TODO: need to add image source once the image source is available
-    const isCompleted = (report: ComponentReport): boolean =>
-        ![
+    const isCompleted = (report: ComponentReport): boolean => {
+        return ![
             report?.action,
             report?.condition,
             report?.note,
@@ -76,6 +78,7 @@ export function ReviewAssessment({ buildingId, assessmentReportId }: ReviewAsses
             report?.component?.unitRate,
             report?.component?.lastActionYear
         ].some(field => field === null || field === undefined || field === '')
+    }
 
     const isExist = (componentId: string): boolean =>
         componentReportsData?.componentReports.find(report => report?.componentId === componentId) !== undefined
@@ -99,10 +102,10 @@ export function ReviewAssessment({ buildingId, assessmentReportId }: ReviewAsses
 
     return (
         <View className="flex-1">
-            <ScrollView>
+            <ScrollView className="mb-28 w-full">
                 <View className=" flex flex-col gap-4">
                     {Object.entries(groupedComponents || {}).map(([section, components]) => (
-                        <Card key={section} className="w-full max-w-sm">
+                        <Card key={section} className="w-full max-w-lg mx-auto">
                             <CardHeader className="flex flex-row justify-between">
                                 <CardTitle>{section}</CardTitle>
                                 <CardDescription className="text-eva-black-300">
@@ -136,21 +139,20 @@ export function ReviewAssessment({ buildingId, assessmentReportId }: ReviewAsses
                                             <Button
                                                 key={component?.id}
                                                 variant="link"
-                                                className="rounded-lg py-2 px-3 flex-row gap-3 justify-between bg-eva-white-100 text-eva-black-900"
+                                                className="rounded-lg py-2 px-3 flex-row gap-3 justify-between items-center bg-eva-white-100 text-eva-black-900"
                                             >
                                                 {isCompleted(
                                                     componentReportsData?.componentReports.find(
                                                         report => report?.componentId === component?.id
                                                     ) as ComponentReport
                                                 ) ? (
-                                                    <CheckCircleIcon
-                                                        variant="solid"
-                                                        stroke="#14532d"
-                                                        color="#dcfce7"
-                                                        strokeWidth={1.5}
-                                                    />
+                                                    <View className="w-6 h-6 ">
+                                                        <CheckCircleSvg className="h-full w-full" />
+                                                    </View>
                                                 ) : (
-                                                    <ErrorIcon variant="solid" color="#fee2e2" stroke="#7F1D1D" />
+                                                    <View className="w-6 h-6 ">
+                                                        <ErrorCircleSvg className=" h-full w-full" />
+                                                    </View>
                                                 )}
                                                 <Text className="flex-grow">{component?.name}</Text>
                                                 <ChevronIcon direction="right" />

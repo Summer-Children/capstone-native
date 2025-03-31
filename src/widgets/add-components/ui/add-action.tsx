@@ -10,15 +10,15 @@ import {
     SelectValue
 } from '@/reusables/components/ui/select'
 import { Text } from '@/reusables/components/ui/text'
+import { GET_ASSESSMENT_REPORT_FOR_PREVIEW } from '@/src/entities/assessment-report/hook'
 import { ComponentReportPriority, type UpdateComponent, type UpdateComponentReport } from '@/src/_gqlgen/graphql'
 import { GET_COMPONENT_REPORT, UPDATE_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
 import { GET_COMPONENT, UPDATE_COMPONENT } from '@/src/entities/component/hook/components'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
 import { useMutation, useQuery } from '@apollo/client'
-import { useRouter } from 'expo-router'
-import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Alert, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -31,6 +31,8 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
     const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>()
     const [componentItems, setComponentItems] = useState<UpdateComponent>()
     const insets = useSafeAreaInsets()
+
+    const { assessmentReportId } = useLocalSearchParams()
 
     const { data: componentReportData, loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
         variables: {
@@ -85,17 +87,25 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                             yearReviewed,
                             note
                         }
-                    }
+                    },
+                    // NOTE: I added the following refetchQueries because I need to reflect the latest changes in this GET_ASSESSMENT_REPORT_FOR_PREVIEW query, which will be called in the review-depreviation screen
+                    refetchQueries: [
+                        {
+                            query: GET_ASSESSMENT_REPORT_FOR_PREVIEW,
+                            variables: {
+                                id: assessmentReportId
+                            }
+                        }
+                    ]
                 })
-                console.log('Successfully updated component report:', res.data)
+                // Please leave this console log for later debugging purposes
+                console.log('Successfully updated component report items:', res.data)
             } catch (error) {
                 console.error('Error updating component report:', error)
             }
         }, 800)
         return (): void => clearTimeout(timeout)
     }, [componentReportItems])
-
-    console.log('local state:componentReportItems:', componentReportItems)
 
     useEffect(() => {
         const timeout = setTimeout(async () => {
@@ -114,21 +124,37 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 unitRate,
                 actionFrequency
             } = componentItems
-            await updateComponent({
-                variables: {
-                    component: {
-                        id: id,
-                        lastActionYear: lastActionYear,
-                        nextActionYear: nextActionYear,
-                        name: name,
-                        category: category,
-                        section: section,
-                        yearInstalled: yearInstalled,
-                        unitRate: unitRate,
-                        actionFrequency: actionFrequency
-                    }
-                }
-            })
+
+            try {
+                await updateComponent({
+                    variables: {
+                        component: {
+                            id: id,
+                            lastActionYear: lastActionYear,
+                            nextActionYear: nextActionYear,
+                            name: name,
+                            category: category,
+                            section: section,
+                            yearInstalled: yearInstalled,
+                            unitRate: unitRate,
+                            actionFrequency: actionFrequency
+                        }
+                    },
+                    // NOTE: I added the following refetchQueries because I need to reflect the latest changes in this GET_ASSESSMENT_REPORT_FOR_PREVIEW query, which will be called in the review-depreviation screenB
+                    refetchQueries: [
+                        {
+                            query: GET_ASSESSMENT_REPORT_FOR_PREVIEW,
+                            variables: {
+                                id: assessmentReportId
+                            }
+                        }
+                    ]
+                })
+                // Please leave this console log for later debugging purposes
+                console.log('Successfully updated componentItems:', componentItems)
+            } catch (error) {
+                console.error('Error updating componentItems:', error)
+            }
         }, 800)
         return (): void => clearTimeout(timeout)
     }, [componentItems])
@@ -163,7 +189,10 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 <Select
                     defaultValue={{
                         value: componentReportItems.action ?? '',
-                        label: componentReportItems.action ?? ''
+                        label:
+                            componentReportItems.action === 'TBD'
+                                ? 'Select action'
+                                : (componentReportItems.action ?? '')
                     }}
                     onValueChange={option => {
                         if (!option?.value) {
@@ -175,7 +204,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                 >
                     <SelectTrigger className="w-32">
                         <SelectValue
-                            className="text-foreground text-sm native:text-lg"
+                            className="text-foreground text-md native:text-md font-semibold"
                             placeholder="Select an action"
                         />
                     </SelectTrigger>
@@ -334,7 +363,14 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                             Alert.alert('No value is set')
                             return
                         }
-                        setComponentItems({ ...componentItems, unitRate: Number.parseInt(value) })
+                        if (value === '') {
+                            setComponentItems({ ...componentItems, unitRate: null })
+                        } else {
+                            const parsed = Number.parseInt(value)
+                            if (!isNaN(parsed)) {
+                                setComponentItems({ ...componentItems, unitRate: parsed })
+                            }
+                        }
                     }}
                     aria-labelledby="inputLabel"
                     aria-errormessage="inputError"
@@ -342,7 +378,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
             </View>
 
             <View className="flex flex-row justify-between items-center">
-                <Text className="font-bold text-xl text-eva-black-900">Final Cost</Text>
+                <Text className="font-bold text-xl text-eva-black-900">Final Cost:</Text>
                 <Text className="font-bold text-xl text-eva-black-300">
                     {finalCost > 0 ? `$${finalCost}` : 'To be calculated'}
                 </Text>
