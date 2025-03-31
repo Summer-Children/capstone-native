@@ -10,6 +10,7 @@ interface BuildingCardProps {
     building: Building
     onPress: () => void
     hasShadow?: boolean
+    showDot?: boolean
 }
 
 const getBuildingState = (building: Building): 'pending' | 'in progress' | 'complete' => {
@@ -18,7 +19,7 @@ const getBuildingState = (building: Building): 'pending' | 'in progress' | 'comp
     return 'complete'
 }
 
-export function BuildingCard({ building, onPress, hasShadow }: BuildingCardProps): ReactNode {
+export function BuildingCard({ building, onPress, hasShadow, showDot = true }: BuildingCardProps): ReactNode {
     const [loadFailed, setLoadFailed] = useState(false)
     const state = getBuildingState(building)
     const imageUrl = getBuildingImageUrl(building.id)
@@ -54,7 +55,7 @@ export function BuildingCard({ building, onPress, hasShadow }: BuildingCardProps
                     </Text>
                     <View className="flex-row items-center justify-between">
                         <Text className="text-sm text-eva-black-300">Strata: {building.strataId}</Text>
-                        <Badge state={state} />
+                        <Badge state={state} showDot={showDot} />
                     </View>
                 </View>
             </View>

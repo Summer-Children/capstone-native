@@ -20,13 +20,14 @@ export const SearchBar = ({ className }: SearchBarProps): ReactNode => {
             <SearchIcon size={20} />
             <TextInput
                 placeholder="Find buildings"
+                placeholderTextColor="#5D6368"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 className="ml-2 flex-1"
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
             />
-            {searchQuery.length > 0 && (
+            {(isFocused || searchQuery.length > 0) && (
                 <TouchableOpacity onPress={() => setSearchQuery('')}>
                     <CloseIcon size={20} />
                 </TouchableOpacity>

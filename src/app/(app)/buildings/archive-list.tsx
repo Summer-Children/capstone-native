@@ -135,6 +135,7 @@ export default function BuildingArchive(): ReactNode {
                                 const status = getBuildingState(item)
                                 return (
                                     <BuildingCard
+                                        showDot={false}
                                         building={item}
                                         onPress={() => {
                                             if (status === 'in progress') {

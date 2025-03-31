@@ -4,6 +4,7 @@ import { Text } from '@/reusables/components/ui/text'
 
 interface BadgeProps {
     state: 'pending' | 'in progress' | 'complete'
+    showDot?: boolean
 }
 
 const buildingState = {
@@ -27,12 +28,12 @@ const buildingState = {
     }
 }
 
-export function Badge({ state }: BadgeProps): ReactNode {
+export function Badge({ state, showDot = true }: BadgeProps): ReactNode {
     const { label, color, textColor, bgColor } = buildingState[state]
 
     return (
         <View className="flex-row items-center gap-1 px-2 py-1 rounded-full" style={{ backgroundColor: bgColor }}>
-            <View className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+            {showDot && <View style={{ backgroundColor: color }} className="w-2 h-2 rounded-full" />}
             <Text className="text-xs font-semibold" style={{ color: textColor }}>
                 {label}
             </Text>
