@@ -62,7 +62,7 @@ export default function BuildingSuccess(): ReactNode {
             />
 
             <ScrollView className="flex-1">
-                <Header headerText="Your building has been created" />
+                <Header headerText="Your building profile has been created" />
                 <View className="pb-4 flex gap-4">
                     <View className="h-60 bg-eva-white-200 rounded-xl overflow-hidden justify-center items-center">
                         {!loadFailed ? (
