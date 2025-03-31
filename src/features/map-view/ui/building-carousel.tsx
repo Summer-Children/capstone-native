@@ -40,8 +40,8 @@ export function BuildingCarousel({
             pagingEnabled
             mode="parallax"
             modeConfig={{
-                parallaxScrollingScale: 0.9,
-                parallaxScrollingOffset: 50
+                parallaxScrollingScale: 0.92,
+                parallaxScrollingOffset: 40
             }}
             renderItem={({ item }) => (
                 <BuildingCard

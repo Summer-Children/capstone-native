@@ -56,16 +56,18 @@ export default function Homepage(): ReactNode {
                     contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' },
                     headerBackVisible: false,
                     headerLeft: () => (
-                        <Image
-                            source={require('@/assets/images/logo.png')}
-                            resizeMode="contain"
-                            style={{ width: 40, height: 40 }}
-                        />
+                        <View style={{ marginTop: 8 }}>
+                            <Image
+                                source={require('@/assets/images/logo.png')}
+                                resizeMode="contain"
+                                style={{ width: 40, height: 40 }}
+                            />
+                        </View>
                     )
                 }}
             />
 
-            <H2 className="px-4 text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
+            <H2 className="px-4 pt-2 text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
 
             {loading ? (
                 <View className="flex-1 flex items-center justify-center">
