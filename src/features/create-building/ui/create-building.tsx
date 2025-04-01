@@ -1,5 +1,4 @@
 import { View, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
-import { Text } from '@/reusables/components/ui/text'
 import { GeneralForm } from '@/src/entities/building/ui/general-form'
 import { FinancialForm } from '@/src/entities/building/ui/financial-form'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -119,7 +118,7 @@ export function CreateBuilding({ onSuccess }: CreateBuildingProps): ReactNode {
                                         : (): Promise<void> => methods.handleSubmit(onSubmit)()
                                 }
                             >
-                                <Text>{step === 'general' ? 'Continue' : 'Done'}</Text>
+                                {step === 'general' ? 'Continue' : 'Done'}
                             </BottomButton>
                         </Footer>
                     </ScrollView>

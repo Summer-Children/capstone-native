@@ -43,6 +43,14 @@ export function FinancialForm(): ReactNode {
         }
     }
 
+    const formatNumberWithCommas = (value?: string | number): string => {
+        if (!value && value !== 0) return ''
+        const str = typeof value === 'number' ? value.toString() : value
+        const parts = str.split('.')
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        return parts.join('.')
+    }
+
     return (
         <View className="flex flex-col gap-4">
             <CustomInput
@@ -70,21 +78,21 @@ export function FinancialForm(): ReactNode {
 
             <CustomInput
                 label="CRF Annual Contribution *"
-                value={watch('crfAnnualContribution')}
+                value={formatNumberWithCommas(watch('crfAnnualContribution'))}
                 onChangeText={text => handleNumericInputChange(text, val => setValue('crfAnnualContribution', val))}
                 clearable
             />
 
             <CustomInput
                 label="Total CRF Balance *"
-                value={watch('crfTotalBalance')}
+                value={formatNumberWithCommas(watch('crfTotalBalance'))}
                 onChangeText={text => handleNumericInputChange(text, val => setValue('crfTotalBalance', val))}
                 clearable
             />
 
             <CustomInput
                 label="CRF Minimum Balance *"
-                value={watch('crfMinimumBalance')}
+                value={formatNumberWithCommas(watch('crfMinimumBalance'))}
                 onChangeText={text => handleNumericInputChange(text, val => setValue('crfMinimumBalance', val))}
                 clearable
             />

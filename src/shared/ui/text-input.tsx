@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentPropsWithRef, type ReactNode } from 'react'
+import { forwardRef, useState, type ComponentPropsWithRef, type ReactNode } from 'react'
 import { View, TextInput, TouchableOpacity } from 'react-native'
 import { Label } from '@rn-primitives/context-menu'
 import { Input } from '@/reusables/components/ui/input'
@@ -17,6 +17,7 @@ type CustomInputProps = {
 
 export const CustomInput = forwardRef<TextInput, CustomInputProps>(function CustomInput(props, ref): ReactNode {
     const { label, disabled, labelClassName, suffix, clearable, value, onChangeText, ...rest } = props
+    const [isFocused, setIsFocused] = useState(false)
 
     return (
         <View className="flex flex-col gap-2 w-full">
@@ -31,11 +32,19 @@ export const CustomInput = forwardRef<TextInput, CustomInputProps>(function Cust
                         'h-11 border-2 border-eva-white-500 text-eva-black-300 rounded-xl py-2 pl-4 pr-12 focus:border-eva-blue-500'
                     )}
                     editable={!disabled}
+                    onFocus={e => {
+                        setIsFocused(true)
+                        rest.onFocus?.(e)
+                    }}
+                    onBlur={e => {
+                        setIsFocused(false)
+                        rest.onBlur?.(e)
+                    }}
                     {...rest}
                 />
 
                 <View className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    {clearable && !!value && (
+                    {clearable && isFocused && (
                         <TouchableOpacity onPress={() => onChangeText('')}>
                             <CloseIcon size={20} className="text-eva-black-300" />
                         </TouchableOpacity>

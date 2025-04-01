@@ -6,11 +6,12 @@ interface TagListProps {
     options: string[]
     selected: string
     onSelect: (option: string) => void
+    gap?: number
 }
 
-export const TagList = ({ options, selected, onSelect }: TagListProps): ReactNode => {
+export const TagList = ({ options, selected, onSelect, gap = 16 }: TagListProps): ReactNode => {
     return (
-        <View className="flex-row gap-4">
+        <View className="flex-row flex-wrap" style={{ gap: gap }}>
             {options.map(option => (
                 <TouchableOpacity
                     key={option}

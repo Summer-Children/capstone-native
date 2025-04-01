@@ -5,7 +5,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ReactNode, useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import * as Location from 'expo-location'
-import { AddPhotoIcon, CameraIcon, LocationIcon } from '@/src/shared/ui'
+import { AddPhotoIcon, LocationIcon } from '@/src/shared/ui'
 import { ActionButton } from '@/src/widgets/home'
 import { getBuildingImageUrl } from '../hook/get-building-image-url'
 
@@ -132,7 +132,7 @@ export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
                 ) : (
                     <ActionButton
                         label="Add a picture of a building"
-                        icon={<CameraIcon size={20} variant="solid" color="#1C1D1F" />}
+                        icon={<AddPhotoIcon size={20} variant="solid" color="#1C1D1F" />}
                         onPress={() =>
                             router.push(
                                 mode === 'edit'

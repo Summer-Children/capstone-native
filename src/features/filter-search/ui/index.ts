@@ -1,6 +1,5 @@
 export * from './action-sheet'
 export * from './filter-chips'
-export * from './tag-list'
 export * from './search-bar'
 export * from './location-filter'
 export * from './sort-filter'

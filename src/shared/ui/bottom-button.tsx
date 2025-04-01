@@ -20,7 +20,7 @@ const BottomButton = forwardRef<View, BottomButtonProps>(({ className, children,
                 className={clsx(className, 'bg-eva-blue-500 rounded-xl disabled:bg-eva-white-200')}
                 {...props}
             >
-                <Text className="text-white font-bold">{children}</Text>
+                <Text className="text-white font-semibold">{children}</Text>
             </Button>
         </>
     )
