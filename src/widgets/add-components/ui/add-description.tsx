@@ -39,7 +39,7 @@ export function AddDescription({ onGoNext, initialValue }: Props): ReactNode {
     }
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 overflow-auto">
             <Tabs value={tab} onValueChange={setTab as (value: string) => void} className="flex-1">
                 <TabsList className="flex flex-row w-full bg-eva-white-100 rounded-xl h-10 mb-6">
                     <TabsTrigger value="audio" className="flex-1 rounded-xl w-1/2">

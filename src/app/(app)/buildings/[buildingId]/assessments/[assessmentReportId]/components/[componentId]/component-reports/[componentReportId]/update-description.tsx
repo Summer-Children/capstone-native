@@ -8,6 +8,7 @@ import { Href, Stack, useLocalSearchParams } from 'expo-router'
 import type { ReactNode } from 'react'
 import React from 'react'
 import { ComponentReportPriority } from '@/src/_gqlgen/graphql'
+import { Platform, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, View } from 'react-native'
 
 export default function AudioDescriptionPage(): ReactNode {
     const { componentReportId } = useLocalSearchParams()
@@ -50,12 +51,18 @@ export default function AudioDescriptionPage(): ReactNode {
     return (
         <>
             <Stack.Screen options={{ headerRight: () => <CloseButton /> }} />
-            <Header
-                headerText="Component description"
-                headerDescription="Describe your component status and details. We'll organize it in the report for you."
-            />
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View className="flex-1">
+                        <Header
+                            headerText="Component description"
+                            headerDescription="Describe your component status and details. We'll organize it in the report for you."
+                        />
 
-            <AddDescription onGoNext={onGoNext} initialValue={data.componentReport.note} />
+                        <AddDescription onGoNext={onGoNext} initialValue={data.componentReport.note} />
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </>
     )
 }

@@ -19,7 +19,15 @@ import Footer from '@/src/shared/ui/footer'
 import { useMutation, useQuery } from '@apollo/client'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState, type ReactNode } from 'react'
-import { Alert, View } from 'react-native'
+import {
+    Alert,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    View,
+    ScrollView
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type Props = {
@@ -182,200 +190,227 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
 
     return (
         <View className="flex-1 flex flex-col gap-5">
-            <View className="flex flex-row justify-between items-center">
-                <Label className="font-bold text-eva-black-900" style={{ fontSize: 20 }}>
-                    Type of action
-                </Label>
-                <Select
-                    defaultValue={{
-                        value: componentReportItems.action ?? '',
-                        label:
-                            componentReportItems.action === 'TBD'
-                                ? 'Select action'
-                                : (componentReportItems.action ?? '')
-                    }}
-                    onValueChange={option => {
-                        if (!option?.value) {
-                            Alert.alert('No option selected')
-                            return
-                        }
-                        setComponentReportItems({ ...componentReportItems, action: option?.value })
-                    }}
-                >
-                    <SelectTrigger className="w-32">
-                        <SelectValue
-                            className="text-foreground text-md native:text-md font-semibold"
-                            placeholder="Select an action"
-                        />
-                    </SelectTrigger>
-                    <SelectContent insets={contentInsets} className="w-32">
-                        <SelectGroup>
-                            <SelectItem label="Renewal" value="renewal">
-                                Renewal
-                            </SelectItem>
-                            <SelectItem label="Repair" value="repair">
-                                Repair
-                            </SelectItem>
-                            <SelectItem label="Maintenance" value="maintenance">
-                                Maintenance
-                            </SelectItem>
-                            <SelectItem label="Monitor" value="monitor">
-                                Monitor
-                            </SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </View>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                className="flex-1"
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        className="flex-1 "
+                        keyboardShouldPersistTaps="handled"
+                        automaticallyAdjustKeyboardInsets={true}
+                    >
+                        <View className="flex flex-col gap-5">
+                            <View className="flex flex-row justify-between items-center">
+                                <Label className="font-bold text-eva-black-900" style={{ fontSize: 20 }}>
+                                    Type of action
+                                </Label>
+                                <Select
+                                    defaultValue={{
+                                        value: componentReportItems.action ?? '',
+                                        label:
+                                            componentReportItems.action === 'TBD'
+                                                ? 'Select action'
+                                                : (componentReportItems.action ?? '')
+                                    }}
+                                    onValueChange={option => {
+                                        if (!option?.value) {
+                                            Alert.alert('No option selected')
+                                            return
+                                        }
+                                        setComponentReportItems({ ...componentReportItems, action: option?.value })
+                                    }}
+                                >
+                                    <SelectTrigger className="w-32">
+                                        <SelectValue
+                                            className="text-foreground text-md native:text-md font-semibold"
+                                            placeholder="Select an action"
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent insets={contentInsets} className="w-32">
+                                        <SelectGroup>
+                                            <SelectItem label="Renewal" value="renewal">
+                                                Renewal
+                                            </SelectItem>
+                                            <SelectItem label="Repair" value="repair">
+                                                Repair
+                                            </SelectItem>
+                                            <SelectItem label="Maintenance" value="maintenance">
+                                                Maintenance
+                                            </SelectItem>
+                                            <SelectItem label="Monitor" value="monitor">
+                                                Monitor
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </View>
 
-            <View>
-                <Label className="text-eva-black-300">Frequency</Label>
-                <Input
-                    defaultValue={componentItems?.actionFrequency?.toString()}
-                    onChangeText={value => {
-                        if (!componentItems) {
-                            Alert.alert('No value is set')
-                            return
-                        }
-                        setComponentItems({ ...componentItems, actionFrequency: Number(value) })
-                    }}
-                    aria-labelledby="inputLabel"
-                    aria-errormessage="inputError"
-                />
-            </View>
-            <View className="flex flex-row justify-between items-center">
-                <View className="flex flex-col">
-                    <Label className="text-eva-black-300">Last renovation</Label>
-                    <Input
-                        placeholder="Write a year"
-                        defaultValue={componentItems?.lastActionYear?.toString()}
-                        onChangeText={value => {
-                            if (!componentItems) {
-                                Alert.alert('No value is set')
-                                return
-                            }
-                            setComponentItems({ ...componentItems, lastActionYear: Number(value) })
-                        }}
-                        aria-labelledby="inputLabel"
-                        aria-errormessage="inputError"
-                    />
-                </View>
+                            <View>
+                                <Label className="text-eva-black-300">Frequency</Label>
+                                <Input
+                                    defaultValue={componentItems?.actionFrequency?.toString()}
+                                    onChangeText={value => {
+                                        if (!componentItems) {
+                                            Alert.alert('No value is set')
+                                            return
+                                        }
+                                        setComponentItems({ ...componentItems, actionFrequency: Number(value) })
+                                    }}
+                                    aria-labelledby="inputLabel"
+                                    aria-errormessage="inputError"
+                                />
+                            </View>
+                            <View className="flex flex-row justify-between items-center">
+                                <View className="flex flex-col">
+                                    <Label className="text-eva-black-300">Last renovation</Label>
+                                    <Input
+                                        placeholder="Write a year"
+                                        defaultValue={componentItems?.lastActionYear?.toString()}
+                                        onChangeText={value => {
+                                            if (!componentItems) {
+                                                Alert.alert('No value is set')
+                                                return
+                                            }
+                                            setComponentItems({ ...componentItems, lastActionYear: Number(value) })
+                                        }}
+                                        aria-labelledby="inputLabel"
+                                        aria-errormessage="inputError"
+                                    />
+                                </View>
 
-                <View className="flex flex-col">
-                    <Label className="text-eva-black-300">Next renovation</Label>
-                    <Input
-                        placeholder="Write a year"
-                        defaultValue={componentItems?.nextActionYear?.toString()}
-                        onChangeText={value => {
-                            if (!componentItems) {
-                                Alert.alert('No value is set')
-                                return
-                            }
-                            setComponentItems({ ...componentItems, nextActionYear: Number(value) })
-                        }}
-                        aria-labelledby="inputLabel"
-                        aria-errormessage="inputError"
-                    />
-                </View>
-            </View>
+                                <View className="flex flex-col">
+                                    <Label className="text-eva-black-300">Next renovation</Label>
+                                    <Input
+                                        placeholder="Write a year"
+                                        defaultValue={componentItems?.nextActionYear?.toString()}
+                                        onChangeText={value => {
+                                            if (!componentItems) {
+                                                Alert.alert('No value is set')
+                                                return
+                                            }
+                                            setComponentItems({ ...componentItems, nextActionYear: Number(value) })
+                                        }}
+                                        aria-labelledby="inputLabel"
+                                        aria-errormessage="inputError"
+                                    />
+                                </View>
+                            </View>
 
-            <View>
-                <Label className="text-eva-black-300">Component condition</Label>
-                <View className="flex flex-row gap-x-2 gap-y-2 flex-wrap">
-                    {conditions.map(condition => (
-                        <Button
-                            key={condition}
-                            variant="outline"
-                            size="sm"
-                            className={` ${
-                                condition === componentReportItems?.condition
-                                    ? 'bg-eva-black-900 text-eva-white-50'
-                                    : 'bg-white text-eva-black-300'
-                            }`}
-                            onPress={() => {
-                                setComponentReportItems({ ...componentReportItems, condition: condition })
-                            }}
-                        >
-                            <Text
-                                className="text-lg font-semibold"
-                                style={{
-                                    backgroundColor:
-                                        condition === componentReportItems?.condition ? '#1C1D1F' : '#FFFFFF',
-                                    color: condition === componentReportItems?.condition ? '#F7F7F7' : '#5D6368',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                {condition}
-                            </Text>
-                        </Button>
-                    ))}
-                </View>
-            </View>
+                            <View>
+                                <Label className="text-eva-black-300">Component condition</Label>
+                                <View className="flex flex-row gap-x-2 gap-y-2 flex-wrap">
+                                    {conditions.map(condition => (
+                                        <Button
+                                            key={condition}
+                                            variant="outline"
+                                            size="sm"
+                                            className={` ${
+                                                condition === componentReportItems?.condition
+                                                    ? 'bg-eva-black-900 text-eva-white-50'
+                                                    : 'bg-white text-eva-black-300'
+                                            }`}
+                                            onPress={() => {
+                                                setComponentReportItems({
+                                                    ...componentReportItems,
+                                                    condition: condition
+                                                })
+                                            }}
+                                        >
+                                            <Text
+                                                className="text-lg font-semibold"
+                                                style={{
+                                                    backgroundColor:
+                                                        condition === componentReportItems?.condition
+                                                            ? '#1C1D1F'
+                                                            : '#FFFFFF',
+                                                    color:
+                                                        condition === componentReportItems?.condition
+                                                            ? '#F7F7F7'
+                                                            : '#5D6368',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                {condition}
+                                            </Text>
+                                        </Button>
+                                    ))}
+                                </View>
+                            </View>
 
-            <View>
-                <Label className="text-eva-black-300">Quantity</Label>
-                <View className="flex flex-row">
-                    <Input
-                        defaultValue={componentReportItems?.quantityNeeded?.toString()}
-                        onChangeText={value => {
-                            if (!componentReportItems) {
-                                Alert.alert('No value is set')
-                                return
-                            }
-                            setComponentReportItems({ ...componentReportItems, quantityNeeded: Number(value) })
-                        }}
-                        aria-labelledby="inputLabel"
-                        aria-errormessage="inputError"
-                        className="flex-1"
-                    />
+                            <View>
+                                <Label className="text-eva-black-300">Quantity</Label>
+                                <View className="flex flex-row">
+                                    <Input
+                                        defaultValue={componentReportItems?.quantityNeeded?.toString()}
+                                        onChangeText={value => {
+                                            if (!componentReportItems) {
+                                                Alert.alert('No value is set')
+                                                return
+                                            }
+                                            setComponentReportItems({
+                                                ...componentReportItems,
+                                                quantityNeeded: Number(value)
+                                            })
+                                        }}
+                                        aria-labelledby="inputLabel"
+                                        aria-errormessage="inputError"
+                                        className="flex-1"
+                                    />
 
-                    <Select defaultValue={{ value: 'ft2', label: 'ft2' }}>
-                        <SelectTrigger className="w-24">
-                            <SelectValue
-                                className="text-foreground text-sm native:text-lg"
-                                placeholder="Select a quantity"
-                            />
-                        </SelectTrigger>
-                        <SelectContent insets={contentInsets} className="w-24">
-                            <SelectGroup>
-                                <SelectItem label="ft2" value="ft2">
-                                    ft2
-                                </SelectItem>
-                                <SelectItem label="LF" value="LF">
-                                    LF
-                                </SelectItem>
-                                <SelectItem label="units" value="units">
-                                    Units
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </View>
-            </View>
+                                    <Select defaultValue={{ value: 'ft2', label: 'ft2' }}>
+                                        <SelectTrigger className="w-24">
+                                            <SelectValue
+                                                className="text-foreground text-sm native:text-lg"
+                                                placeholder="Select a quantity"
+                                            />
+                                        </SelectTrigger>
+                                        <SelectContent insets={contentInsets} className="w-24">
+                                            <SelectGroup>
+                                                <SelectItem label="ft2" value="ft2">
+                                                    ft2
+                                                </SelectItem>
+                                                <SelectItem label="LF" value="LF">
+                                                    LF
+                                                </SelectItem>
+                                                <SelectItem label="units" value="units">
+                                                    Units
+                                                </SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </View>
+                            </View>
 
-            <View>
-                <Label className="text-eva-black-300">Price per quantity</Label>
-                <Input
-                    defaultValue={componentItems?.unitRate?.toString()}
-                    onChangeText={value => {
-                        if (!componentItems) {
-                            Alert.alert('No value is set')
-                            return
-                        }
-                        if (value === '') {
-                            setComponentItems({ ...componentItems, unitRate: null })
-                        } else {
-                            const parsed = Number.parseInt(value)
-                            if (!isNaN(parsed)) {
-                                setComponentItems({ ...componentItems, unitRate: parsed })
-                            }
-                        }
-                    }}
-                    aria-labelledby="inputLabel"
-                    aria-errormessage="inputError"
-                />
-            </View>
+                            <View>
+                                <Label className="text-eva-black-300">Price per quantity</Label>
+                                <Input
+                                    defaultValue={componentItems?.unitRate?.toString()}
+                                    onChangeText={value => {
+                                        if (!componentItems) {
+                                            Alert.alert('No value is set')
+                                            return
+                                        }
+                                        if (value === '') {
+                                            setComponentItems({ ...componentItems, unitRate: null })
+                                        } else {
+                                            const parsed = Number.parseInt(value)
+                                            if (!isNaN(parsed)) {
+                                                setComponentItems({ ...componentItems, unitRate: parsed })
+                                            }
+                                        }
+                                    }}
+                                    aria-labelledby="inputLabel"
+                                    aria-errormessage="inputError"
+                                />
+                            </View>
+                        </View>
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
 
             <View className="flex flex-row justify-between items-center">
                 <Text className="font-bold text-xl text-eva-black-900">Final Cost:</Text>

@@ -12,7 +12,14 @@ import { useMutation, useQuery, useLazyQuery } from '@apollo/client'
 import { ComboBox } from '@shared/ui/combo-box'
 import { router } from 'expo-router'
 import { type ReactNode, useMemo, useState } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import {
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native'
 
 type AssessmentReport = {
     id: string
@@ -103,59 +110,66 @@ export default function SelectBuildingPage(): ReactNode {
     }
 
     return (
-        <View className="flex-1">
-            <Header headerText="First select your building" />
-            <ComboBox
-                label="Building name"
-                placeholder="Search for a building"
-                options={
-                    data.res.map(building => ({
-                        id: building?.id ?? '',
-                        val: concatAddress(building?.name ?? '', building?.address ?? ''),
-                        fiscalYear: building?.fiscalYear ?? 0
-                    })) ?? []
-                }
-                value={buildingLabel ?? ''}
-                onChangeText={text => {
-                    setBuildingLabel(text)
-                }}
-                onSelect={item => {
-                    setBuildingInput({
-                        ...item,
-                        fiscalYear: item.fiscalYear ?? 0
-                    })
-                    setBuildingLabel(item.val)
-                    setDropdownVisible(false)
-                }}
-                isDropdownVisible={isDropdownVisible}
-                setDropdownVisible={setDropdownVisible}
-                prefixIcon={<LocationIcon width={20} height={20} />}
-            />
-            {isNewBldg && buildingLabel !== null && (
-                <TouchableOpacity
-                    className="flex-row items-center justify-between"
-                    onPress={() => {
-                        router.push({
-                            pathname: '../buildings/new',
-                            params: {
-                                buildingLabel
-                            }
-                        })
-                    }}
-                >
-                    <Text className="text-md text-eva-black-900 py-5 px-4">Not found. Create this building</Text>
-                    <ArrowIcon direction="outward" color="#1c1d1f" />
-                </TouchableOpacity>
-            )}
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View className="flex-1">
+                    <Header headerText="First select your building" />
+                    <ComboBox
+                        label="Building name"
+                        placeholder="Search for a building"
+                        options={
+                            data.res.map(building => ({
+                                id: building?.id ?? '',
+                                val: concatAddress(building?.name ?? '', building?.address ?? ''),
+                                fiscalYear: building?.fiscalYear ?? 0
+                            })) ?? []
+                        }
+                        value={buildingLabel ?? ''}
+                        onChangeText={text => {
+                            setBuildingLabel(text)
+                        }}
+                        onSelect={item => {
+                            setBuildingInput({
+                                ...item,
+                                fiscalYear: item.fiscalYear ?? 0
+                            })
+                            setBuildingLabel(item.val)
+                            setDropdownVisible(false)
+                            Keyboard.dismiss()
+                        }}
+                        isDropdownVisible={isDropdownVisible}
+                        setDropdownVisible={setDropdownVisible}
+                        prefixIcon={<LocationIcon width={20} height={20} />}
+                    />
+                    {isNewBldg && buildingLabel !== null && (
+                        <TouchableOpacity
+                            className="flex-row items-center justify-between"
+                            onPress={() => {
+                                router.push({
+                                    pathname: '../buildings/new',
+                                    params: {
+                                        buildingLabel
+                                    }
+                                })
+                            }}
+                        >
+                            <Text className="text-md text-eva-black-900 py-5 px-4">
+                                Not found. Create this building
+                            </Text>
+                            <ArrowIcon direction="outward" color="#1c1d1f" />
+                        </TouchableOpacity>
+                    )}
 
-            <Footer>
-                <BottomButton
-                    onPress={handleRouter}
-                    disabled={!buildingLabel || buildingLabel === '' || buildingLabel === null || isNewBldg}
-                >
-                    Continue
-                </BottomButton>
-            </Footer>
-        </View>
+                    <Footer>
+                        <BottomButton
+                            onPress={handleRouter}
+                            disabled={!buildingLabel || buildingLabel === '' || buildingLabel === null || isNewBldg}
+                        >
+                            Continue
+                        </BottomButton>
+                    </Footer>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
