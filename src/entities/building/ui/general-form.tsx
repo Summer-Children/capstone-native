@@ -166,7 +166,9 @@ export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
                 label="Construction year *"
                 value={inputYear}
                 onChangeText={handleYearChange}
-                onFocus={() => setShowPicker(true)}
+                onFocus={() => {
+                    setShowPicker(true)
+                }}
                 clearable
             />
             {showPicker && (
@@ -177,7 +179,7 @@ export function GeneralForm({ mode, buildingId }: GeneralFormProps): ReactNode {
                         setInputYear(itemValue.toString())
                         setShowPicker(false)
                     }}
-                    itemStyle={{ fontSize: 16, height: 180 }}
+                    itemStyle={{ fontSize: 14, height: 160 }}
                 >
                     {years.map(year => (
                         <Picker.Item key={year} label={year} value={year} />

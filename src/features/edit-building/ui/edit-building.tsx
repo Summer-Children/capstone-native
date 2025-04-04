@@ -1,4 +1,4 @@
-import { View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { View } from 'react-native'
 import { Text } from '@/reusables/components/ui/text'
 import { GeneralForm } from '@/src/entities/building/ui/general-form'
 import { FinancialForm } from '@/src/entities/building/ui/financial-form'
@@ -14,6 +14,7 @@ import Footer from '@/src/shared/ui/footer'
 import { getBuildingImageUrl } from '@/src/entities/building/hook/get-building-image-url'
 import { ReactNativeFile } from 'apollo-upload-client'
 import BottomButton from '@/src/shared/ui/bottom-button'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 interface Building {
     id: string
@@ -131,56 +132,60 @@ export function EditBuilding({ id, onSuccess }: EditBuildingProps): ReactNode {
     }
 
     return (
-        <KeyboardAvoidingView
-            className="flex-1 bg-white"
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={80}
-        >
-            <View className="px-4 flex-1">
-                <FormProvider {...methods} key={formKey}>
-                    <Tabs
-                        value={activeTab}
-                        onValueChange={val => setActiveTab(val as 'general' | 'financial')}
-                        className="w-full"
-                    >
-                        <TabsList className="flex-row w-full bg-eva-white-100 rounded-2xl mb-6 h-14">
-                            <TabsTrigger
-                                value="general"
-                                className={`flex-1 rounded-xl h-10 ${activeTab === 'general' ? 'border border-eva-white-100' : 'border-none'}`}
+        <View className="px-4 flex-1">
+            <FormProvider {...methods} key={formKey}>
+                <Tabs
+                    value={activeTab}
+                    onValueChange={val => setActiveTab(val as 'general' | 'financial')}
+                    className="w-full"
+                >
+                    <TabsList className="flex-row w-full bg-eva-white-100 rounded-2xl mb-6 h-14">
+                        <TabsTrigger
+                            value="general"
+                            className={`flex-1 rounded-xl h-10 ${activeTab === 'general' ? 'border border-eva-white-100' : 'border-none'}`}
+                        >
+                            <Text
+                                className={`font-semibold ${activeTab === 'general' ? 'text-[#1C1D1F]' : 'text-[#5D6368]'}`}
                             >
-                                <Text
-                                    className={`font-semibold ${activeTab === 'general' ? 'text-[#1C1D1F]' : 'text-[#5D6368]'}`}
-                                >
-                                    General
-                                </Text>
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value="financial"
-                                className={`flex-1 rounded-xl h-10 ${activeTab === 'financial' ? 'border border-eva-white-100' : 'border-none'}`}
+                                General
+                            </Text>
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="financial"
+                            className={`flex-1 rounded-xl h-10 ${activeTab === 'financial' ? 'border border-eva-white-100' : 'border-none'}`}
+                        >
+                            <Text
+                                className={`font-semibold ${activeTab === 'financial' ? 'text-[#1C1D1F]' : 'text-[#5D6368]'}`}
                             >
-                                <Text
-                                    className={`font-semibold ${activeTab === 'financial' ? 'text-[#1C1D1F]' : 'text-[#5D6368]'}`}
-                                >
-                                    Financial
-                                </Text>
-                            </TabsTrigger>
-                        </TabsList>
-                        <ScrollView keyboardShouldPersistTaps="handled">
-                            <TabsContent value="general">
-                                <GeneralForm mode="edit" buildingId={id} />
-                            </TabsContent>
-                            <TabsContent value="financial">
-                                <FinancialForm />
-                            </TabsContent>
-                        </ScrollView>
-                    </Tabs>
-                    <Footer>
-                        <BottomButton onPress={handleSubmit(onSubmit)}>
-                            <Text>Update</Text>
-                        </BottomButton>
-                    </Footer>
-                </FormProvider>
-            </View>
-        </KeyboardAvoidingView>
+                                Financial
+                            </Text>
+                        </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="general">
+                        <KeyboardAwareScrollView
+                            enableOnAndroid
+                            keyboardShouldPersistTaps="handled"
+                            contentContainerStyle={{ paddingBottom: 160 }}
+                        >
+                            <GeneralForm mode="edit" buildingId={id} />
+                        </KeyboardAwareScrollView>
+                    </TabsContent>
+
+                    <TabsContent value="financial">
+                        <KeyboardAwareScrollView
+                            enableOnAndroid
+                            keyboardShouldPersistTaps="handled"
+                            contentContainerStyle={{ paddingBottom: 220 }}
+                        >
+                            <FinancialForm />
+                        </KeyboardAwareScrollView>
+                    </TabsContent>
+                </Tabs>
+                <Footer>
+                    <BottomButton onPress={handleSubmit(onSubmit)}>Update</BottomButton>
+                </Footer>
+            </FormProvider>
+        </View>
     )
 }

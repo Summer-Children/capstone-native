@@ -86,9 +86,7 @@ export default function BuildingSuccess(): ReactNode {
             </ScrollView>
 
             <Footer className="flex gap-4 mx-4">
-                <BottomButton onPress={handleCreateAssessment}>
-                    <Text>Start assessment</Text>
-                </BottomButton>
+                <BottomButton onPress={handleCreateAssessment}>Start assessment</BottomButton>
 
                 <Button
                     variant="outline"

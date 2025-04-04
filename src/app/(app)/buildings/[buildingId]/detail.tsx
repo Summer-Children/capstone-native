@@ -109,7 +109,7 @@ export default function BuildingDetail(): ReactNode {
                 )}
 
                 <BottomButton onPress={handleCreateAssessment} className="mx-4 mt-6">
-                    <Text>Start assessment</Text>
+                    Start assessment
                 </BottomButton>
 
                 {hasAssessment && !isDraft && (

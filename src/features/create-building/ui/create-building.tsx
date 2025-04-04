@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { GeneralForm } from '@/src/entities/building/ui/general-form'
 import { FinancialForm } from '@/src/entities/building/ui/financial-form'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -11,6 +11,7 @@ import { ArrowIcon } from '@/src/shared/ui'
 import { ReactNativeFile } from 'apollo-upload-client'
 import CloseButton from '@/src/shared/ui/close-button'
 import BottomButton from '@/src/shared/ui/bottom-button'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 interface CreateBuildingForm {
     name: string
@@ -98,32 +99,33 @@ export function CreateBuilding({ onSuccess }: CreateBuildingProps): ReactNode {
                     headerRight: () => <CloseButton />
                 }}
             />
-            <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                <View className="flex-1">
-                    <Header headerText={headerText} />
-                    <ScrollView
-                        className="flex-1"
+
+            <View className="flex-1">
+                <Header headerText={headerText} />
+
+                <FormProvider {...methods}>
+                    <KeyboardAwareScrollView
+                        extraScrollHeight={20}
+                        enableOnAndroid
                         keyboardShouldPersistTaps="handled"
                         contentContainerStyle={{ flexGrow: 1 }}
+                        className="flex-1"
                     >
-                        <FormProvider {...methods}>
-                            {step === 'general' ? <GeneralForm mode="create" /> : <FinancialForm />}
-                        </FormProvider>
-
-                        <Footer>
-                            <BottomButton
-                                onPress={
-                                    step === 'general'
-                                        ? (): void => setStep('financial')
-                                        : (): Promise<void> => methods.handleSubmit(onSubmit)()
-                                }
-                            >
-                                {step === 'general' ? 'Continue' : 'Done'}
-                            </BottomButton>
-                        </Footer>
-                    </ScrollView>
-                </View>
-            </KeyboardAvoidingView>
+                        {step === 'general' ? <GeneralForm mode="create" /> : <FinancialForm />}
+                    </KeyboardAwareScrollView>
+                    <Footer>
+                        <BottomButton
+                            onPress={
+                                step === 'general'
+                                    ? (): void => setStep('financial')
+                                    : (): Promise<void> => methods.handleSubmit(onSubmit)()
+                            }
+                        >
+                            {step === 'general' ? 'Continue' : 'Done'}
+                        </BottomButton>
+                    </Footer>
+                </FormProvider>
+            </View>
         </>
     )
 }

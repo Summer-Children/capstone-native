@@ -38,7 +38,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ title, fileType, fileUrl, onPre
                 className="flex-row items-center justify-center gap-2 bg-eva-white-100 rounded-full py-2"
             >
                 <ShareIcon size={16} color="#1C1D1F" />
-                <Text className="text-eva-black-900 font-semibold text-sm">Download / Share</Text>
+                <Text className="text-eva-black-900 font-semibold text-sm">Share file</Text>
             </TouchableOpacity>
         </View>
     )

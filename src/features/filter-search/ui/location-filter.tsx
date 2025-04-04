@@ -82,21 +82,23 @@ export const LocationFilter = forwardRef<ActionSheetRef, LocationFilterProps>(
                     <TextInput
                         className="ml-2 flex-1 text-eva-black-900"
                         placeholder="Search a location"
+                        placeholderTextColor="#5D6368"
                         value={search}
                         onChangeText={text => setSearch(text)}
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                     />
-                    {search.length > 0 && (
-                        <TouchableOpacity
-                            onPress={() => {
-                                setSearch('')
-                                setFilters({ ...filters, location: '' })
-                            }}
-                        >
-                            <CloseIcon size={16} />
-                        </TouchableOpacity>
-                    )}
+                    {isFocused ||
+                        (search.length > 0 && (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setSearch('')
+                                    setFilters({ ...filters, location: '' })
+                                }}
+                            >
+                                <CloseIcon size={16} />
+                            </TouchableOpacity>
+                        ))}
                 </View>
                 {currentLocation && (
                     <TouchableOpacity className="flex-row items-center" onPress={() => selectLocation(currentLocation)}>

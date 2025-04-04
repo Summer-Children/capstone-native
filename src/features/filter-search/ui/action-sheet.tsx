@@ -35,7 +35,7 @@ export const CustomActionSheet = forwardRef<ActionSheetRef, Props>(
                                 actionSheetRef.current?.hide()
                             }}
                         >
-                            <Text>Apply</Text>
+                            Apply
                         </BottomButton>
 
                         <Button className="bg-white" onPress={onReset}>

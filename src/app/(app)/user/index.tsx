@@ -47,9 +47,7 @@ export default function UserProfile(): ReactNode {
                 </View>
 
                 <Footer>
-                    <BottomButton onPress={handleLogout}>
-                        <Text>Log out</Text>
-                    </BottomButton>
+                    <BottomButton onPress={handleLogout}>Log out</BottomButton>
                 </Footer>
             </View>
         </>

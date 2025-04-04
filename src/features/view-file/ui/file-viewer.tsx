@@ -38,7 +38,13 @@ export default function FileViewer({ fileUrl, fileType, fileName, triggerOpen }:
 
         return (): void => {
             isMounted.current = false
-            RNFS.unlink(tempFilePath).catch(err => console.error('File deletion failed:', err))
+            void RNFS.exists(tempFilePath).then(exists => {
+                if (exists) {
+                    RNFS.unlink(tempFilePath).catch(err => {
+                        console.error('File deletion failed:', err)
+                    })
+                }
+            })
         }
     }, [fileUrl])
 

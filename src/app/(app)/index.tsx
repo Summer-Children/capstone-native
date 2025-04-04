@@ -12,8 +12,10 @@ import { Building } from '@/src/entities/building/type/building-type'
 import { getBuildingState } from '@/src/entities/building/ui/building-card'
 import { ActionButton, BlankState } from '@/src/widgets/home'
 import { H2 } from '@/reusables/components/ui/typography'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Homepage(): ReactNode {
+    const insets = useSafeAreaInsets()
     const accountName = 'Carolina' // TODO: get account name from user but I suppose we dont have time
     const { data, loading, error } = useQuery<{ res: Building[] }>(GET_BUILDINGS, {
         fetchPolicy: 'network-only'
@@ -55,19 +57,32 @@ export default function Homepage(): ReactNode {
                 options={{
                     contentStyle: { paddingHorizontal: 0, backgroundColor: 'white' },
                     headerBackVisible: false,
-                    headerLeft: () => (
-                        <View style={{ marginTop: 8 }}>
-                            <Image
-                                source={require('@/assets/images/logo.png')}
-                                resizeMode="contain"
-                                style={{ width: 40, height: 40 }}
-                            />
-                        </View>
-                    )
+                    headerStyle: {
+                        backgroundColor: 'red'
+                    },
+                    header: () => {
+                        return (
+                            <View
+                                style={{
+                                    paddingTop: insets.top + 8,
+                                    paddingHorizontal: 16,
+                                    backgroundColor: 'white',
+
+                                    height: insets.top + 56
+                                }}
+                            >
+                                <Image
+                                    source={require('@/assets/images/logo.png')}
+                                    resizeMode="contain"
+                                    style={{ width: 40, height: 40 }}
+                                />
+                            </View>
+                        )
+                    }
                 }}
             />
 
-            <H2 className="px-4 pt-2 text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
+            <H2 className="px-4 text-[32px] text-eva-blue-900">Hello {accountName}!</H2>
 
             {loading ? (
                 <View className="flex-1 flex items-center justify-center">
