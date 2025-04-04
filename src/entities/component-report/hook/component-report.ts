@@ -71,6 +71,14 @@ export const GET_COMPONENT_REPORTS_BY_ASSESSMENT_REPORT_ID = graphql(`
             quantityNeeded
             yearReviewed
             assessmentReportId
+            component {
+                name
+                unitRate
+                actionFrequency
+                nextActionYear
+                lastActionYear
+                yearInstalled
+            }
         }
     }
 `)
