@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { Text } from '@/reusables/components/ui/text'
 import { ActionSheetRef } from 'react-native-actions-sheet'
 import { CustomActionSheet } from './action-sheet'
-import { TagList } from '@/src/shared/ui'
+import { TagList } from '@shared/ui/tag-list'
 import { FilterState } from '../model/filter-state'
 
 interface StatusFilterProps {

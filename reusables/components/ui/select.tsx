@@ -21,14 +21,14 @@ const SelectTrigger = React.forwardRef<SelectPrimitive.TriggerRef, SelectPrimiti
         <SelectPrimitive.Trigger
             ref={ref}
             className={cn(
-                'flex flex-row h-10 native:h-12 items-center text-sm justify-between rounded-md border border-input bg-background px-3 py-2 web:ring-offset-background text-muted-foreground web:focus:outline-none web:focus:ring-2 web:focus:ring-ring web:focus:ring-offset-2 [&>span]:line-clamp-1',
+                ' flex flex-row gap-1 h-8 items-center justify-around text-sm rounded-full bg-eva-white-100 pl-3 pr-2 py-2 web:ring-offset-background text-muted-foreground   web:focus:ring-offset-2 [&>span]:line-clamp-1',
                 props.disabled && 'web:cursor-not-allowed opacity-50',
                 className
             )}
             {...props}
         >
             <>{children}</>
-            <ChevronDown size={16} aria-hidden={true} className="text-foreground opacity-50" />
+            <ChevronDown size={16} aria-hidden={true} className="text-eva-black-900 pr-2" />
         </SelectPrimitive.Trigger>
     )
 )
@@ -60,10 +60,10 @@ const SelectScrollDownButton = ({ className, ...props }: SelectPrimitive.ScrollD
     }
     return (
         <SelectPrimitive.ScrollDownButton
-            className={cn('flex web:cursor-default items-center justify-center py-1', className)}
+            className={cn('flex web:cursor-default items-center justify-around py-1 px-2', className)}
             {...props}
         >
-            <ChevronDown size={14} className="text-foreground" />
+            <ChevronDown size={14} className="text-eva-black-900" />
         </SelectPrimitive.ScrollDownButton>
     )
 }

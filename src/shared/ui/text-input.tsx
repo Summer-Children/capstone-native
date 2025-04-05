@@ -29,7 +29,7 @@ export const CustomInput = forwardRef<TextInput, CustomInputProps>(function Cust
                     value={value !== undefined && value !== null ? String(value) : ''}
                     onChangeText={onChangeText}
                     className={cn(
-                        'h-11 border-2 border-eva-white-500 text-eva-black-300 rounded-xl py-2 pl-4 pr-12 focus:border-eva-blue-500'
+                        'h-11 border border-eva-white-500 text-eva-black-300 rounded-xl py-2 pl-4 pr-12 focus:border-eva-blue-500'
                     )}
                     editable={!disabled}
                     onFocus={e => {

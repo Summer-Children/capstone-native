@@ -44,7 +44,7 @@ const rawComponents: Component[] = [
         name: 'Foundation',
         category: Category.StructuralSystem,
         section: Section.Structure,
-        actionFrequency: 50,
+        actionFrequency: 5,
         unitRate: 5000,
         image: '/assets/images/components/foundation.png' // NEEDTOFIX
     },
@@ -53,7 +53,7 @@ const rawComponents: Component[] = [
         name: 'Slab on Grade',
         category: Category.StructuralSystem,
         section: Section.Structure,
-        actionFrequency: 50,
+        actionFrequency: 5,
         unitRate: 3500,
         image: '/assets/images/components/door.png' // NEEDTOFIX
     },
@@ -62,7 +62,7 @@ const rawComponents: Component[] = [
         name: 'Suspended Slab',
         category: Category.StructuralSystem,
         section: Section.Structure,
-        actionFrequency: 50,
+        actionFrequency: 10,
         unitRate: 4000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
@@ -71,7 +71,7 @@ const rawComponents: Component[] = [
         name: 'Superstructure',
         category: Category.StructuralSystem,
         section: Section.Structure,
-        actionFrequency: 50,
+        actionFrequency: 5,
         unitRate: 6000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
@@ -80,7 +80,7 @@ const rawComponents: Component[] = [
         name: 'Parking Garage Driveway',
         category: Category.StructuralSystem,
         section: Section.Structure,
-        actionFrequency: 45,
+        actionFrequency: 5,
         unitRate: 2500,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
@@ -89,8 +89,8 @@ const rawComponents: Component[] = [
         name: 'Vinyl Siding Assembly',
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
-        actionFrequency: 40,
-        unitRate: 1500,
+        actionFrequency: 30,
+        unitRate: 60,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -98,8 +98,8 @@ const rawComponents: Component[] = [
         name: 'Fibre Cement Siding',
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
-        actionFrequency: 45,
-        unitRate: 2000,
+        actionFrequency: 30,
+        unitRate: 60,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -107,8 +107,8 @@ const rawComponents: Component[] = [
         name: 'Stone Veneer Cladding',
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
-        actionFrequency: 50,
-        unitRate: 3000,
+        actionFrequency: 30,
+        unitRate: 7.5,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -126,7 +126,7 @@ const rawComponents: Component[] = [
         category: Category.ExteriorWalls,
         section: Section.BuildingEnclosure,
         actionFrequency: 30,
-        unitRate: 800,
+        unitRate: 10,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -134,8 +134,8 @@ const rawComponents: Component[] = [
         name: 'Windows & Sliding Doors',
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
-        actionFrequency: 35,
-        unitRate: 2500,
+        actionFrequency: 25,
+        unitRate: 35,
         image: '/assets/images/components/door.png'
     },
     {
@@ -143,8 +143,8 @@ const rawComponents: Component[] = [
         name: 'Main Door',
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
-        actionFrequency: 30,
-        unitRate: 1800,
+        actionFrequency: 25,
+        unitRate: 35,
         image: '/assets/images/components/door.png'
     },
     {
@@ -152,8 +152,8 @@ const rawComponents: Component[] = [
         name: 'Exterior Doors',
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
-        actionFrequency: 30,
-        unitRate: 1500,
+        actionFrequency: 15,
+        unitRate: 800,
         image: '/assets/images/components/door.png'
     },
     {
@@ -161,8 +161,8 @@ const rawComponents: Component[] = [
         name: 'Garage Overhead Doors',
         category: Category.WindowsDoors,
         section: Section.BuildingEnclosure,
-        actionFrequency: 35,
-        unitRate: 2200,
+        actionFrequency: 15,
+        unitRate: 10000,
         image: '/assets/images/components/door.png'
     },
     {
@@ -180,7 +180,7 @@ const rawComponents: Component[] = [
         category: Category.Roofing,
         section: Section.Roofing,
         actionFrequency: 35,
-        unitRate: 1800,
+        unitRate: 150,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -188,8 +188,8 @@ const rawComponents: Component[] = [
         name: 'Podium Roof Assembly',
         category: Category.Roofing,
         section: Section.Roofing,
-        actionFrequency: 45,
-        unitRate: 3500,
+        actionFrequency: 20,
+        unitRate: 80,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -197,8 +197,8 @@ const rawComponents: Component[] = [
         name: 'Glazed Metal Framed Canopy',
         category: Category.Roofing,
         section: Section.Roofing,
-        actionFrequency: 35,
-        unitRate: 2800,
+        actionFrequency: 15,
+        unitRate: 100,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -206,16 +206,16 @@ const rawComponents: Component[] = [
         name: 'Balcony Membranes',
         category: Category.Balconies,
         section: Section.Balconies,
-        actionFrequency: 35,
-        unitRate: 1500
+        actionFrequency: 25,
+        unitRate: 4000
     },
     {
         id: '20',
         name: 'Guardrails',
         category: Category.Balconies,
         section: Section.Balconies,
-        actionFrequency: 40,
-        unitRate: 1200,
+        actionFrequency: 50,
+        unitRate: 900,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -224,7 +224,7 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 25,
-        unitRate: 1000,
+        unitRate: 60,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -233,7 +233,7 @@ const rawComponents: Component[] = [
         category: Category.InteriorFinishes,
         section: Section.Interior,
         actionFrequency: 25,
-        unitRate: 1500,
+        unitRate: 600,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -241,8 +241,8 @@ const rawComponents: Component[] = [
         name: 'Stairwell Finishes',
         category: Category.InteriorFinishes,
         section: Section.Interior,
-        actionFrequency: 30,
-        unitRate: 900,
+        actionFrequency: 25,
+        unitRate: 20,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -250,8 +250,8 @@ const rawComponents: Component[] = [
         name: 'Storage Finishes',
         category: Category.InteriorFinishes,
         section: Section.Interior,
-        actionFrequency: 20,
-        unitRate: 600,
+        actionFrequency: 30,
+        unitRate: 20,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -268,8 +268,8 @@ const rawComponents: Component[] = [
         name: 'Washroom Finishes',
         category: Category.InteriorFinishes,
         section: Section.Interior,
-        actionFrequency: 20,
-        unitRate: 1500,
+        actionFrequency: 40,
+        unitRate: 10,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -313,8 +313,8 @@ const rawComponents: Component[] = [
         name: 'Electric Baseboards',
         category: Category.HeatingCooling,
         section: Section.MechanicalSystems,
-        actionFrequency: 40,
-        unitRate: 1200,
+        actionFrequency: 30,
+        unitRate: 300,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -322,8 +322,8 @@ const rawComponents: Component[] = [
         name: 'Make Up Air Unit',
         category: Category.Ventilation,
         section: Section.MechanicalSystems,
-        actionFrequency: 45,
-        unitRate: 4000,
+        actionFrequency: 30,
+        unitRate: 45000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -331,8 +331,8 @@ const rawComponents: Component[] = [
         name: 'Parking Garage Ventilation',
         category: Category.Ventilation,
         section: Section.MechanicalSystems,
-        actionFrequency: 45,
-        unitRate: 3000,
+        actionFrequency: 30,
+        unitRate: 15000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -340,8 +340,8 @@ const rawComponents: Component[] = [
         name: 'Service Room Ventilation',
         category: Category.Ventilation,
         section: Section.MechanicalSystems,
-        actionFrequency: 40,
-        unitRate: 2000,
+        actionFrequency: 25,
+        unitRate: 3000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -349,8 +349,8 @@ const rawComponents: Component[] = [
         name: 'Water Distribution',
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
-        actionFrequency: 50,
-        unitRate: 3500,
+        actionFrequency: 20,
+        unitRate: 1,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -358,8 +358,8 @@ const rawComponents: Component[] = [
         name: 'Domestic Hot Water System',
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
-        actionFrequency: 45,
-        unitRate: 4000,
+        actionFrequency: 30,
+        unitRate: 18000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -367,8 +367,8 @@ const rawComponents: Component[] = [
         name: 'Drainage System',
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
-        actionFrequency: 50,
-        unitRate: 3000,
+        actionFrequency: 5,
+        unitRate: 8000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -376,8 +376,8 @@ const rawComponents: Component[] = [
         name: 'Sump Pumps',
         category: Category.Plumbing,
         section: Section.MechanicalSystems,
-        actionFrequency: 55,
-        unitRate: 2500,
+        actionFrequency: 15,
+        unitRate: 3000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -413,7 +413,7 @@ const rawComponents: Component[] = [
         category: Category.Elevator,
         section: Section.MechanicalSystems,
         actionFrequency: 35,
-        unitRate: 3000,
+        unitRate: 30000,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -430,8 +430,8 @@ const rawComponents: Component[] = [
         name: 'Interior Lighting',
         category: Category.Lighting,
         section: Section.ElectricalSystems,
-        actionFrequency: 40,
-        unitRate: 1500,
+        actionFrequency: 20,
+        unitRate: 100,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -439,8 +439,8 @@ const rawComponents: Component[] = [
         name: 'Exterior Lighting',
         category: Category.Lighting,
         section: Section.ElectricalSystems,
-        actionFrequency: 45,
-        unitRate: 2000,
+        actionFrequency: 20,
+        unitRate: 100,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     },
     {
@@ -448,8 +448,8 @@ const rawComponents: Component[] = [
         name: 'Emergency Lighting',
         category: Category.Lighting,
         section: Section.ElectricalSystems,
-        actionFrequency: 60,
-        unitRate: 2500,
+        actionFrequency: 20,
+        unitRate: 40,
         image: '/assets/images/components/pipe.png' // NEEDTOFIX
     }
 ]

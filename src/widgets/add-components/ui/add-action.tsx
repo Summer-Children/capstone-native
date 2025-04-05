@@ -1,4 +1,3 @@
-import { Button } from '@/reusables/components/ui/button'
 import { Input } from '@/reusables/components/ui/input'
 import { Label } from '@/reusables/components/ui/label'
 import {
@@ -10,13 +9,17 @@ import {
     SelectValue
 } from '@/reusables/components/ui/select'
 import { Text } from '@/reusables/components/ui/text'
-import { GET_ASSESSMENT_REPORT_FOR_PREVIEW } from '@/src/entities/assessment-report/hook'
 import { ComponentReportPriority, type UpdateComponent, type UpdateComponentReport } from '@/src/_gqlgen/graphql'
+import { GET_ASSESSMENT_REPORT_FOR_PREVIEW } from '@/src/entities/assessment-report/hook'
 import { GET_COMPONENT_REPORT, UPDATE_COMPONENT_REPORT } from '@/src/entities/component-report/hook/component-report'
 import { GET_COMPONENT, UPDATE_COMPONENT } from '@/src/entities/component/hook/components'
 import BottomButton from '@/src/shared/ui/bottom-button'
 import Footer from '@/src/shared/ui/footer'
+import { CustomInput } from '@/src/shared/ui/text-input'
 import { useMutation, useQuery } from '@apollo/client'
+import DollarSvg from '@assets/images/dollar.svg'
+import { GET_BUILDING } from '@entities/building/hook'
+import { TagList } from '@shared/ui/tag-list'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState, type ReactNode } from 'react'
 import {
@@ -35,12 +38,19 @@ type Props = {
     componentId: string
 }
 
+type buildingItem = {
+    year: number | null | undefined
+}
+
 export default function AddAction({ componentReportId, componentId }: Props): ReactNode {
     const [componentReportItems, setComponentReportItems] = useState<UpdateComponentReport>()
     const [componentItems, setComponentItems] = useState<UpdateComponent>()
+    const [buildingItem, setBuildingItem] = useState<buildingItem>()
+    const [quantityUnit, setQuantityUnit] = useState<string>('Unit')
+
     const insets = useSafeAreaInsets()
 
-    const { assessmentReportId } = useLocalSearchParams()
+    const { buildingId, assessmentReportId } = useLocalSearchParams()
 
     const { data: componentReportData, loading: componentReportLoading } = useQuery(GET_COMPONENT_REPORT, {
         variables: {
@@ -74,9 +84,21 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
     })
     const [updateComponentReport] = useMutation(UPDATE_COMPONENT_REPORT)
     const [updateComponent] = useMutation(UPDATE_COMPONENT)
+    const { data: buildingData, loading: buildingDataLoading } = useQuery(GET_BUILDING, {
+        variables: {
+            id: buildingId as string
+        },
+        onCompleted: d => {
+            setBuildingItem({
+                year: d?.res.year
+            })
+        },
+        onError: e => {
+            console.error('Error fetching building', e)
+        }
+    })
 
     useEffect(() => {
-        console.log('componentReportItems:', componentReportItems)
         const timeout = setTimeout(async () => {
             if (!componentReportItems) {
                 console.error('No component report items found')
@@ -111,7 +133,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
             } catch (error) {
                 console.error('Error updating component report:', error)
             }
-        }, 800)
+        }, 600)
         return (): void => clearTimeout(timeout)
     }, [componentReportItems])
 
@@ -163,9 +185,33 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
             } catch (error) {
                 console.error('Error updating componentItems:', error)
             }
-        }, 800)
+        }, 600)
         return (): void => clearTimeout(timeout)
     }, [componentItems])
+
+    useEffect(() => {
+        if (!componentItems?.id || !buildingItem?.year) return
+
+        // The followins code is necessary to avoid having the infinite loop of updating the component items
+        const calculatedLastActionYear = buildingItem.year
+        const calculatedNextActionYear = componentItems.actionFrequency
+            ? calculatedLastActionYear + componentItems.actionFrequency
+            : undefined
+        if (
+            componentItems.lastActionYear === calculatedLastActionYear &&
+            componentItems.nextActionYear === calculatedNextActionYear
+        ) {
+            return
+        }
+
+        setComponentItems({
+            ...componentItems,
+            lastActionYear: buildingItem.year,
+            nextActionYear: componentItems.actionFrequency
+                ? buildingItem.year + componentItems.actionFrequency
+                : undefined
+        })
+    }, [componentItems, buildingItem])
 
     const router = useRouter()
 
@@ -176,20 +222,18 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
         right: 12
     }
 
-    const conditions = ['Unknown', 'Failed', 'Poor', 'Fair', 'Good', 'Excellent']
-
     const handleDone = (): void => {
         router.push('./review-component')
     }
 
-    if (componentReportLoading || componentLoading) return <Text>Loading...</Text>
-    if (!componentReportData || !componentData) return <Text>No data found</Text>
+    if (componentReportLoading || componentLoading || buildingDataLoading) return <Text>Loading...</Text>
+    if (!componentReportData || !componentData || !buildingData) return <Text>No data found</Text>
     if (!componentReportItems) return <Text>No component report items found</Text>
 
     const finalCost = (componentReportItems.quantityNeeded ?? 0) * (componentItems?.unitRate ?? 0)
 
     return (
-        <View className="flex-1 flex flex-col gap-5">
+        <View className="flex-1">
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 className="flex-1"
@@ -201,7 +245,7 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                         keyboardShouldPersistTaps="handled"
                         automaticallyAdjustKeyboardInsets={true}
                     >
-                        <View className="flex flex-col gap-5">
+                        <View className="flex-1 flex flex-col gap-5">
                             <View className="flex flex-row justify-between items-center">
                                 <Label className="font-bold text-eva-black-900" style={{ fontSize: 20 }}>
                                     Type of action
@@ -221,14 +265,15 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                                         }
                                         setComponentReportItems({ ...componentReportItems, action: option?.value })
                                     }}
+                                    className="pl-3 pr-2 py-[9px]"
                                 >
-                                    <SelectTrigger className="w-32">
+                                    <SelectTrigger>
                                         <SelectValue
-                                            className="text-foreground text-md native:text-md font-semibold"
+                                            className="text-foreground text-md font-semibold"
                                             placeholder="Select an action"
                                         />
                                     </SelectTrigger>
-                                    <SelectContent insets={contentInsets} className="w-32">
+                                    <SelectContent insets={contentInsets}>
                                         <SelectGroup>
                                             <SelectItem label="Renewal" value="renewal">
                                                 Renewal
@@ -249,135 +294,137 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
 
                             <View>
                                 <Label className="text-eva-black-300">Frequency</Label>
-                                <Input
-                                    defaultValue={componentItems?.actionFrequency?.toString()}
+                                <CustomInput
+                                    value={componentItems?.actionFrequency?.toString() ?? ''}
                                     onChangeText={value => {
                                         if (!componentItems) {
                                             Alert.alert('No value is set')
                                             return
                                         }
-                                        setComponentItems({ ...componentItems, actionFrequency: Number(value) })
+                                        if (value === '') {
+                                            setComponentItems({ ...componentItems, actionFrequency: null })
+                                        } else {
+                                            const parsed = Number.parseInt(value)
+                                            if (!isNaN(parsed)) {
+                                                setComponentItems({ ...componentItems, actionFrequency: parsed })
+                                            }
+                                        }
                                     }}
-                                    aria-labelledby="inputLabel"
-                                    aria-errormessage="inputError"
+                                    clearable={true}
                                 />
                             </View>
-                            <View className="flex flex-row justify-between items-center">
-                                <View className="flex flex-col">
+
+                            <View className="flex flex-row gap-4 justify-stretch items-center">
+                                <View className="flex-1 flex flex-col gap-1">
                                     <Label className="text-eva-black-300">Last renovation</Label>
-                                    <Input
+                                    <CustomInput
                                         placeholder="Write a year"
-                                        defaultValue={componentItems?.lastActionYear?.toString()}
+                                        value={
+                                            componentItems?.lastActionYear != null
+                                                ? componentItems.lastActionYear < 0
+                                                    ? '0'
+                                                    : componentItems.lastActionYear.toString()
+                                                : ''
+                                        }
                                         onChangeText={value => {
                                             if (!componentItems) {
                                                 Alert.alert('No value is set')
                                                 return
                                             }
-                                            setComponentItems({ ...componentItems, lastActionYear: Number(value) })
+                                            setBuildingItem({ year: Number(value) })
                                         }}
-                                        aria-labelledby="inputLabel"
-                                        aria-errormessage="inputError"
+                                        clearable={true}
                                     />
                                 </View>
 
-                                <View className="flex flex-col">
+                                <View className="flex-1 flex flex-col gap-1">
                                     <Label className="text-eva-black-300">Next renovation</Label>
-                                    <Input
+                                    <CustomInput
                                         placeholder="Write a year"
-                                        defaultValue={componentItems?.nextActionYear?.toString()}
+                                        value={componentItems?.nextActionYear?.toString() ?? ''}
                                         onChangeText={value => {
                                             if (!componentItems) {
                                                 Alert.alert('No value is set')
                                                 return
                                             }
-                                            setComponentItems({ ...componentItems, nextActionYear: Number(value) })
+                                            setBuildingItem({
+                                                year: Number(value) - Number(componentItems.actionFrequency)
+                                            })
                                         }}
-                                        aria-labelledby="inputLabel"
-                                        aria-errormessage="inputError"
+                                        clearable={true}
                                     />
                                 </View>
                             </View>
 
-                            <View>
+                            <View className="flex flex-col gap-1">
                                 <Label className="text-eva-black-300">Component condition</Label>
-                                <View className="flex flex-row gap-x-2 gap-y-2 flex-wrap">
-                                    {conditions.map(condition => (
-                                        <Button
-                                            key={condition}
-                                            variant="outline"
-                                            size="sm"
-                                            className={` ${
-                                                condition === componentReportItems?.condition
-                                                    ? 'bg-eva-black-900 text-eva-white-50'
-                                                    : 'bg-white text-eva-black-300'
-                                            }`}
-                                            onPress={() => {
-                                                setComponentReportItems({
-                                                    ...componentReportItems,
-                                                    condition: condition
-                                                })
-                                            }}
-                                        >
-                                            <Text
-                                                className="text-lg font-semibold"
-                                                style={{
-                                                    backgroundColor:
-                                                        condition === componentReportItems?.condition
-                                                            ? '#1C1D1F'
-                                                            : '#FFFFFF',
-                                                    color:
-                                                        condition === componentReportItems?.condition
-                                                            ? '#F7F7F7'
-                                                            : '#5D6368',
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center'
-                                                }}
-                                            >
-                                                {condition}
-                                            </Text>
-                                        </Button>
-                                    ))}
+                                <View>
+                                    <TagList
+                                        options={['Unknown', 'Failed', 'Poor', 'Fair', 'Good', 'Excellent']}
+                                        selected={componentReportItems?.condition ?? ''}
+                                        onSelect={condition =>
+                                            setComponentReportItems({ ...componentReportItems, condition })
+                                        }
+                                        gap={8}
+                                    />
                                 </View>
                             </View>
 
-                            <View>
+                            <View className="flex flex-col gap-1">
                                 <Label className="text-eva-black-300">Quantity</Label>
-                                <View className="flex flex-row">
+                                <View className="relative">
                                     <Input
-                                        defaultValue={componentReportItems?.quantityNeeded?.toString()}
+                                        defaultValue={componentReportItems?.quantityNeeded?.toString() ?? ''}
                                         onChangeText={value => {
                                             if (!componentReportItems) {
                                                 Alert.alert('No value is set')
                                                 return
                                             }
-                                            setComponentReportItems({
-                                                ...componentReportItems,
-                                                quantityNeeded: Number(value)
-                                            })
+                                            if (value === '') {
+                                                setComponentReportItems({
+                                                    ...componentReportItems,
+                                                    quantityNeeded: null
+                                                })
+                                            } else {
+                                                const parsed = Number.parseInt(value)
+                                                if (!isNaN(parsed)) {
+                                                    setComponentReportItems({
+                                                        ...componentReportItems,
+                                                        quantityNeeded: parsed
+                                                    })
+                                                }
+                                            }
                                         }}
                                         aria-labelledby="inputLabel"
                                         aria-errormessage="inputError"
-                                        className="flex-1"
                                     />
-
-                                    <Select defaultValue={{ value: 'ft2', label: 'ft2' }}>
+                                    <Select
+                                        defaultValue={{ value: 'Unit', label: 'Unit' }}
+                                        onValueChange={option => {
+                                            if (!option?.value) {
+                                                Alert.alert('No option selected')
+                                                return
+                                            }
+                                            setQuantityUnit(option?.value)
+                                        }}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2"
+                                    >
                                         <SelectTrigger className="w-24">
                                             <SelectValue
-                                                className="text-foreground text-sm native:text-lg"
+                                                className="text-foreground text-md font-semibold"
                                                 placeholder="Select a quantity"
                                             />
                                         </SelectTrigger>
                                         <SelectContent insets={contentInsets} className="w-24">
                                             <SelectGroup>
-                                                <SelectItem label="ft2" value="ft2">
-                                                    ft2
+                                                <SelectItem label="Ft2" value="Ft2">
+                                                    Ft2
                                                 </SelectItem>
                                                 <SelectItem label="LF" value="LF">
                                                     LF
                                                 </SelectItem>
-                                                <SelectItem label="units" value="units">
-                                                    Units
+                                                <SelectItem label="Unit" value="Unit">
+                                                    Unit
                                                 </SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
@@ -385,39 +432,43 @@ export default function AddAction({ componentReportId, componentId }: Props): Re
                                 </View>
                             </View>
 
-                            <View>
-                                <Label className="text-eva-black-300">Price per quantity</Label>
-                                <Input
-                                    defaultValue={componentItems?.unitRate?.toString()}
-                                    onChangeText={value => {
-                                        if (!componentItems) {
-                                            Alert.alert('No value is set')
-                                            return
-                                        }
-                                        if (value === '') {
-                                            setComponentItems({ ...componentItems, unitRate: null })
-                                        } else {
-                                            const parsed = Number.parseInt(value)
-                                            if (!isNaN(parsed)) {
-                                                setComponentItems({ ...componentItems, unitRate: parsed })
+                            <View className="flex flex-col gap-1">
+                                <Label className="text-eva-black-300">Price per {quantityUnit}</Label>
+                                <View className="relative">
+                                    <CustomInput
+                                        value={componentItems?.unitRate?.toString() ?? ''}
+                                        onChangeText={value => {
+                                            if (!componentItems) {
+                                                Alert.alert('No value is set')
+                                                return
                                             }
-                                        }
-                                    }}
-                                    aria-labelledby="inputLabel"
-                                    aria-errormessage="inputError"
-                                />
+                                            if (value === '') {
+                                                setComponentItems({ ...componentItems, unitRate: null })
+                                            } else {
+                                                const parsed = Number.parseInt(value)
+                                                if (!isNaN(parsed)) {
+                                                    setComponentItems({ ...componentItems, unitRate: parsed })
+                                                }
+                                            }
+                                        }}
+                                        className="pl-10"
+                                        clearable={true}
+                                    />
+                                    <View className="absolute left-2 top-1/2 -translate-y-1/2">
+                                        <DollarSvg />
+                                    </View>
+                                </View>
+                            </View>
+                            <View className="flex flex-row gap-2 justify-between items-center">
+                                <Text className="font-semibold text-lg text-eva-black-900">Final Cost:</Text>
+                                <Text className="font-semibold text-lg text-eva-black-300">
+                                    {finalCost > 0 ? finalCost.toLocaleString() : 'To be calculated'}
+                                </Text>
                             </View>
                         </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-
-            <View className="flex flex-row justify-between items-center">
-                <Text className="font-bold text-xl text-eva-black-900">Final Cost:</Text>
-                <Text className="font-bold text-xl text-eva-black-300">
-                    {finalCost > 0 ? `$${finalCost}` : 'To be calculated'}
-                </Text>
-            </View>
 
             <Footer>
                 <BottomButton onPress={handleDone}>Continue</BottomButton>
