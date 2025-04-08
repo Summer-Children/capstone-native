@@ -40,7 +40,7 @@ export default function SelectBuildingPage(): ReactNode {
     const isNewBldg = useMemo(() => {
         return !(
             buildingLabel &&
-            buildingsWithAddress?.some(building => building?.toLowerCase() === buildingLabel.toLowerCase())
+            buildingsWithAddress?.some(building => building?.toLowerCase().includes(buildingLabel.toLowerCase()))
         )
     }, [buildingLabel, buildingsWithAddress])
 
@@ -141,7 +141,7 @@ export default function SelectBuildingPage(): ReactNode {
                         setDropdownVisible={setDropdownVisible}
                         prefixIcon={<LocationIcon width={20} height={20} />}
                     />
-                    {isNewBldg && buildingLabel !== null && (
+                    {isNewBldg && !!buildingLabel && (
                         <TouchableOpacity
                             className="flex-row items-center justify-between"
                             onPress={() => {
