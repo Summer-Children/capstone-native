@@ -1,88 +1,80 @@
-# Welcome to your Expo app 👋
+# Evalo
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+📱 **Mobile App for Building Assessments & Reserve Fund Studies**
 
-## Preparation
+Evalo is designed for consulting firms conducting building condition assessments and Reserve Fund Studies in British Columbia. With new regulations requiring Strata corporations to update Depreciation Reports every five years (starting July 1, 2024), Evalo helps streamline the entire process—making it faster, more efficient, and compliant.
 
-- register the certificate on xcode
-- enable developer mode on your iPhone
+🔗 **[Landing Page & Proposal](#)**  
+🎬 **[Trailer (45 sec)](#)**  
+📽️ **[Demo (5 min)](#)**
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Features
 
-    ```bash
-    pnpm i
-    ```
+### ✅ Smart Building Records
+- Store and manage all building-related data (e.g., structural, financial, and historical info) in one place.
 
-2. build the app
+### 🤖 AI-Powered Assessments
+- Capture photos, record audio, and let AI generate transcripts and insights in real-time.
+- Eliminate handwritten notes—assessments are conducted directly on a mobile device.
 
-    ```bash
-    pnpm ios-device
-    ```
+### 📄 Automated Review & Report Generation
+- Instantly generate depreciation reports that meet compliance requirements.
+- Auto-detect missing data and share finalized reports with stakeholders in one tap.
 
-3. run the app
+---
 
-    ```bash
-    # on your ios device
-    pnpm start
+## 🧠 Main Benefits
+- **Compliant** with British Columbia's July 2024 regulations.
+- **Digitized** workflows for faster inspections.
+- **Lower costs** and **no paperwork** thanks to automation and AI.
+- **Real-time insights** for teams and clients.
 
-    # or
+---
 
-    # on simulator
-    pnpm ios
-    ```
+## 🧰 Tech Stack
 
-In the output, you'll find options to open the app in a
+### Frontend
+- ⚛️ React Native (iOS & Android)
+- 🛰️ Apollo Client (GraphQL integration)
+- 🧱 React Native Reusables (UI components)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-  [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Backend
+- 🟦 Golang (for high performance and scalability)
+- 🔺 gqlgen (GraphQL server in Go)
+- 📄 Gotenberg (PDF generation from structured reports)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Infrastructure
+- ☁️ AWS (cloud infrastructure)
+- 🐳 Docker (containerization with microservices)
 
-## Procedures to use the app on your physical phone when you have to access local backend server (when the deployed backend server is ready, you do not need to do this.)
+---
 
-1. Replace your .env
-   replace the EXPO_PUBLIC_API_URL of .env with the url I share
+## 📁 Directory Structure
 
-2. Build (If this is your first time to use the physical phone)
+| Directory | Description |
+|----------|-------------|
+| [`frontend`](./frontend) | React Native app written in TypeScript |
+| [`backend`](./backend)   | Go-based backend with GraphQL and PDF services |
 
-```bash
-pnpm exec expo run:ios
-```
+---
 
-3. Scan the QR code with your physical iphone
+## 👨‍💻 Authors
 
-## Get a fresh project
+| Developer | GitHub | Role |
+|----------|--------|------|
+| Your Name | [@yourhandle](#) | Fullstack Developer — Developed assessment features, AI integration, and automated reporting |
+| ... | ... | ... |
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+## 📸 Screenshots
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Coming soon...
 
-## eas build
+---
 
-ref: https://github.com/expo/eas-cli/issues/997
+## 📌 Notes
 
-```
-eas build -p ios --profile preview
-```
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Evalo helps your team stay ahead of evolving regulations, eliminate manual errors, and deliver professional-grade assessments that clients can trust.
