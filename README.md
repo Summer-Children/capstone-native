@@ -4,9 +4,9 @@
 
 Evalo is designed for building consulting firms which conduct building condition assessments and Reserve Fund Studies. With new regulations in British Columbia requiring Strata corporations to update Depreciation Reports every five years (starting July 1, 2024), Evalo helps streamline the entire evaluation process faster, more efficient, and compliant.
 
-🔗 **[Landing Page & Proposal](https://www.evalo.wmdd.ca/)** 
+🔗 **[Landing Page & Proposal including 36-second trailer](https://www.evalo.wmdd.ca/)** 
 🎬 **[Trailer (36 sec)](https://langara-my.sharepoint.com/personal/hchoi38_mylangara_ca/_layouts/15/stream.aspx?id=%2Fpersonal%2Fhchoi38%5Fmylangara%5Fca%2FDocuments%2FEvalo%5Ffinal%2FLong%20Video%5Ffinal%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eaa75512f%2D4059%2D4990%2D8b9c%2Ded5c8b8d18d6)**  
-📽️ **[Demo (about 5 min)](#)**
+📽️ **[Demo (about 5 min)](#)** Coming Soon...
 
 ---
 
@@ -38,17 +38,19 @@ Evalo is designed for building consulting firms which conduct building condition
 - Gotenberg (PDF generation from structured reports)
 
 ### Infrastructure
-- ☁AS (cloud infrastructure)
+- AWS (cloud infrastructure)
 - Docker (containerization with microservices)
 
 ---
 
 ## 👨‍💻 Authors
 
-| Developer | GitHub | Role |
-|----------|--------|------|
-| Natsuko Ogata | [@Summer-Children](https://github.com/Summer-Children) | Frontend Developer — Implement pdf/excel view functionality and frontend authentication, create UI for most of the assessment flow |
-| ... | ... | ... |
+| Developer        | GitHub                                         | Role |
+|------------------|------------------------------------------------|------|
+| Natsuko Ogata    | [@Summer-Children](https://github.com/Summer-Children) | Frontend Developer — Implemented PDF/Excel view functionality and frontend authentication, created UI for most of the assessment flow |
+| Rasul Omarov     | [@rasulomaroff](https://github.com/rasulomaroff)       | Backend Developer — |
+| Tomoki Kaneko    | [@kaneko-tomoki](https://github.com/tom555-555)     | Full Stack Developer - |
+| Xuehui Lan       | [@Xuehui-Lan](https://github.com/1ador)           | Frontend Developer —  |
 
 ---
 
@@ -57,7 +59,3 @@ Evalo is designed for building consulting firms which conduct building condition
 Coming soon...
 
 ---
-
-## 📌 Notes
-
-Evalo helps your team stay ahead of evolving regulations, eliminate manual errors, and deliver professional-grade assessments that clients can trust.
