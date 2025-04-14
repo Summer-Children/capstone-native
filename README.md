@@ -1,62 +1,45 @@
 # Evalo
 
-📱 **Mobile App for Building Assessments & Reserve Fund Studies**
+📱 **iOs Mobile App for streamlining the evaluation process of building**
 
-Evalo is designed for consulting firms conducting building condition assessments and Reserve Fund Studies in British Columbia. With new regulations requiring Strata corporations to update Depreciation Reports every five years (starting July 1, 2024), Evalo helps streamline the entire process—making it faster, more efficient, and compliant.
+Evalo is designed for building consulting firms which conduct building condition assessments and Reserve Fund Studies. With new regulations in British Columbia requiring Strata corporations to update Depreciation Reports every five years (starting July 1, 2024), Evalo helps streamline the entire evaluation process faster, more efficient, and compliant.
 
-🔗 **[Landing Page & Proposal](#)**  
-🎬 **[Trailer (45 sec)](#)**  
-📽️ **[Demo (5 min)](#)**
+🔗 **[Landing Page & Proposal](https://www.evalo.wmdd.ca/)** 
+🎬 **[Trailer (36 sec)](https://langara-my.sharepoint.com/personal/hchoi38_mylangara_ca/_layouts/15/stream.aspx?id=%2Fpersonal%2Fhchoi38%5Fmylangara%5Fca%2FDocuments%2FEvalo%5Ffinal%2FLong%20Video%5Ffinal%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eaa75512f%2D4059%2D4990%2D8b9c%2Ded5c8b8d18d6)**  
+📽️ **[Demo (about 5 min)](#)**
 
 ---
 
 ## 🚀 Features
 
-### ✅ Smart Building Records
+### Smart Building Records
 - Store and manage all building-related data (e.g., structural, financial, and historical info) in one place.
 
-### 🤖 AI-Powered Assessments
-- Capture photos, record audio, and let AI generate transcripts and insights in real-time.
-- Eliminate handwritten notes—assessments are conducted directly on a mobile device.
+### AI-Powered Assessments
+- AI helps you generate evaluation comments in real-time after the app converts your voice into text.
 
-### 📄 Automated Review & Report Generation
+### Automated Review & Report Generation
+- Notes—taking are conducted directly on a mobile device.
 - Instantly generate depreciation reports that meet compliance requirements.
-- Auto-detect missing data and share finalized reports with stakeholders in one tap.
-
----
-
-## 🧠 Main Benefits
-- **Compliant** with British Columbia's July 2024 regulations.
-- **Digitized** workflows for faster inspections.
-- **Lower costs** and **no paperwork** thanks to automation and AI.
-- **Real-time insights** for teams and clients.
 
 ---
 
 ## 🧰 Tech Stack
 
 ### Frontend
-- ⚛️ React Native (iOS & Android)
-- 🛰️ Apollo Client (GraphQL integration)
-- 🧱 React Native Reusables (UI components)
+- React Native
+- Native Wind
+- Apollo Client (GraphQL integration)
+- React Native Reusables (UI components library)
 
 ### Backend
-- 🟦 Golang (for high performance and scalability)
-- 🔺 gqlgen (GraphQL server in Go)
-- 📄 Gotenberg (PDF generation from structured reports)
+- Golang (for high performance and scalability)
+- gqlgen (GraphQL server in Go)
+- Gotenberg (PDF generation from structured reports)
 
 ### Infrastructure
-- ☁️ AWS (cloud infrastructure)
-- 🐳 Docker (containerization with microservices)
-
----
-
-## 📁 Directory Structure
-
-| Directory | Description |
-|----------|-------------|
-| [`frontend`](./frontend) | React Native app written in TypeScript |
-| [`backend`](./backend)   | Go-based backend with GraphQL and PDF services |
+- ☁AS (cloud infrastructure)
+- Docker (containerization with microservices)
 
 ---
 
@@ -64,7 +47,7 @@ Evalo is designed for consulting firms conducting building condition assessments
 
 | Developer | GitHub | Role |
 |----------|--------|------|
-| Your Name | [@yourhandle](#) | Fullstack Developer — Developed assessment features, AI integration, and automated reporting |
+| Natsuko Ogata | [@Summer-Children](https://github.com/Summer-Children) | Frontend Developer — Implement pdf/excel view functionality and frontend authentication, create UI for most of the assessment flow |
 | ... | ... | ... |
 
 ---
