@@ -9,7 +9,7 @@ Evalo is designed for building consulting firms which conduct building condition
 ---
 
 ## Videos
-🎬 **[Trailer (36 sec)](https://langara-my.sharepoint.com/personal/hchoi38_mylangara_ca/_layouts/15/stream.aspx?id=%2Fpersonal%2Fhchoi38%5Fmylangara%5Fca%2FDocuments%2FEvalo%5Ffinal%2FLong%20Video%5Ffinal%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eaa75512f%2D4059%2D4990%2D8b9c%2Ded5c8b8d18d6)**  
+🎬 **Trailer (36 sec) – *Coming Soon*** 
 📽️ **[Demo (about 8 min)](https://youtu.be/5J7GNhBhyaM?si=y1TGM0QPcGS25Jm1)**
 
 ---
