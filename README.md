@@ -6,7 +6,7 @@ Evalo is designed for building consulting firms which conduct building condition
 
 🔗 **[Landing Page & Proposal including 36-second trailer](https://www.evalo.wmdd.ca/)** 
 🎬 **[Trailer (36 sec)](https://langara-my.sharepoint.com/personal/hchoi38_mylangara_ca/_layouts/15/stream.aspx?id=%2Fpersonal%2Fhchoi38%5Fmylangara%5Fca%2FDocuments%2FEvalo%5Ffinal%2FLong%20Video%5Ffinal%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eaa75512f%2D4059%2D4990%2D8b9c%2Ded5c8b8d18d6)**  
-📽️ **[Demo (about 5 min)](#)** Coming Soon...
+📽️ **[Demo (about 8 min)](https://youtu.be/5J7GNhBhyaM?si=y1TGM0QPcGS25Jm1)**
 
 ---
 
@@ -15,13 +15,13 @@ Evalo is designed for building consulting firms which conduct building condition
 ### Smart Building Records
 - Store and manage all building-related data (e.g., structural, financial, and historical info) in one place.
 
-### AI-Powered Assessments
-- AI helps you generate evaluation comments in real-time after the app converts your voice into text.
-
 ### Automated Review & Report Generation
 - Notes—taking are conducted directly on a mobile device.
 - Instantly generate depreciation reports that meet compliance requirements.
 
+### AI-Powered Assessments
+- AI helps you generate evaluation comments in real-time after the app converts your voice into text.
+  
 ---
 
 ## 🧰 Tech Stack
