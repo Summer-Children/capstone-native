@@ -56,6 +56,21 @@ Evalo is designed for building consulting firms which conduct building condition
 
 ## 📸 Screenshots
 
-Coming soon...
+| Home Page | Building Page | Search Function | Create Building |
+|-----------|---------------|-----------------|------------------|
+| ![](./assets/screenshots/home-page.png) | ![](./assets/screenshots/building-page.png) | ![](./assets/screenshots/search-function.png) | ![](./assets/screenshots/create-building.png) |
+
+| Create Building (Final) | Building Assessment | Add Components | Description |
+|--------------------------|---------------------|----------------|-------------|
+| ![](./assets/screenshots/create-building-fin.png) | ![](./assets/screenshots/building-assessment.png) | ![](./assets/screenshots/add-components.png) | ![](./assets/screenshots/description.png) |
+
+| Add Photos | Action | Review | Review Assessment |
+|------------|--------|--------|-------------------|
+| ![](./assets/screenshots/add-photos.png) | ![](./assets/screenshots/action.png) | ![](./assets/screenshots/review.png) | ![](./assets/screenshots/review-assessment.png) |
+
+| Final Report |  |  |  |
+|--------------|--|--|--|
+| ![](./assets/screenshots/final-report.png) |  |  |  |
+
 
 ---
