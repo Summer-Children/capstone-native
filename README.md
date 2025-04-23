@@ -4,7 +4,7 @@
 
 Evalo is designed for building consulting firms which conduct building condition assessments and Reserve Fund Studies. With new regulations in British Columbia requiring Strata corporations to update Depreciation Reports every five years (starting July 1, 2024), Evalo helps streamline the entire evaluation process faster, more efficient, and compliant.
 
-🔗 **[Landing Page & Proposal including 36-second trailer](https://www.evalo.wmdd.ca/)** 
+🔗 **[Landing Page & Proposal](https://www.evalo.wmdd.ca/)** 
 
 ---
 
@@ -27,6 +27,10 @@ Evalo is designed for building consulting firms which conduct building condition
 | Add Photos | Action | Review | Review Assessment |
 |------------|--------|--------|-------------------|
 | ![](./assets/screenshots/add-photos.png) | ![](./assets/screenshots/action.png) | ![](./assets/screenshots/review.png) | ![](./assets/screenshots/review-assessment.png) |
+
+| Final Report | Email | PDF Report | Budget Sheet |
+|--------------|-------|------------|--------------|
+| ![](./assets/screenshots/final-report.png) | ![](./assets/screenshots/email.png)  | ![](./assets/screenshots/report.png)  | ![](./assets/screenshots/budget-excel.png)  |
 
 ---
 
@@ -78,10 +82,5 @@ Evalo is designed for building consulting firms which conduct building condition
 | Rasul Omarov     | [@rasulomaroff](https://github.com/rasulomaroff)       | Backend Developer — |
 | Tomoki Kaneko    | [@kaneko-tomoki](https://github.com/tom555-555)     | Full Stack Developer - |
 | Xuehui Lan       | [@Xuehui-Lan](https://github.com/1ador)           | Frontend Developer —  |
-
----
-| Final Report | Email | PDF Report | Budget Sheet |
-|--------------|-------|------------|--------------|
-| ![](./assets/screenshots/final-report.png) | ![](./assets/screenshots/email.png)  | ![](./assets/screenshots/report.png)  | ![](./assets/screenshots/budget-excel.png)  |
 
 ---
