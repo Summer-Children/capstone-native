@@ -60,7 +60,7 @@ Evalo is designed for building consulting firms which conduct building condition
 |-----------|---------------|-----------------|------------------|
 | ![](./assets/screenshots/home-page.png) | ![](./assets/screenshots/building-page.png) | ![](./assets/screenshots/search-function.png) | ![](./assets/screenshots/create-building.png) |
 
-| Create Building (Final) | Building Assessment | Add Components | Description |
+| Create Building (Complete) | Building Assessment | Add Components | Description |
 |--------------------------|---------------------|----------------|-------------|
 | ![](./assets/screenshots/create-building-fin.png) | ![](./assets/screenshots/building-assessment.png) | ![](./assets/screenshots/add-components.png) | ![](./assets/screenshots/description.png) |
 
@@ -68,14 +68,8 @@ Evalo is designed for building consulting firms which conduct building condition
 |------------|--------|--------|-------------------|
 | ![](./assets/screenshots/add-photos.png) | ![](./assets/screenshots/action.png) | ![](./assets/screenshots/review.png) | ![](./assets/screenshots/review-assessment.png) |
 
-| Final Report |  |  |  |
-|--------------|--|--|--|
-| ![](./assets/screenshots/final-report.png) |  |  |  |
-
-
-| Final Report |  |  |  |
-|--------------|--|--|--|
-| ![](./assets/screenshots/final-report.png) |  |  |  |
-
+| Final Report | Email | PDF Report | Budget Sheet |
+|--------------|-------|------------|--------------|
+| ![](./assets/screenshots/final-report.png) | ![](./assets/screenshots/email.png)  | ![](./assets/screenshots/report.png)  | ![](./assets/screenshots/budget-excel.png)  |
 
 ---
