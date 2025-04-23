@@ -10,6 +10,22 @@ Evalo is designed for building consulting firms which conduct building condition
 
 ---
 
+## 📸 Screenshots
+
+| Home Page | Building Page | Search Function | Create Building |
+|-----------|---------------|-----------------|------------------|
+| ![](./assets/screenshots/home-page.png) | ![](./assets/screenshots/building-page.png) | ![](./assets/screenshots/search-function.png) | ![](./assets/screenshots/create-building.png) |
+
+| Create Building (Complete) | Building Assessment | Add Components | Description |
+|--------------------------|---------------------|----------------|-------------|
+| ![](./assets/screenshots/create-building-fin.png) | ![](./assets/screenshots/building-assessment.png) | ![](./assets/screenshots/add-components.png) | ![](./assets/screenshots/description.png) |
+
+| Add Photos | Action | Review | Review Assessment |
+|------------|--------|--------|-------------------|
+| ![](./assets/screenshots/add-photos.png) | ![](./assets/screenshots/action.png) | ![](./assets/screenshots/review.png) | ![](./assets/screenshots/review-assessment.png) |
+
+---
+
 ## 🚀 Features
 
 ### Smart Building Records
@@ -60,21 +76,6 @@ Evalo is designed for building consulting firms which conduct building condition
 | Xuehui Lan       | [@Xuehui-Lan](https://github.com/1ador)           | Frontend Developer —  |
 
 ---
-
-## 📸 Screenshots
-
-| Home Page | Building Page | Search Function | Create Building |
-|-----------|---------------|-----------------|------------------|
-| ![](./assets/screenshots/home-page.png) | ![](./assets/screenshots/building-page.png) | ![](./assets/screenshots/search-function.png) | ![](./assets/screenshots/create-building.png) |
-
-| Create Building (Complete) | Building Assessment | Add Components | Description |
-|--------------------------|---------------------|----------------|-------------|
-| ![](./assets/screenshots/create-building-fin.png) | ![](./assets/screenshots/building-assessment.png) | ![](./assets/screenshots/add-components.png) | ![](./assets/screenshots/description.png) |
-
-| Add Photos | Action | Review | Review Assessment |
-|------------|--------|--------|-------------------|
-| ![](./assets/screenshots/add-photos.png) | ![](./assets/screenshots/action.png) | ![](./assets/screenshots/review.png) | ![](./assets/screenshots/review-assessment.png) |
-
 | Final Report | Email | PDF Report | Budget Sheet |
 |--------------|-------|------------|--------------|
 | ![](./assets/screenshots/final-report.png) | ![](./assets/screenshots/email.png)  | ![](./assets/screenshots/report.png)  | ![](./assets/screenshots/budget-excel.png)  |
