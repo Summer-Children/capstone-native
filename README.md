@@ -35,8 +35,15 @@ Evalo is designed for building consulting firms which conduct building condition
 ### Backend
 - Golang (for high performance and scalability)
 - gqlgen (GraphQL server in Go)
-- Gotenberg (PDF generation from structured reports)
+- Microservices
+  - Excel Generator
+  - Pdf Generator
+  - AWS Mailer
+  - Image Compressor
 
+### Database
+- PostgreSQL
+  
 ### Infrastructure
 - AWS (cloud infrastructure)
 - Docker (containerization with microservices)
